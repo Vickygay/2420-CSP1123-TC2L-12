@@ -36,6 +36,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+LIGHTBLUE = (173, 216, 230)
+CHARCOAL = (54, 69, 79)
 
 # Font setting for Life Roulette
 font_1_size = 70
@@ -99,8 +101,8 @@ text_3_x = (screen_width - text_3_width) // 2
 text_3_y = (screen_height - text_3_height) // 2 +75 
 
 # Button areas for How to Play (Back)
-button_2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
-button_3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
+button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
+button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
 
 # Back button 
 text_4_width, text_4_height = text_4_surface.get_size()
@@ -113,6 +115,25 @@ text_5_width, text_5_height = text_4_surface.get_size()
 text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
+
+# Image setting for magnifier
+image_1 = pygame.image.load('magnifier.png') 
+image_1 = pygame.transform.scale(image_1, (250, 250))
+image_1_width, image_1_height = image_1.get_size()
+image_1_x = 100  # X position from the left
+image_1_y = (screen_height - image_1_height) // 2 - 150  # Centered vertically with an offset
+
+# Frame settings for magnifier
+frame_thickness = 10  
+frame_color = WHITE 
+frame_surface = pygame.Surface((image_1_width +0.5 * frame_thickness, image_1_height +0.5 * frame_thickness))
+frame_surface.fill(CHARCOAL)  
+pygame.draw.rect(frame_surface, frame_color, (0, 0, frame_surface.get_width(), frame_surface.get_height()), frame_thickness)
+
+# Image with Frame
+image_with_frame_surface = pygame.Surface((image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness))
+image_with_frame_surface.blit(frame_surface, (0, 0))  
+image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))  
 
 # Each screen states
 SCREEN_MAIN = 0
@@ -130,14 +151,14 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             if current_screen == SCREEN_MAIN:
-                if button_2_rect.collidepoint(mouse_pos):
+                if button_text2_rect.collidepoint(mouse_pos):
                     sound_play.play()
                     current_screen = SCREEN_PLAY
                     pygame.display.set_caption('Playing')
-                elif button_3_rect.collidepoint(mouse_pos):
+                elif button_text3_rect.collidepoint(mouse_pos):
                     sound_how_to_play.play()
                     current_screen = SCREEN_HOW_TO_PLAY
-                    pygame.display.set_caption('How to Play')
+                    pygame.display.set_caption('Instruction')
             elif current_screen in [SCREEN_PLAY, SCREEN_HOW_TO_PLAY]:
                 if text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
@@ -153,8 +174,8 @@ while running:
     # Show on current screen
     if current_screen == SCREEN_MAIN:
         # Get the current frame
-        current_time = pygame.time.get_ticks() / 1000.0  # Convert milliseconds to seconds
-        frame_time = current_time % video_clip.duration  # Loop video
+        current_time = pygame.time.get_ticks() / 1000.0  
+        frame_time = current_time % video_clip.duration  
         frame = video_clip.get_frame(frame_time)
         
         # Convert frame to Pygame surface
@@ -194,7 +215,8 @@ while running:
         how_text1_y = (screen_height - how_to_play_height) // 2 -350
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
-
+        screen.blit(image_with_frame_surface, (image_1_x, image_1_y))  
+    
     pygame.display.flip() 
     
     pygame.time.Clock().tick(fps)
