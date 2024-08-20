@@ -220,5 +220,3 @@ while running:
     pygame.display.flip() 
     
     pygame.time.Clock().tick(fps)
-
-print= "helo world"

@@ -29,12 +29,15 @@ pygame.mixer.music.play(-1)  # Play infinity
 sound_play = pygame.mixer.Sound('clicksound.mp3')
 sound_how_to_play = pygame.mixer.Sound('clicksound.mp3')
 sound_back = pygame.mixer.Sound('clicksound.mp3')
+sound_next = pygame.mixer.Sound('clicksound.mp3')
 
 # Colours code in RGB
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+LIGHTBLUE = (173, 216, 230)
+CHARCOAL = (54, 69, 79)
 
 # Font setting for Life Roulette
 font_1_size = 70
@@ -72,6 +75,15 @@ font_4 = pygame.font.Font(font_4_path, font_4_size)
 text_4 = "Back"
 text_4_surface = font_4.render(text_4, True, WHITE)
 
+# Font setting for Next
+font_5_size = 45
+font_5_path = 'Matemasie.ttf'  
+font_5 = pygame.font.Font(font_5_path, font_5_size)
+
+# Show (Next) on screen
+text_5 = "Next"
+text_5_surface = font_5.render(text_5, True, WHITE)
+
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))  
 
@@ -88,23 +100,48 @@ text_3_width, text_3_height = text_3_surface.get_size()
 text_3_x = (screen_width - text_3_width) // 2
 text_3_y = (screen_height - text_3_height) // 2 +75 
 
-# Button areas for Play and How to Play
-button_2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
-button_3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
+# Button areas for How to Play (Back)
+button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
+button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
 
 # Back button 
-text_back_width, text_back_height = text_4_surface.get_size()
-back_button_x = (screen_width - text_back_width) // 2 +400
-back_button_y = screen_height - text_back_height // 2 -50
-back_button_rect = pygame.Rect(back_button_x, back_button_y, text_back_width, text_back_height)
+text_4_width, text_4_height = text_4_surface.get_size()
+text_4_button_x = (screen_width - text_4_width) // 2 +400
+text_4_button_y = screen_height - text_4_height // 2 -50
+text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
 
-# Define screen states
+# Next button 
+text_5_width, text_5_height = text_4_surface.get_size()
+text_5_button_x = (screen_width - text_5_width) // 2 +400
+text_5_button_y = screen_height - text_5_height // 2 -50
+text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
+
+# Image setting for magnifier
+image_1 = pygame.image.load('magnifier.png') 
+image_1 = pygame.transform.scale(image_1, (250, 250))
+image_1_width, image_1_height = image_1.get_size()
+image_1_x = 100  # X position from the left
+image_1_y = (screen_height - image_1_height) // 2 - 150  # Centered vertically with an offset
+
+# Frame settings for magnifier
+frame_thickness = 10  
+frame_color = WHITE 
+frame_surface = pygame.Surface((image_1_width +0.5 * frame_thickness, image_1_height +0.5 * frame_thickness))
+frame_surface.fill(CHARCOAL)  
+pygame.draw.rect(frame_surface, frame_color, (0, 0, frame_surface.get_width(), frame_surface.get_height()), frame_thickness)
+
+# Image with Frame
+image_with_frame_surface = pygame.Surface((image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness))
+image_with_frame_surface.blit(frame_surface, (0, 0))  
+image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))  
+
+# Each screen states
 SCREEN_MAIN = 0
 SCREEN_PLAY = 1
 SCREEN_HOW_TO_PLAY = 2
 current_screen = SCREEN_MAIN
 
-# Main loop
+# IMPORTANT!!!
 running = True
 while running:
     for event in pygame.event.get():
@@ -114,37 +151,36 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             if current_screen == SCREEN_MAIN:
-                if button_2_rect.collidepoint(mouse_pos):
+                if button_text2_rect.collidepoint(mouse_pos):
                     sound_play.play()
                     current_screen = SCREEN_PLAY
                     pygame.display.set_caption('Playing')
-                elif button_3_rect.collidepoint(mouse_pos):
+                elif button_text3_rect.collidepoint(mouse_pos):
                     sound_how_to_play.play()
                     current_screen = SCREEN_HOW_TO_PLAY
-                    pygame.display.set_caption('How to Play')
+                    pygame.display.set_caption('Instruction')
             elif current_screen in [SCREEN_PLAY, SCREEN_HOW_TO_PLAY]:
-                if back_button_rect.collidepoint(mouse_pos):
+                if text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
                     current_screen = SCREEN_MAIN
                     pygame.display.set_caption('Life Roulette')
     
-    # Handle key presses
+    # Key 
     keys = pygame.key.get_pressed()
     if current_screen == SCREEN_PLAY and keys[pygame.K_b]:
         current_screen = SCREEN_MAIN
         pygame.display.set_caption('Life Roulette')
 
-    # Handle screen rendering based on current screen state
+    # Show on current screen
     if current_screen == SCREEN_MAIN:
         # Get the current frame
-        current_time = pygame.time.get_ticks() / 1000.0  # Convert milliseconds to seconds
-        frame_time = current_time % video_clip.duration  # Loop video
+        current_time = pygame.time.get_ticks() / 1000.0  
+        frame_time = current_time % video_clip.duration  
         frame = video_clip.get_frame(frame_time)
         
         # Convert frame to Pygame surface
         frame_surface = get_frame_as_surface(frame)
         
-        # Clear the screen
         screen.fill(BLACK)
         
         # Draw the video frame
@@ -154,12 +190,12 @@ while running:
         screen.blit(transparent_surface, (0, 0))
         
         # Draw both text surfaces
-        screen.blit(text_1_surface, (text_1_x, text_1_y))  # Position of the first text
-        screen.blit(text_2_surface, (text_2_x, text_2_y))  # Position of the second text
-        screen.blit(text_3_surface, (text_3_x, text_3_y))  # Position of the third text
+        screen.blit(text_1_surface, (text_1_x, text_1_y))  
+        screen.blit(text_2_surface, (text_2_x, text_2_y))  
+        screen.blit(text_3_surface, (text_3_x, text_3_y))  
 
     elif current_screen == SCREEN_PLAY:
-        # Render the Play screen
+        # Show on Play screen
         screen.fill(BLACK)
         play_1_text = ""
         play_1_text_surface = font_2.render(play_1_text, True, GREEN)
@@ -167,25 +203,22 @@ while running:
         play_1_text_x = (screen_width - play_1_text_width) // 2
         play_1_text_y = (screen_height - play_text_height) // 2
         screen.blit(play_1_text_surface, (play_1_text_x, play_1_text_y))
-        screen.blit(text_4_surface, (back_button_x, back_button_y))  # Draw the Back button
+        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
 
     elif current_screen == SCREEN_HOW_TO_PLAY:
-        # Render the How to Play screen
+        # Show on How to Play screen
         screen.fill(BLACK)
-        how_to_play_text = "Instructions"
-        how_to_play_surface = font_3.render(how_to_play_text, True, WHITE)
-        how_to_play_width, how_to_play_height = how_to_play_surface.get_size()
-        how_to_play_x = (screen_width - how_to_play_width) // 2
-        how_to_play_y = (screen_height - how_to_play_height) // 2 -350
-        screen.blit(how_to_play_surface, (how_to_play_x, how_to_play_y))
-        screen.blit(text_4_surface, (back_button_x, back_button_y))  # Draw the Back button
-
-    # Update the display
-    pygame.display.flip()
+        how_text1_ = "Instructions"
+        how_text1_surface = font_3.render(how_text1_, True, WHITE)
+        how_text1_width, how_to_play_height = how_text1_surface.get_size()
+        how_text1_x = (screen_width - how_text1_width) // 2
+        how_text1_y = (screen_height - how_to_play_height) // 2 -350
+        screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
+        screen.blit(image_with_frame_surface, (image_1_x, image_1_y))  
     
-    # Cap the frame rate
+    pygame.display.flip() 
+    
     pygame.time.Clock().tick(fps)
 
-
-    
-
+print= "helo world"
