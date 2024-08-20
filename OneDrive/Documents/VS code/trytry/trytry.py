@@ -198,5 +198,3 @@ while running:
     pygame.display.flip() 
     
     pygame.time.Clock().tick(fps)
-
-this is to test out 
