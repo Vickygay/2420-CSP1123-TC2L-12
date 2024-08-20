@@ -195,10 +195,8 @@ while running:
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
 
-    pygame.display.flip()
+    pygame.display.flip() 
     
     pygame.time.Clock().tick(fps)
 
-
-    
-
+this is to test out 
