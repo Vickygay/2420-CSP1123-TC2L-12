@@ -136,6 +136,12 @@ SCREEN_MAIN = 0
 SCREEN_PLAY = 1
 SCREEN_HOW_TO_PLAY = 2
 SCREEN_STORY1 = 3
+SCREEN_STORY2 = 4
+SCREEN_STORY3 = 5
+SCREEN_STORY4 = 6
+SCREEN_STORY5 = 7
+SCREEN_STORY6 = 8
+SCREEN_PLAY1 = 9
 current_screen = SCREEN_MAIN
 
 kidnapperimage = pygame.image.load('kidnapper.png')
@@ -195,9 +201,6 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     
     # Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
-
-    
-
 
 # Main loop
 running = True
@@ -274,9 +277,6 @@ while running:
         create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
         player_x + 400, player_y - 150, width=400, height=230)
         
-
-            
-
     elif current_screen == SCREEN_HOW_TO_PLAY:
         # Render the How to Play screen
         screen.fill(BLACK)

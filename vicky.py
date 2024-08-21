@@ -38,6 +38,9 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 LIGHTBLUE = (173, 216, 230)
 CHARCOAL = (54, 69, 79)
+PINK = (255,192,203)
+PURPLE = (160, 32, 240)
+YELLOW = (255, 255, 0)
 
 # Font setting for Life Roulette
 font_1_size = 70
@@ -112,7 +115,7 @@ text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width,
 
 # Next button 
 text_5_width, text_5_height = text_4_surface.get_size()
-text_5_button_x = (screen_width - text_5_width) // 2 +400
+text_5_button_x = (screen_width - text_5_width) // 2 +200
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
@@ -126,7 +129,7 @@ image_1_y = (screen_height - image_1_height) // 2 - 150  # Centered vertically w
 # Frame settings for magnifier
 frame_thickness = 10  
 frame_color = WHITE 
-frame_surface = pygame.Surface((image_1_width +0.5 * frame_thickness, image_1_height +0.5 * frame_thickness))
+frame_surface = pygame.Surface((image_1_width + 1 * frame_thickness, image_1_height + 1 * frame_thickness))
 frame_surface.fill(CHARCOAL)  
 pygame.draw.rect(frame_surface, frame_color, (0, 0, frame_surface.get_width(), frame_surface.get_height()), frame_thickness)
 
@@ -138,9 +141,14 @@ image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
 # Each screen states
 SCREEN_MAIN = 0
 SCREEN_PLAY = 1
-SCREEN_PLAY = 4
-SCREEN_HOW_TO_PLAY_1 = 2
-SCREEN_HOW_TO_PLAY_2 = 3
+SCREEN_HOW_TO_PLAY = 2
+SCREEN_STORY1 = 3
+SCREEN_STORY2 = 4
+SCREEN_STORY3 = 5
+SCREEN_STORY4 = 6
+SCREEN_STORY5 = 7
+SCREEN_STORY6 = 8
+SCREEN_PLAY1 = 9
 current_screen = SCREEN_MAIN
 
 # IMPORTANT!!!
@@ -150,28 +158,114 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
+
+            # Settings for click on Play and move to storyline
             if current_screen == SCREEN_MAIN:
                 if button_text2_rect.collidepoint(mouse_pos):
                     sound_play.play()
                     current_screen = SCREEN_PLAY
-                    pygame.display.set_caption('Playing')
+                    pygame.display.set_caption('Storyline')
+
+                # Settings for How to Play and How to Play Back
                 elif button_text3_rect.collidepoint(mouse_pos):
                     sound_how_to_play.play()
-                    current_screen = SCREEN_HOW_TO_PLAY_1
-                    pygame.display.set_caption('Instruction')
-            elif current_screen in [SCREEN_PLAY, SCREEN_HOW_TO_PLAY_1]:
+                    current_screen = SCREEN_HOW_TO_PLAY
+                    pygame.display.set_caption('How to Play')
+            elif current_screen == SCREEN_HOW_TO_PLAY:
                 if text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
-                    current_screen = SCREEN_HOW_TO_PLAY_2
+                    current_screen = SCREEN_MAIN
                     pygame.display.set_caption('Life Roulette')
 
-    # Key 
+                # Setting for Play and move to Story 1 and Screen Play back to Main
+            elif current_screen == SCREEN_PLAY:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_next.play()
+                    current_screen = SCREEN_STORY1
+                    pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
+
+                # Setting for Story 1 and move to Story 2 and Story 1 back to Play
+            elif current_screen == SCREEN_STORY1:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_next.play()
+                    current_screen = SCREEN_STORY2
+                    pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_PLAY
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREEN_STORY2:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY3
+                    pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY1
+                    pygame.display.set_caption('Storyline')
+            
+            elif current_screen == SCREEN_STORY3:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY4
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY2
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREEN_STORY4:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY5
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY3
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREEN_STORY5:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY6
+                    pygame.display.set_caption('Playing')
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY4
+                    pygame.display.set_caption('Storyline')
+            
+    # Key control for SCREEN_PLAY
     keys = pygame.key.get_pressed()
     if current_screen == SCREEN_PLAY and keys[pygame.K_b]:
         current_screen = SCREEN_MAIN
         pygame.display.set_caption('Life Roulette')
+
+    # Current screen update
+    screen.fill(BLACK)
+    if current_screen == SCREEN_MAIN:
+        pass
+    elif current_screen == SCREEN_PLAY:
+        pass
+    elif current_screen == SCREEN_HOW_TO_PLAY:
+        pass
+    elif current_screen == SCREEN_STORY1:
+        pass
+    elif current_screen == SCREEN_STORY2:
+        pass
+    elif current_screen == SCREEN_STORY3:
+        pass 
+    elif current_screen == SCREEN_STORY4:
+        pass
+    elif current_screen == SCREEN_STORY5:
+        pass
+    elif current_screen == SCREEN_STORY6:
+        pass
 
     # Show on current screen
     if current_screen == SCREEN_MAIN:
@@ -206,8 +300,9 @@ while running:
         play_1_text_y = (screen_height - play_text_height) // 2
         screen.blit(play_1_text_surface, (play_1_text_x, play_1_text_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
 
-    elif current_screen == SCREEN_HOW_TO_PLAY_1:
+    elif current_screen == SCREEN_HOW_TO_PLAY:
         # Show on How to Play screen 1
         screen.fill(BLACK)
         how_text1_ = "Instructions"
@@ -219,10 +314,40 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))  
 
-    elif current_screen == SCREEN_HOW_TO_PLAY_2:
-     screen.fill(BLACK)
+    elif current_screen == SCREEN_STORY1:
+    # Show on Story1 Screen
+     screen.fill(CHARCOAL)
+     screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+     screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
 
-    
+    elif current_screen == SCREEN_STORY2:
+     # Show on Story 2 Screen
+     screen.fill(RED)
+     screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+     screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
+
+    elif current_screen == SCREEN_STORY3:
+     # Show on Story 3 Screen
+     screen.fill(LIGHTBLUE) 
+     screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+     screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
+
+    elif current_screen == SCREEN_STORY4:
+     # Show on Story 4 Screen
+     screen.fill(PINK) 
+     screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+     screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
+
+    elif current_screen == SCREEN_STORY5:
+     # Show on Story 5 Screen
+     screen.fill(PURPLE) 
+     screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+     screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
+
+    elif current_screen == SCREEN_STORY6:
+     # Show on Story 6 Screen
+     screen.fill(YELLOW) 
+
     pygame.display.flip() 
     
     pygame.time.Clock().tick(fps)
