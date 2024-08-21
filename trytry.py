@@ -138,7 +138,9 @@ image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
 # Each screen states
 SCREEN_MAIN = 0
 SCREEN_PLAY = 1
-SCREEN_HOW_TO_PLAY = 2
+SCREEN_PLAY = 4
+SCREEN_HOW_TO_PLAY_1 = 2
+SCREEN_HOW_TO_PLAY_2 = 3
 current_screen = SCREEN_MAIN
 
 # IMPORTANT!!!
@@ -157,14 +159,14 @@ while running:
                     pygame.display.set_caption('Playing')
                 elif button_text3_rect.collidepoint(mouse_pos):
                     sound_how_to_play.play()
-                    current_screen = SCREEN_HOW_TO_PLAY
+                    current_screen = SCREEN_HOW_TO_PLAY_1
                     pygame.display.set_caption('Instruction')
-            elif current_screen in [SCREEN_PLAY, SCREEN_HOW_TO_PLAY]:
+            elif current_screen in [SCREEN_PLAY, SCREEN_HOW_TO_PLAY_1]:
                 if text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
-                    current_screen = SCREEN_MAIN
+                    current_screen = SCREEN_HOW_TO_PLAY_2
                     pygame.display.set_caption('Life Roulette')
-    
+
     # Key 
     keys = pygame.key.get_pressed()
     if current_screen == SCREEN_PLAY and keys[pygame.K_b]:
@@ -205,8 +207,8 @@ while running:
         screen.blit(play_1_text_surface, (play_1_text_x, play_1_text_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
 
-    elif current_screen == SCREEN_HOW_TO_PLAY:
-        # Show on How to Play screen
+    elif current_screen == SCREEN_HOW_TO_PLAY_1:
+        # Show on How to Play screen 1
         screen.fill(BLACK)
         how_text1_ = "Instructions"
         how_text1_surface = font_3.render(how_text1_, True, WHITE)
@@ -216,6 +218,10 @@ while running:
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))  
+
+    elif current_screen == SCREEN_HOW_TO_PLAY_2:
+     screen.fill(BLACK)
+
     
     pygame.display.flip() 
     
