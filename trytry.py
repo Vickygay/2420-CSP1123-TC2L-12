@@ -216,6 +216,49 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     # Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
 
+##########################################################################################################################################################################
+# Player and AI health bar
+def draw_health_bar(screen, x, y, hp, max_hp):
+    bar_length = 100
+    bar_height = 10
+    fill = (hp / max_hp) * bar_length
+    border = pygame.Rect(x, y, bar_length, bar_height)
+    fill = pygame.Rect(x, y, fill, bar_height)
+    pygame.draw.rect(screen, GREEN, fill)
+    pygame.draw.rect(screen, WHITE, border, 2)
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((50, 50))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.rect.center = (screen_width // 4, screen_height // 2)
+        self.hp = 3
+        self.max_hp = 3
+
+#AI class
+class AI(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((50, 50))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.rect.center = (screen_width * 3 // 4, screen_height // 2)
+        self.hp = 3
+        self.max_hp = 3
+
+#Create player and AI objects
+player = Player()
+ai = AI()
+
+#Group the sprite
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+all_sprites.add(ai)
+
+
+##########################################################################################################################################################################
 # IMPORTANT!!!
 running = True
 while running:
@@ -314,23 +357,11 @@ while running:
     # Current screen update
     screen.fill(BLACK)
     if current_screen == SCREEN_MAIN:
-        pass
-    elif current_screen == SCREEN_PLAY:
-        pass
-    elif current_screen == SCREEN_HOW_TO_PLAY:
-        pass
-    elif current_screen == SCREEN_STORY1:
-        pass
-    elif current_screen == SCREEN_STORY2:
-        pass
-    elif current_screen == SCREEN_STORY3:
-        pass 
-    elif current_screen == SCREEN_STORY4:
-        pass
-    elif current_screen == SCREEN_STORY5:
-        pass
-    elif current_screen == SCREEN_STORY6:
-        pass
+        screen.fill(BLACK)
+        screen.blit(text_1_surface, (text_1_x, text_1_y))  # Draw the "Life Roulette" title
+        screen.blit(text_2_surface, (text_2_x, text_2_y))  # Draw the "Start" button
+        screen.blit(text_3_surface, (text_3_x, text_3_y))  # Draw the "How to Play" button
+        
         # Get the current frame
         current_time = pygame.time.get_ticks() / 1000.0  # Convert milliseconds to seconds
         frame_time = current_time % video_clip.duration  # Loop video
@@ -432,6 +463,7 @@ while running:
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
+
 
 
 
