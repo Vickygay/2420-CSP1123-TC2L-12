@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Life Roulette')
 
 # Video
-video_clip = VideoFileClip('shake22.mp4')  
+video_clip = VideoFileClip('video.mp4')  
 fps = video_clip.fps  
 
 def get_frame_as_surface(frame):

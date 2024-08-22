@@ -110,7 +110,6 @@ text_3_x = (screen_width - text_3_width) // 2
 text_3_y = (screen_height - text_3_height) // 2 +75 
 
 # Button areas for How to Play (Back)
-# Button areas for How to Play (Back)
 button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
 button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
 
@@ -164,7 +163,6 @@ kidnapper = pygame.transform.scale(kidnapperimage,(500,500))
 manimage = pygame.image.load('father.png')
 man = pygame.transform.scale(manimage,(500,500))
 
-
 player_x = 50
 player_y = 200
 
@@ -174,7 +172,6 @@ font = pygame.font.SysFont(None, 24)
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
-
 
 # Function to wrap text
 def wrap_text(text, font, max_width):
@@ -331,6 +328,7 @@ while running:
         pass
     elif current_screen == SCREEN_STORY6:
         pass
+
         # Get the current frame
         current_time = pygame.time.get_ticks() / 1000.0  # Convert milliseconds to seconds
         frame_time = current_time % video_clip.duration  # Loop video
@@ -380,7 +378,6 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y)) 
     
-
     elif current_screen == SCREEN_STORY1:
         # Show on Play Screen
         screen.fill(BLACK)
