@@ -400,7 +400,7 @@ while running:
         player_x + 400, player_y - 150, width=400, height=230)
         
     elif current_screen == SCREEN_HOW_TO_PLAY:
-        # Show on How to Play screen
+        # Show on How to Play screen 1
         screen.fill(BLACK)
         how_text1_ = "Instructions"
         how_text1_surface = font_3.render(how_text1_, True, WHITE)
