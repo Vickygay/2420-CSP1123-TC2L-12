@@ -235,7 +235,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 4, screen_height // 2)
         self.hp = 3
-        self.max_hp = 3
+        self.max_hp = 5
 
 #AI class
 class AI(pygame.sprite.Sprite):
@@ -246,7 +246,7 @@ class AI(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width * 3 // 4, screen_height // 2)
         self.hp = 3
-        self.max_hp = 3
+        self.max_hp = 5
 
 #Create player and AI objects
 player = Player()
