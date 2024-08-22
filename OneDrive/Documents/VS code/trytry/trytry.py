@@ -155,6 +155,21 @@ font = pygame.font.SysFont(None, 24)
 def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
+font2 = pygame.font.SysFont('Arial', 20, bold=True)
+
+def draw_custom_shape(surface, color, x, y, size):
+    points = [
+        (x, y - size // 3),               # Top center point
+        (x + size // 2, y - size // 3),   # Top right point
+        (x + size // 1.5, y),             # Middle right point
+        (x + size // 2, y + size // 3),   # Bottom right point
+        (x, y + size // 3),               # Bottom center point
+        (x - size // 2, y + size // 3),   # Bottom left point
+        (x - size // 1.5, y),             # Middle left point
+        (x - size // 2, y - size // 3)    # Top left point
+    ]
+    pygame.draw.polygon(surface, color, points, 0)
+
 
 # Function to wrap text
 def wrap_text(text, font, max_width):
@@ -174,6 +189,16 @@ def wrap_text(text, font, max_width):
 
     lines.append(' '.join(current_line))  # Add the last line
     return lines
+
+def draw_multiline_text(surface, text, font2, color, x, y, max_width, line_spacing=5):
+    lines = wrap_text(text, font2, max_width)
+    total_height = len(lines) * font2.get_height() + (len(lines) - 1) * line_spacing
+    start_y = y - total_height // 2
+    
+    for i, line in enumerate(lines):
+        text_surface = font2.render(line, True, color)
+        text_rect = text_surface.get_rect(center=(x, start_y + i * (font2.get_height() + line_spacing)))
+        surface.blit(text_surface, text_rect)
 
 # Function to create a speech bubble with multiple lines
 def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radius=10):
@@ -196,7 +221,16 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     # Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
 
+
+def draw_multiline_text(surface, text, font, color, x, y, max_width, line_spacing=5):
+    lines = wrap_text(text, font, max_width)
+    total_height = len(lines) * font.get_height() + (len(lines) - 1) * line_spacing
+    start_y = y - total_height // 2
     
+    for i, line in enumerate(lines):
+        text_surface = font.render(line, True, color)
+        text_rect = text_surface.get_rect(center=(x, start_y + i * (font.get_height() + line_spacing)))
+        surface.blit(text_surface, text_rect)
 
 
 # Main loop
@@ -273,6 +307,9 @@ while running:
 
         create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
         player_x + 400, player_y - 150, width=400, height=230)
+
+        draw_custom_shape(screen, WHITE, 700, 500, 200)
+        draw_multiline_text(screen, "Dad, please! Help me!", font, RED, 700, 500, max_width=140)
         
 
             
@@ -303,6 +340,8 @@ while running:
 
         create_rounded_speech_bubble("Sorry sorry I didn’t have so much money now. Can you leave my daughter first? Give me one 10days. 10days! I will pay back the money for you!",
         player_x + 400, player_y - 90, width=400, height=150)
+
+        
         
 
     # Update the display
