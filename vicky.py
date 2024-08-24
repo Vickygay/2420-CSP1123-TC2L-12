@@ -267,8 +267,6 @@ while running:
     elif current_screen == SCREEN_STORY6:
         pass
 
-    # Show on current screen
-    if current_screen == SCREEN_MAIN:
         # Get the current frame
         current_time = pygame.time.get_ticks() / 1000.0  
         frame_time = current_time % video_clip.duration  
