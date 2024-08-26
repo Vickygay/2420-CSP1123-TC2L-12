@@ -3,7 +3,6 @@ import sys
 from moviepy.editor import VideoFileClip
 import numpy as np
 
-
 # Initialize Pygame
 pygame.init()
 
@@ -23,9 +22,9 @@ def get_frame_as_surface(frame):
     return pygame.surfarray.make_surface(frame_bgr)
 
 # Background music in Menu
-pygame.mixer.music.load('song.mp3')  # Replace with your music file
-pygame.mixer.music.set_volume(0.3)  # Set volume (0.0 to 1.0)
-pygame.mixer.music.play(-1)  # Play music looped (-1 means loop indefinitely)
+pygame.mixer.music.load('song.mp3')  
+pygame.mixer.music.set_volume(0.3)  # (0.0 - 1.0)
+pygame.mixer.music.play(-1)  # Loop music infinity
 
 # Sound effects when click the text
 sound_play = pygame.mixer.Sound('clicksound.mp3')
@@ -43,6 +42,10 @@ CHARCOAL = (54, 69, 79)
 PINK = (255,192,203)
 PURPLE = (160, 32, 240)
 YELLOW = (255, 255, 0)
+DARKRED = (139, 0, 0)
+TRANSPARENT = (0, 0, 0, 0)
+RICHGREY = (31,32,34)
+DARKGREY = (169, 169, 169)
 
 # Font setting for Life Roulette
 font_1_size = 70
@@ -158,24 +161,43 @@ text_5_button_x = (screen_width - text_5_width) // 2 +200
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
-# Image setting for magnifier
+# Image settings for magnifier
 image_1 = pygame.image.load('magnifier.png') 
-image_1 = pygame.transform.scale(image_1, (250, 250))
+image_1_size = (200, 200)
+image_1 = pygame.transform.scale(image_1, image_1_size)
 image_1_width, image_1_height = image_1.get_size()
-image_1_x = 100  # X position from the left
-image_1_y = (screen_height - image_1_height) // 2 - 150  # Centered vertically with an offset
+label_offset = 12
+image_rect_1 = image_1.get_rect(topleft=(30, (screen_height - image_1_height) // 2 + 200)) 
 
-# Frame settings for magnifier
-frame_thickness = 10  
-frame_color = WHITE 
-frame_surface = pygame.Surface((image_1_width + 1 * frame_thickness, image_1_height + 1 * frame_thickness))
-frame_surface.fill(CHARCOAL)  
-pygame.draw.rect(frame_surface, frame_color, (0, 0, frame_surface.get_width(), frame_surface.get_height()), frame_thickness)
 
-# Image with Frame
-image_with_frame_surface = pygame.Surface((image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness))
-image_with_frame_surface.blit(frame_surface, (0, 0))  
-image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness)) 
+# Label text with multiple lines
+label_text_lines_1 = [
+    "  Magnifier: ",
+    "  Allows you to",
+    "  check your",
+    "  current bullet's",
+    "  status"
+]
+
+font_10 = pygame.font.Font("Anton.ttf", 20)
+
+label_surfaces = [font_10.render(line, True, (WHITE)) for line in label_text_lines_1]
+label_rects = [surf.get_rect(topleft=(image_rect_1.right + label_offset, image_rect_1.top + i * font_10.get_height())) for i, surf in enumerate(label_surfaces)]
+
+# Frame settings
+frame_thickness_1 = 10
+frame_color_1 = BLACK
+background_color_1 = DARKGREY
+
+# Image with frame surface
+image_with_frame_surface_1 = pygame.Surface((image_1_width + 2 * frame_thickness_1, image_1_height + 2 * frame_thickness_1), pygame.SRCALPHA)
+image_with_frame_surface_1.fill(background_color_1)
+
+# Draw the border around the image
+pygame.draw.rect(image_with_frame_surface_1, frame_color_1, (0, 0, image_with_frame_surface_1.get_width(), image_with_frame_surface_1.get_height()), frame_thickness_1)
+
+# Draw the image onto the surface with the frame
+image_with_frame_surface_1.blit(image_1, (frame_thickness_1, frame_thickness_1))
 
 # Define screen states
 SCREEN_MAIN = 0
@@ -261,7 +283,6 @@ def draw_multiline_text(surface, text, font2, color, x, y, max_width, line_spaci
         text_rect = text_surface.get_rect(center=(x, start_y + i * (font2.get_height() + line_spacing)))
         surface.blit(text_surface, text_rect)
 
-
 # Function to create a speech bubble with multiple lines
 def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radius=10):
     # Create a surface for the speech bubble with transparency
@@ -270,8 +291,6 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     # Draw a rounded rectangle for the bubble
     draw_rounded_rect(bubble_surface, WHITE, bubble_surface.get_rect(), corner_radius)
     pygame.draw.rect(bubble_surface, BLACK, bubble_surface.get_rect(), 2, border_radius=corner_radius)
-
-
     
     # Wrap the text into multiple lines
     wrapped_lines = wrap_text(text, font, width - 20)  # Adjust for padding
@@ -433,16 +452,6 @@ while running:
                     sound_back.play()
                     current_screen = SCREEN_STORY3
                     pygame.display.set_caption('Storyline')
-
-            elif current_screen == SCREEN_STORY5:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY6
-                    pygame.display.set_caption('Playing')
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY4
-                    pygame.display.set_caption('Storyline')
             
     # Key control for SCREEN_PLAY
     keys = pygame.key.get_pressed()
@@ -454,9 +463,9 @@ while running:
     screen.fill(BLACK)
     if current_screen == SCREEN_MAIN:
         screen.fill(BLACK)
-        screen.blit(text_1_surface, (text_1_x, text_1_y))  # Draw the "Life Roulette" title
-        screen.blit(text_2_surface, (text_2_x, text_2_y))  # Draw the "Start" button
-        screen.blit(text_3_surface, (text_3_x, text_3_y))  # Draw the "How to Play" button
+        screen.blit(text_1_surface, (text_1_x, text_1_y)) 
+        screen.blit(text_2_surface, (text_2_x, text_2_y)) 
+        screen.blit(text_3_surface, (text_3_x, text_3_y))  
         
         # Get the current frame
         current_time = pygame.time.get_ticks() / 1000.0  # Convert milliseconds to seconds
@@ -467,7 +476,7 @@ while running:
         frame_surface = get_frame_as_surface(frame)
         
         # Clear the screen
-        screen.fill(BLACK)
+        screen.fill(TRANSPARENT)
         
         # Draw the video frame
         screen.blit(frame_surface, (0, 0))
@@ -476,9 +485,9 @@ while running:
         screen.blit(transparent_surface, (0, 0))
         
         # Draw both text surfaces
-        screen.blit(text_1_surface, (text_1_x, text_1_y))  # Position of the first text
-        screen.blit(text_2_surface, (text_2_x, text_2_y))  # Position of the second text
-        screen.blit(text_3_surface, (text_3_x, text_3_y))  # Position of the third text
+        screen.blit(text_1_surface, (text_1_x, text_1_y))  
+        screen.blit(text_2_surface, (text_2_x, text_2_y))  
+        screen.blit(text_3_surface, (text_3_x, text_3_y))  
 
     elif current_screen == SCREEN_PLAY:
         # Render the Play screen
@@ -497,20 +506,25 @@ while running:
         draw_custom_shape(screen, WHITE, 700, 490, 200)
         draw_multiline_text(screen, "Dad, please! Help me!", font2, RED, 700, 500, max_width=140)
         
-
-        
     elif current_screen == SCREEN_HOW_TO_PLAY:
-        # Show on How to Play screen 1
-        screen.fill(BLACK)
-        how_text1_ = "Instructions"
+        # Show on How to Play screen 
+        screen.fill(DARKRED)
+        how_text1_ = "Game Introduction"
         how_text1_surface = font_3.render(how_text1_, True, WHITE)
-        how_text1_width, how_to_play_height = how_text1_surface.get_size()
+        how_text1_width, how_to_play_1_height = how_text1_surface.get_size()
         how_text1_x = (screen_width - how_text1_width) // 2
-        how_text1_y = (screen_height - how_to_play_height) // 2 -350
+        how_text1_y = (screen_height - how_to_play_1_height) // 2 -350
+        how_text2_ = "Items Introduction"
+        how_text2_surface = font_3.render(how_text2_, True, WHITE)
+        how_text2_width, how_to_play_2_height = how_text2_surface.get_size()
+        how_text2_x = (screen_width - how_text2_width) // 2
+        how_text2_y = (screen_height - how_to_play_2_height) // 2 + 30
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
-        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
-        screen.blit(image_with_frame_surface, (image_1_x, image_1_y)) 
-    
+        screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
+        screen.blit(image_with_frame_surface_1, (image_rect_1)) 
+        create_rounded_speech_bubble("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.  2 items will be given in round 2 and 4 in round 3.",
+        player_x + 50 , player_y -100 , width=800, height=250) 
 
     elif current_screen == SCREEN_STORY1:
         # Show on Play Screen
@@ -559,8 +573,11 @@ while running:
         screen.fill(BLACK) 
         all_sprites.draw(screen)
         player.draw_hp(screen)
-        ai.draw_hp(screen)   
+        ai.draw_hp(screen)
 
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
+
+    #vicky try merge
+    
