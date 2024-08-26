@@ -128,6 +128,44 @@ text_5_button_x = (screen_width - text_5_width) // 2 +200
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
+# Image settings for magnifier
+image_1 = pygame.image.load('magnifier.png') 
+image_1_size = (200, 200)
+image_1 = pygame.transform.scale(image_1, image_1_size)
+image_1_width, image_1_height = image_1.get_size()
+label_offset = 12
+image_rect_1 = image_1.get_rect(topleft=(30, (screen_height - image_1_height) // 2 + 200)) 
+
+
+# Label text with multiple lines
+label_text_lines_1 = [
+    "  Magnifier: ",
+    "  Allows you to",
+    "  check your",
+    "  current bullet's",
+    "  status"
+]
+
+font_10 = pygame.font.Font("Anton.ttf", 20)
+
+label_surfaces = [font_10.render(line, True, (WHITE)) for line in label_text_lines_1]
+label_rects = [surf.get_rect(topleft=(image_rect_1.right + label_offset, image_rect_1.top + i * font_10.get_height())) for i, surf in enumerate(label_surfaces)]
+
+# Frame settings
+frame_thickness_1 = 10
+frame_color_1 = BLACK
+background_color_1 = DARKGREY
+
+# Image with frame surface
+image_with_frame_surface_1 = pygame.Surface((image_1_width + 2 * frame_thickness_1, image_1_height + 2 * frame_thickness_1), pygame.SRCALPHA)
+image_with_frame_surface_1.fill(background_color_1)
+
+# Draw the border around the image
+pygame.draw.rect(image_with_frame_surface_1, frame_color_1, (0, 0, image_with_frame_surface_1.get_width(), image_with_frame_surface_1.get_height()), frame_thickness_1)
+
+# Draw the image onto the surface with the frame
+image_with_frame_surface_1.blit(image_1, (frame_thickness_1, frame_thickness_1))
+
 # Define screen states
 SCREEN_MAIN = 0
 SCREEN_PLAY = 1
@@ -149,7 +187,6 @@ man = pygame.transform.scale(manimage,(500,500))
 
 monsterimage = pygame.image.load("monster.jpeg")
 monster = pygame.transform.scale(monsterimage,(700,500))
-
 
 player_x = 50
 player_y = 200
@@ -297,6 +334,9 @@ while running:
                     sound_how_to_play.play()
                     current_screen = SCREEN_HOW_TO_PLAY
                     pygame.display.set_caption('How to Play')
+                if image_rect_1.colliderect(mouse_rect):
+                  for label_surf, label_rect in zip(label_surfaces, label_rects):
+                   screen.blit(label_surf, label_rect)
             elif current_screen == SCREEN_HOW_TO_PLAY:
                 if text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
@@ -433,7 +473,10 @@ while running:
         how_text2_y = (screen_height - how_to_play_2_height) // 2 + 30
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
-        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))  
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
+        screen.blit(image_with_frame_surface_1, (image_rect_1)) 
+        create_rounded_speech_bubble("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.  2 items will be given in round 2 and 4 in round 3.",
+        player_x + 50 , player_y -100 , width=800, height=250) 
 
     elif current_screen == SCREEN_STORY1:
         # Show on Play Screen
@@ -486,6 +529,14 @@ while running:
     elif current_screen == SCREEN_STORY6:
         # Show on Story 6 Screen
         screen.fill(YELLOW) 
+    
+    # Get the current mouse position and create a rectangle for it
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    mouse_rect = pygame.Rect(mouse_x, mouse_y, 1, 1)
+
+    if image_rect_1.colliderect(mouse_rect):
+        for label_surf, label_rect in zip(label_surfaces, label_rects):
+            screen.blit(label_surf, label_rect)
 
     pygame.display.flip()
     
