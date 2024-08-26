@@ -559,7 +559,7 @@ while running:
         screen.fill(BLACK) 
         all_sprites.draw(screen)
         player.draw_hp(screen)
-        ai.draw_hp(screen)     
+        ai.draw_hp(screen)   
 
     pygame.display.flip()
     
