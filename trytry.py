@@ -459,16 +459,6 @@ while running:
                     sound_back.play()
                     current_screen = SCREEN_STORY3
                     pygame.display.set_caption('Storyline')
-
-            elif current_screen == SCREEN_STORY5:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY6
-                    pygame.display.set_caption('Playing')
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY4
-                    pygame.display.set_caption('Storyline')
             
     # Key control for SCREEN_PLAY
     keys = pygame.key.get_pressed()
@@ -617,7 +607,6 @@ while running:
             screen.blit(win_text_surface, (win_x, win_y))
 
             
-
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
