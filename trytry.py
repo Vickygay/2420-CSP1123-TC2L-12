@@ -602,5 +602,4 @@ while running:
     
     pygame.time.Clock().tick(fps)
 
-    #vicky try merge
     
