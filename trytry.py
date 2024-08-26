@@ -600,8 +600,6 @@ while running:
             screen.fill(BLACK)
             screen.blit(win_text_surface, (win_x, win_y))
 
-            
-
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
