@@ -363,25 +363,7 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        # Testing    
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN: 
-                # Down button decrease health by 1
-                current_hp = max(0, current_hp - 1)
-
-            elif event.key == pygame.K_UP:
-                # Up button increase health by 1
-                current_hp = min(max_hp, current_hp + 1)
-
-            elif event.key == pygame.K_LEFT:
-                ai_current_hp = max(0, ai_current_hp - 1)
-
-            elif event.key == pygame.K_RIGHT:
-                ai_current_hp == min(ai_hp, ai_current_hp + 1)
-
-
-
-##########################################################################################################################################################################
+        
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
 
