@@ -286,50 +286,47 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     screen.blit(bubble_surface, (x, y))
 
 ##########################################################################################################################################################################
-# Player and AI health bar
-def draw_health_bar(screen, x, y, hp, max_hp):
-    bar_length = 100
-    bar_height = 10
-    fill = (hp / max_hp) * bar_length
-    border = pygame.Rect(x, y, bar_length, bar_height)
-    fill = pygame.Rect(x, y, fill, bar_height)
-    pygame.draw.rect(screen, GREEN, fill)
-    pygame.draw.rect(screen, WHITE, border, 2)
+#Define initial hp
+max_hp = 3
+ai_hp = 3
 
-class Player(pygame.sprite.Sprite):
+# Class for Player and AI 
+# Player Class
+class player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 4, screen_height // 2)
-        self.hp = 3
-        self.max_hp = 3
+        self.max_hp = max_hp
+        self.current_hp = max_hp
+        self.hp_positions = [(0, 0), (50, 0), (100, 0)]
+
+    def draw_hp(self, surface):
+        for i in range(self.current_hp):
+            surface.blit(hearts, self.hp_positions[i])
 
 #AI class
-class AI(pygame.sprite.Sprite):
+class ai(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width * 3 // 4, screen_height // 2)
-        self.hp = 3
-        self.max_hp = 3
+        self.max_hp = ai_hp
+        self.ai_current_hp = ai_hp
+        self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
 
-#Define initial HP 
-max_hp = 3
-current_hp = max_hp
-hp_positions = [(70, 0), (120, 0), (170, 0)]
+    def draw_hp(self, surface):
+        for i in range(self.ai_current_hp):
+            surface.blit(hearts, self.ai_hp_positions[i])
 
-#Define initial HP (AI)
-ai_hp = 3
-ai_current_hp = ai_hp
-ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
 
 #Create player and AI objects
-player = Player()
-ai = AI()
+player = player()
+ai = ai()
 
 #Group the sprite
 all_sprites = pygame.sprite.Group()
@@ -561,33 +558,9 @@ while running:
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
         screen.fill(BLACK) 
-        screen.blit(life_text_surface, (life_x, life_y)) # Draw life word on the top of corner
-        all_sprites.update()
-        for sprite in all_sprites:
-            screen.blit(sprite.image, sprite.rect)
-
-        #Draw hearts based on current hp    
-        for i in range(max_hp):
-            if i < current_hp:
-                screen.blit(hearts, hp_positions[i])  # Draw full heart
-            else:
-                screen.blit(broken_hearts, hp_positions[i])  # Draw empty heart
-        # Check if player lose all their hp
-        if current_hp == 0:
-            screen.fill(BLACK)
-            screen.blit(lose_text_surface, (lose_x, lose_y))
-
-        for i in range(ai_hp):
-            if i < ai_current_hp:
-                screen.blit(hearts, ai_hp_positions[i])
-            else:
-                screen.blit(broken_hearts, ai_hp_positions[i])
-        # Check if AI lose all their hp        
-        if ai_current_hp == 0:
-            screen.fill(BLACK)
-            screen.blit(win_text_surface, (win_x, win_y))
-
-            
+        all_sprites.draw(screen)
+        player.draw_hp(screen)
+        ai.draw_hp(screen)     
 
     pygame.display.flip()
     
