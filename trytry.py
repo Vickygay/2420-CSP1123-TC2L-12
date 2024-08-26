@@ -283,7 +283,6 @@ def draw_multiline_text(surface, text, font2, color, x, y, max_width, line_spaci
         text_rect = text_surface.get_rect(center=(x, start_y + i * (font2.get_height() + line_spacing)))
         surface.blit(text_surface, text_rect)
 
-
 # Function to create a speech bubble with multiple lines
 def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radius=10):
     # Create a surface for the speech bubble with transparency
@@ -292,8 +291,6 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     # Draw a rounded rectangle for the bubble
     draw_rounded_rect(bubble_surface, WHITE, bubble_surface.get_rect(), corner_radius)
     pygame.draw.rect(bubble_surface, BLACK, bubble_surface.get_rect(), 2, border_radius=corner_radius)
-
-
     
     # Wrap the text into multiple lines
     wrapped_lines = wrap_text(text, font, width - 20)  # Adjust for padding
@@ -606,7 +603,6 @@ while running:
             screen.fill(BLACK)
             screen.blit(win_text_surface, (win_x, win_y))
 
-            
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
