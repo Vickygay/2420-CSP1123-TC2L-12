@@ -507,8 +507,6 @@ while running:
         draw_custom_shape(screen, WHITE, 700, 490, 200)
         draw_multiline_text(screen, "Dad, please! Help me!", font2, RED, 700, 500, max_width=140)
         
-
-        
     elif current_screen == SCREEN_HOW_TO_PLAY:
         # Show on How to Play screen 
         screen.fill(DARKRED)
@@ -600,8 +598,9 @@ while running:
             screen.fill(BLACK)
             screen.blit(win_text_surface, (win_x, win_y))
 
-            
-
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
+
+    #vicky try merge
+    
