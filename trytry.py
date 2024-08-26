@@ -353,7 +353,6 @@ all_sprites.add(player)
 all_sprites.add(ai)
 
 ##########################################################################################################################################################################
-#Class for buttons
 
 ##########################################################################################################################################################################
 # IMPORTANT!!!
@@ -364,25 +363,7 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        # Testing    
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN: 
-                # Down button decrease health by 1
-                current_hp = max(0, current_hp - 1)
-
-            elif event.key == pygame.K_UP:
-                # Up button increase health by 1
-                current_hp = min(max_hp, current_hp + 1)
-
-            elif event.key == pygame.K_LEFT:
-                ai_current_hp = max(0, ai_current_hp - 1)
-
-            elif event.key == pygame.K_RIGHT:
-                ai_current_hp == min(ai_hp, ai_current_hp + 1)
-
-
-
-##########################################################################################################################################################################
+        
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
 
@@ -572,34 +553,13 @@ while running:
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
         screen.fill(BLACK) 
-        screen.blit(life_text_surface, (life_x, life_y)) # Draw life word on the top of corner
-        all_sprites.update()
-        for sprite in all_sprites:
-            screen.blit(sprite.image, sprite.rect)
-
-        #Draw hearts based on current hp    
-        for i in range(max_hp):
-            if i < current_hp:
-                screen.blit(hearts, hp_positions[i])  # Draw full heart
-            else:
-                screen.blit(broken_hearts, hp_positions[i])  # Draw empty heart
-        # Check if player lose all their hp
-        if current_hp == 0:
-            screen.fill(BLACK)
-            screen.blit(lose_text_surface, (lose_x, lose_y))
-
-        for i in range(ai_hp):
-            if i < ai_current_hp:
-                screen.blit(hearts, ai_hp_positions[i])
-            else:
-                screen.blit(broken_hearts, ai_hp_positions[i])
-        # Check if AI lose all their hp        
-        if ai_current_hp == 0:
-            screen.fill(BLACK)
-            screen.blit(win_text_surface, (win_x, win_y))
+        all_sprites.draw(screen)
+        player.draw_hp(screen)
+        ai.draw_hp(screen)
 
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
 
+    #vicky try merge
     
