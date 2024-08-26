@@ -93,6 +93,39 @@ font_5 = pygame.font.Font(font_5_path, font_5_size)
 text_5 = "Next"
 text_5_surface = font_5.render(text_5, True, WHITE)
 
+# Font setting for Life
+font_5_size = 30
+font_5_path = 'Matemasie.ttf'
+font_5 = pygame.font.Font(font_5_path, font_5_size)
+
+# Show (Life) on screen and positioning
+life_text = "Life:"
+life_text_surface = font_5.render(life_text, True, RED)
+life_x = 3
+life_y = 0
+
+# Font setting for You lose
+font_6_size = 40
+font_6_path = 'Matemasie.ttf'
+font_6 = pygame.font.Font(font_6_path, font_6_size)
+
+# Show (You lose) on screen and positioning
+lose_text = "Guess you have not enough of determination. Try to gamble again would ya?"
+lose_text_surface = font_6.render(lose_text, True, RED)
+lose_x = 50
+lose_y = 50
+
+# Font setting for You win
+font_7_size = 40
+font_7_path = 'Matemasie.ttf'
+font_7 = pygame.font.Font(font_7_path, font_7_size)
+
+# Show (You win) on screen and positioning
+win_text = "Your humanity didn't betray you."
+win_text_surface = font_7.render(win_text, True, WHITE)
+win_x = 50
+win_y = 50
+
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
 
@@ -109,7 +142,6 @@ text_3_width, text_3_height = text_3_surface.get_size()
 text_3_x = (screen_width - text_3_width) // 2
 text_3_y = (screen_height - text_3_height) // 2 +75 
 
-# Button areas for How to Play (Back)
 # Button areas for How to Play (Back)
 button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
 button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
@@ -158,6 +190,7 @@ SCREEN_STORY6 = 8
 SCREEN_PLAY1 = 9
 current_screen = SCREEN_MAIN
 
+#Import and resize images
 kidnapperimage = pygame.image.load('kidnapper.png')
 kidnapper = pygame.transform.scale(kidnapperimage,(500,500))
 
@@ -167,7 +200,13 @@ man = pygame.transform.scale(manimage,(500,500))
 monsterimage = pygame.image.load("monster.jpeg")
 monster = pygame.transform.scale(monsterimage,(700,500))
 
+heartsimage = pygame.image.load('hearts.png')
+hearts = pygame.transform.scale(heartsimage, (50,50))
 
+broken_hearts = pygame.image.load('broken_hearts.png')
+broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
+
+#Display positions of images
 player_x = 50
 player_y = 200
 
@@ -265,7 +304,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 4, screen_height // 2)
         self.hp = 3
-        self.max_hp = 5
+        self.max_hp = 3
 
 #AI class
 class AI(pygame.sprite.Sprite):
@@ -276,7 +315,17 @@ class AI(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width * 3 // 4, screen_height // 2)
         self.hp = 3
-        self.max_hp = 5
+        self.max_hp = 3
+
+#Define initial HP 
+max_hp = 3
+current_hp = max_hp
+hp_positions = [(70, 0), (120, 0), (170, 0)]
+
+#Define initial HP (AI)
+ai_hp = 3
+ai_current_hp = ai_hp
+ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
 
 #Create player and AI objects
 player = Player()
@@ -287,16 +336,37 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 all_sprites.add(ai)
 
+##########################################################################################################################################################################
+#Class for buttons
 
 ##########################################################################################################################################################################
 # IMPORTANT!!!
+##########################################################################################################################################################################
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        # Testing    
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_DOWN: 
+                # Down button decrease health by 1
+                current_hp = max(0, current_hp - 1)
 
+            elif event.key == pygame.K_UP:
+                # Up button increase health by 1
+                current_hp = min(max_hp, current_hp + 1)
+
+            elif event.key == pygame.K_LEFT:
+                ai_current_hp = max(0, ai_current_hp - 1)
+
+            elif event.key == pygame.K_RIGHT:
+                ai_current_hp == min(ai_hp, ai_current_hp + 1)
+
+
+
+##########################################################################################################################################################################
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
 
@@ -490,13 +560,34 @@ while running:
 
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
-        screen.fill(PURPLE) 
-        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
-        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
+        screen.fill(BLACK) 
+        screen.blit(life_text_surface, (life_x, life_y)) # Draw life word on the top of corner
+        all_sprites.update()
+        for sprite in all_sprites:
+            screen.blit(sprite.image, sprite.rect)
 
-    elif current_screen == SCREEN_STORY6:
-        # Show on Story 6 Screen
-        screen.fill(YELLOW) 
+        #Draw hearts based on current hp    
+        for i in range(max_hp):
+            if i < current_hp:
+                screen.blit(hearts, hp_positions[i])  # Draw full heart
+            else:
+                screen.blit(broken_hearts, hp_positions[i])  # Draw empty heart
+        # Check if player lose all their hp
+        if current_hp == 0:
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
+
+        for i in range(ai_hp):
+            if i < ai_current_hp:
+                screen.blit(hearts, ai_hp_positions[i])
+            else:
+                screen.blit(broken_hearts, ai_hp_positions[i])
+        # Check if AI lose all their hp        
+        if ai_current_hp == 0:
+            screen.fill(BLACK)
+            screen.blit(win_text_surface, (win_x, win_y))
+
+            
 
     pygame.display.flip()
     
