@@ -84,7 +84,7 @@ font_4_path = 'Matemasie.ttf'
 font_4 = pygame.font.Font(font_4_path, font_4_size)
 
 # Show (Back) on screen
-text_4 = "Back"
+text_4 = "<< Back"
 text_4_surface = font_4.render(text_4, True, WHITE)
 
 # Font setting for Next
@@ -93,7 +93,7 @@ font_5_path = 'Matemasie.ttf'
 font_5 = pygame.font.Font(font_5_path, font_5_size)
 
 # Show (Next) on screen
-text_5 = "Next"
+text_5 = "Next >>"
 text_5_surface = font_5.render(text_5, True, WHITE)
 
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
@@ -119,13 +119,13 @@ button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
 
 # Back button
 text_4_width, text_4_height = text_4_surface.get_size()
-text_4_button_x = (screen_width - text_4_width) // 2 +400
+text_4_button_x = (screen_width - text_4_width) // 2 -400
 text_4_button_y = screen_height - text_4_height // 2 -50
 text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
 
 # Next button 
 text_5_width, text_5_height = text_4_surface.get_size()
-text_5_button_x = (screen_width - text_5_width) // 2 +200
+text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
@@ -201,6 +201,7 @@ def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
 font2 = pygame.font.SysFont('Arial', 30, bold=True)
+
 
 def draw_custom_shape(surface, color, x, y, size):
     points = [
@@ -472,7 +473,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
         create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time—ten days! Just ten days, and I’ll get you your money!",
-        player_x + 400, player_y - 90, width=400, height=130)
+        player_x + 400, player_y - 90, width=400, height=100)
         
         
     elif current_screen == SCREEN_STORY2:
@@ -491,7 +492,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
         create_rounded_speech_bubble("I’ll do it. I’ll play your game. Just don’t hurt her, please!!",
-        player_x + 400, player_y - 90, width=400, height=100)
+        player_x + 400, player_y - 90, width=400, height=80)
 
     elif current_screen == SCREEN_STORY4:
         # Show on Story 4 Screen
@@ -500,7 +501,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
         screen.blit(monster, (player_x, player_y)) 
         draw_custom_shape(screen, WHITE, 700, 300, 200)
-        draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 300, max_width=140)
+        draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 310, max_width=140)
 
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
