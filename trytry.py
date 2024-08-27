@@ -85,7 +85,7 @@ font_4_path = 'Matemasie.ttf'
 font_4 = pygame.font.Font(font_4_path, font_4_size)
 
 # Show (Back) on screen
-text_4 = "Back"
+text_4 = "<< Back"
 text_4_surface = font_4.render(text_4, True, WHITE)
 
 # Font setting for Next
@@ -94,41 +94,8 @@ font_5_path = 'Matemasie.ttf'
 font_5 = pygame.font.Font(font_5_path, font_5_size)
 
 # Show (Next) on screen
-text_5 = "Next"
+text_5 = "Next >>"
 text_5_surface = font_5.render(text_5, True, WHITE)
-
-# Font setting for Life
-font_5_size = 30
-font_5_path = 'Matemasie.ttf'
-font_5 = pygame.font.Font(font_5_path, font_5_size)
-
-# Show (Life) on screen and positioning
-life_text = "Life:"
-life_text_surface = font_5.render(life_text, True, RED)
-life_x = 3
-life_y = 0
-
-# Font setting for You lose
-font_6_size = 40
-font_6_path = 'Matemasie.ttf'
-font_6 = pygame.font.Font(font_6_path, font_6_size)
-
-# Show (You lose) on screen and positioning
-lose_text = "Guess you have not enough of determination. Try to gamble again would ya?"
-lose_text_surface = font_6.render(lose_text, True, RED)
-lose_x = 50
-lose_y = 50
-
-# Font setting for You win
-font_7_size = 40
-font_7_path = 'Matemasie.ttf'
-font_7 = pygame.font.Font(font_7_path, font_7_size)
-
-# Show (You win) on screen and positioning
-win_text = "Your humanity didn't betray you."
-win_text_surface = font_7.render(win_text, True, WHITE)
-win_x = 50
-win_y = 50
 
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
@@ -147,18 +114,19 @@ text_3_x = (screen_width - text_3_width) // 2
 text_3_y = (screen_height - text_3_height) // 2 +75 
 
 # Button areas for How to Play (Back)
+# Button areas for How to Play (Back)
 button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
 button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
 
 # Back button
 text_4_width, text_4_height = text_4_surface.get_size()
-text_4_button_x = (screen_width - text_4_width) // 2 +400
+text_4_button_x = (screen_width - text_4_width) // 2 -400
 text_4_button_y = screen_height - text_4_height // 2 -50
 text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
 
 # Next button 
 text_5_width, text_5_height = text_4_surface.get_size()
-text_5_button_x = (screen_width - text_5_width) // 2 +200
+text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
@@ -176,7 +144,6 @@ SCREEN_STORY6 = 8
 SCREEN_PLAY1 = 9
 current_screen = SCREEN_MAIN
 
-#Import and resize images
 kidnapperimage = pygame.image.load('kidnapper.png')
 kidnapper = pygame.transform.scale(kidnapperimage,(500,500))
 
@@ -186,13 +153,7 @@ man = pygame.transform.scale(manimage,(500,500))
 monsterimage = pygame.image.load("monster.jpeg")
 monster = pygame.transform.scale(monsterimage,(700,500))
 
-heartsimage = pygame.image.load('hearts.png')
-hearts = pygame.transform.scale(heartsimage, (50,50))
 
-broken_hearts = pygame.image.load('broken_hearts.png')
-broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
-
-#Display positions of images
 player_x = 50
 player_y = 200
 
@@ -204,6 +165,7 @@ def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
 font2 = pygame.font.SysFont('Arial', 30, bold=True)
+
 
 def draw_custom_shape(surface, color, x, y, size):
     points = [
@@ -269,47 +231,40 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     screen.blit(bubble_surface, (x, y))
 
 ##########################################################################################################################################################################
-#Define initial hp
-max_hp = 3
-ai_hp = 3
+# Player and AI health bar
+def draw_health_bar(screen, x, y, hp, max_hp):
+    bar_length = 100
+    bar_height = 10
+    fill = (hp / max_hp) * bar_length
+    border = pygame.Rect(x, y, bar_length, bar_height)
+    fill = pygame.Rect(x, y, fill, bar_height)
+    pygame.draw.rect(screen, GREEN, fill)
+    pygame.draw.rect(screen, WHITE, border, 2)
 
-# Class for Player and AI 
-# Player Class
-class player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 4, screen_height // 2)
-        self.max_hp = max_hp
-        self.current_hp = max_hp
-        self.hp_positions = [(0, 0), (50, 0), (100, 0)]
-
-    def draw_hp(self, surface):
-        for i in range(self.current_hp):
-            surface.blit(hearts, self.hp_positions[i])
+        self.hp = 3
+        self.max_hp = 5
 
 #AI class
-class ai(pygame.sprite.Sprite):
+class AI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width * 3 // 4, screen_height // 2)
-        self.max_hp = ai_hp
-        self.ai_current_hp = ai_hp
-        self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
-
-    def draw_hp(self, surface):
-        for i in range(self.ai_current_hp):
-            surface.blit(hearts, self.ai_hp_positions[i])
-
+        self.hp = 3
+        self.max_hp = 5
 
 #Create player and AI objects
-player = player()
-ai = ai()
+player = Player()
+ai = AI()
 
 #Group the sprite
 all_sprites = pygame.sprite.Group()
@@ -320,7 +275,6 @@ all_sprites.add(ai)
 
 ##########################################################################################################################################################################
 # IMPORTANT!!!
-##########################################################################################################################################################################
 running = True
 while running:
 
@@ -484,7 +438,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
         create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time—ten days! Just ten days, and I’ll get you your money!",
-        player_x + 400, player_y - 90, width=400, height=130)
+        player_x + 400, player_y - 90, width=400, height=100)
         
         
     elif current_screen == SCREEN_STORY2:
@@ -503,7 +457,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
         create_rounded_speech_bubble("I’ll do it. I’ll play your game. Just don’t hurt her, please!!",
-        player_x + 400, player_y - 90, width=400, height=100)
+        player_x + 400, player_y - 90, width=400, height=80)
 
     elif current_screen == SCREEN_STORY4:
         # Show on Story 4 Screen
@@ -512,7 +466,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
         screen.blit(monster, (player_x, player_y)) 
         draw_custom_shape(screen, WHITE, 700, 300, 200)
-        draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 300, max_width=140)
+        draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 310, max_width=140)
 
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
