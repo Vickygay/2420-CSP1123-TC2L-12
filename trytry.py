@@ -130,6 +130,26 @@ text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
+# Image setting for Magnifier
+image_1 = pygame.image.load('magnifier.png')
+image_1_size = (200, 200) 
+image_1 = pygame.transform.scale(image_1, image_1_size)
+image_1_width, image_1_height = image_1.get_size()
+image_1_x = 70
+image_1_y = (screen_height - image_1_height) // 2 + 150
+
+# Tooltip settings
+tooltip_font = pygame.freetype.SysFont('Edu.ttf', 20)
+tooltip_text = "Magnifier: Allows you to check your current bullet's status"
+tooltip_bg_color = BLACK
+tooltip_text_color = WHITE
+
+# Image with frame settings for Magnifer
+frame_thickness = 10
+image_with_frame_surface = pygame.Surface((image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness), pygame.SRCALPHA)
+image_with_frame_surface.fill((DARKGREY))
+pygame.draw.rect(image_with_frame_surface, BLACK, (0, 0, image_with_frame_surface.get_width(), image_with_frame_surface.get_height()), frame_thickness)
+image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
 ##############################################################################################################################################################################################################################################################################################################################
 # Define screen states
 SCREEN_MAIN = 0
@@ -159,6 +179,7 @@ player_y = 200
 
 # Load fonts
 font = pygame.font.SysFont(None, 24)
+font3 = pygame.font.Font("Nerko.ttf",)
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
@@ -277,6 +298,14 @@ all_sprites.add(ai)
 # IMPORTANT!!!
 running = True
 while running:
+
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    if current_screen == SCREEN_HOW_TO_PLAY:
+        image_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
+        if image_rect.collidepoint(mouse_x, mouse_y):
+            tooltip_surface, tooltip_rect = tooltip_font.render(tooltip_text, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
+            tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  
+            screen.blit(tooltip_surface, tooltip_rect)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -419,13 +448,22 @@ while running:
         how_text2_surface = font_3.render(how_text2_, True, WHITE)
         how_text2_width, how_to_play_2_height = how_text2_surface.get_size()
         how_text2_x = (screen_width - how_text2_width) // 2
-        how_text2_y = (screen_height - how_to_play_2_height) // 2 + 30
+        how_text2_y = (screen_height - how_to_play_2_height) // 2 
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
+        screen.blit(image_with_frame_surface, (image_1_x, image_1_y))
+
         create_rounded_speech_bubble("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.  2 items will be given in round 2 and 4 in round 3.",
-        player_x + 50 , player_y -100 , width=800, height=250) 
-        
+        player_x + 50 , player_y -100 , width=800, height=250)
+
+        # Tooltip logic
+        image_1_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
+        if image_1_rect.collidepoint(mouse_x, mouse_y):
+            tooltip_surface, tooltip_rect = tooltip_font.render(tooltip_text, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
+            tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  # Position the tooltip
+            screen.blit(tooltip_surface, tooltip_rect)
+
     elif current_screen == SCREEN_STORY1:
         # Show on Play Screen
         screen.fill(BLACK)
