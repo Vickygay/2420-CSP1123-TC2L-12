@@ -47,6 +47,11 @@ DARKRED = (139, 0, 0)
 TRANSPARENT = (0, 0, 0, 0)
 RICHGREY = (31,32,34)
 DARKGREY = (169, 169, 169)
+BISQUE2 = (238, 213, 183, 255)
+LIGHTCYAN3 = (180, 205, 205, 255)
+LIGHTCYAN4 = (122, 139, 139, 255)
+LIGHTSKYBLUE4 = (96, 123, 139, 255)
+LIGHTCYAN2 = (209, 238, 238, 255)
 
 # Font setting for Life Roulette
 font_1_size = 70
@@ -153,12 +158,11 @@ image_with_frame_surface.fill((DARKGREY))
 pygame.draw.rect(image_with_frame_surface, BLACK, (0, 0, image_with_frame_surface.get_width(), image_with_frame_surface.get_height()), frame_thickness)
 image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
 
-
 image_2 = pygame.image.load('medicine.png') 
 image_2_size = (200, 200)
 image_2 = pygame.transform.scale(image_2, image_2_size)
 image_2_width, image_2_height = image_2.get_size()
-image_2_x = 380
+image_2_x = 390
 image_2_y = (screen_height - image_1_height) // 2 + 150 
 
 tooltip_text_2 = "MED KIT: 50% chance to get heal or else deduct"
@@ -179,7 +183,7 @@ image_3 = pygame.image.load('handsaw.png')
 image_3_size = (200, 200)
 image_3 = pygame.transform.scale(image_3, image_3_size)
 image_3_width, image_3_height = image_3.get_size()
-image_3_x = 730
+image_3_x = 700
 image_3_y = (screen_height - image_1_height) // 2 + 150 
 
 tooltip_text_3 = "Handsaw: double up the damage of the guns, high rick high reward"
@@ -224,14 +228,14 @@ player_x = 50
 player_y = 200
 
 # Load fonts
-font = pygame.font.SysFont(None, 24)
-font3 = pygame.font.Font("Nerko.ttf",)
+font = pygame.font.Font("DMRegular.ttf", 18)
+font3 = pygame.font.Font("Nerko.ttf", 22)
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
-font2 = pygame.font.SysFont('Arial', 30, bold=True)
+font2 = pygame.font.Font('DMRegular.ttf', 28)
 
 
 def draw_custom_shape(surface, color, x, y, size):
@@ -293,9 +297,28 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
         line_surface = font.render(line, True, BLACK)
         line_rect = line_surface.get_rect(center=(width//2, 20 + i * 30))  # Adjust y position for each line
         bubble_surface.blit(line_surface, line_rect)
-    
-    # Draw the bubble on the screen
+
+    #Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
+##########################################################################################################################################################################
+
+# Function to create a speech bubble with multiple lines
+def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_radius=10):
+    bubble_surface_2 = pygame.Surface((width, height), pygame.SRCALPHA)
+
+    # Draw a rounded rectangle for the bubble
+    draw_rounded_rect(bubble_surface_2, DARKGREY, bubble_surface_2.get_rect(), corner_radius)
+    pygame.draw.rect(bubble_surface_2, BLACK, bubble_surface_2.get_rect(), 6, border_radius=corner_radius)
+
+    wrapped_lines_2 = wrap_text(text, font3, width - 20)  # Adjust for padding
+
+    # Render each line
+    for i, line_2 in enumerate(wrapped_lines_2):
+        line_surface_2 = font3.render(line_2, True, BLACK)
+        line_rect_2 = line_surface_2.get_rect(center=(width//2, 20 + i * 30)) 
+        bubble_surface_2.blit(line_surface_2, line_rect_2)
+    # Draw the bubble on the screen
+    screen.blit(bubble_surface_2, (x, y))
 
 ##########################################################################################################################################################################
 # Player and AI health bar
@@ -496,7 +519,7 @@ while running:
         
     elif current_screen == SCREEN_HOW_TO_PLAY:
         # Show on How to Play screen 
-        screen.fill(DARKRED)
+        screen.fill(CHARCOAL)
         how_text1_ = "Game Introduction"
         how_text1_surface = font_3.render(how_text1_, True, WHITE)
         how_text1_width, how_to_play_1_height = how_text1_surface.get_size()
@@ -513,9 +536,8 @@ while running:
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))
         screen.blit(image_with_frame_surface_2, (image_2_x, image_2_y))
         screen.blit(image_with_frame_surface_3, (image_3_x, image_3_y))
-
-        create_rounded_speech_bubble("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.  2 items will be given in round 2 and 4 in round 3.",
-        player_x + 50 , player_y -100 , font2, width=800, height=250)
+        create_rounded_speech_bubble_2("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
+        player_x +6 , player_y -100 , width=900, height=255)
 
         # Tooltip logic
         image_1_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
@@ -558,7 +580,7 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(kidnapper, (player_x, player_y))
         create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal—you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
-        player_x + 400, player_y - 150, width=400, height=200)
+        player_x + 400, player_y - 150, width=410, height=200)
 
     elif current_screen == SCREEN_STORY3:
         # Show on Story 3 Screen
