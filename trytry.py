@@ -152,6 +152,50 @@ image_with_frame_surface = pygame.Surface((image_1_width + 2 * frame_thickness, 
 image_with_frame_surface.fill((DARKGREY))
 pygame.draw.rect(image_with_frame_surface, BLACK, (0, 0, image_with_frame_surface.get_width(), image_with_frame_surface.get_height()), frame_thickness)
 image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
+
+
+image_2 = pygame.image.load('medicine.png') 
+image_2_size = (200, 200)
+image_2 = pygame.transform.scale(image_2, image_2_size)
+image_2_width, image_2_height = image_2.get_size()
+image_2_x = 380
+image_2_y = (screen_height - image_1_height) // 2 + 150 
+
+tooltip_text_2 = "MED KIT: 50% chance to get heal or else deduct"
+
+frame_thickness_2 = 10
+frame_color_2 = BLACK
+background_color_2 = DARKGREY 
+
+image_with_frame_surface_2 = pygame.Surface((image_2_width + 2 * frame_thickness_2, image_2_height + 2 * frame_thickness_2), pygame.SRCALPHA)
+image_with_frame_surface_2.fill(background_color_2)
+
+pygame.draw.rect(image_with_frame_surface_2, frame_color_2, (0, 0, image_with_frame_surface_2.get_width(), image_with_frame_surface_2.get_height()), frame_thickness_2)
+
+image_with_frame_surface_2.blit(image_2, (frame_thickness_2, frame_thickness_2))
+
+
+image_3 = pygame.image.load('handsaw.png') 
+image_3_size = (200, 200)
+image_3 = pygame.transform.scale(image_3, image_3_size)
+image_3_width, image_3_height = image_3.get_size()
+image_3_x = 730
+image_3_y = (screen_height - image_1_height) // 2 + 150 
+
+tooltip_text_3 = "Handsaw: double up the damage of the guns, high rick high reward"
+
+frame_thickness_3 = 10
+frame_color_3 = BLACK
+background_color_3 = DARKGREY
+
+image_with_frame_surface_3 = pygame.Surface((image_3_width + 2 * frame_thickness_3, image_3_height + 2 * frame_thickness_3), pygame.SRCALPHA)
+image_with_frame_surface_3.fill(background_color_3)
+
+pygame.draw.rect(image_with_frame_surface_3, frame_color_3, (0, 0, image_with_frame_surface_3.get_width(), image_with_frame_surface_3.get_height()), frame_thickness_3)
+
+image_with_frame_surface_3.blit(image_3, (frame_thickness_3, frame_thickness_3))
+
+
 ##############################################################################################################################################################################################################################################################################################################################
 # Define screen states
 SCREEN_MAIN = 0
@@ -309,6 +353,17 @@ while running:
             tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  
             tooltip_x = mouse_x - tooltip_width // 2
             screen.blit(tooltip_surface, tooltip_rect)
+    
+        image_rect_2 = pygame.Rect(image_2_x, image_2_y, image_2_width + 2 * frame_thickness_2, image_2_height + 2 * frame_thickness_2)
+        if image_rect_2.collidepoint(mouse_x, mouse_y):
+            tooltip_surface_2, tooltip_rect_2 = tooltip_font.render(tooltip_text_2, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
+            tooltip_rect_2.topright = (mouse_x -10, mouse_y - 10)
+
+        image_rect_3 = pygame.Rect(image_3_x, image_3_y, image_3_width + 2 * frame_thickness_3, image_3_height + 2 * frame_thickness_3)
+        if image_rect_3.collidepoint(mouse_x, mouse_y):
+            tooltip_surface_3, tooltip_rect_3 = tooltip_font.render(tooltip_text_3, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
+            tooltip_rect_3.topright = (mouse_x -10, mouse_y - 10)
+            screen.blit(tooltip_surface_3, tooltip_rect_3)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -456,9 +511,11 @@ while running:
         screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))
+        screen.blit(image_with_frame_surface_2, (image_2_x, image_2_y))
+        screen.blit(image_with_frame_surface_3, (image_3_x, image_3_y))
 
         create_rounded_speech_bubble("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.  2 items will be given in round 2 and 4 in round 3.",
-        player_x + 50 , player_y -100 , width=800, height=250)
+        player_x + 50 , player_y -100 , font2, width=800, height=250)
 
         # Tooltip logic
         image_1_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
@@ -466,6 +523,18 @@ while running:
             tooltip_surface, tooltip_rect = tooltip_font.render(tooltip_text, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
             tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  
             screen.blit(tooltip_surface, tooltip_rect)
+        
+        image_2_rect = pygame.Rect(image_2_x, image_2_y, image_2_width + 2 * frame_thickness_2, image_2_height + 2 * frame_thickness_2)
+        if image_2_rect.collidepoint(mouse_x, mouse_y):
+            tooltip_surface_2, tooltip_rect_2 = tooltip_font.render(tooltip_text_2, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
+            tooltip_rect_2.topleft = (mouse_x -10, mouse_y -10)
+            screen.blit(tooltip_surface_2, tooltip_rect_2)
+
+        image_rect_3 = pygame.Rect(image_3_x, image_3_y, image_3_width + 2 * frame_thickness_3, image_3_height + 2 * frame_thickness_3)
+        if image_rect_3.collidepoint(mouse_x, mouse_y):
+            tooltip_surface_3, tooltip_rect_3 = tooltip_font.render(tooltip_text_3, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
+            tooltip_rect_3.topright = (mouse_x -10, mouse_y - 10)
+            screen.blit(tooltip_surface_3, tooltip_rect_3)
 
     elif current_screen == SCREEN_STORY1:
         # Show on Play Screen
