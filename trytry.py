@@ -89,7 +89,7 @@ font_4_path = 'Matemasie.ttf'
 font_4 = pygame.font.Font(font_4_path, font_4_size)
 
 # Show (Back) on screen
-text_4 = "Back"
+text_4 = "<< Back"
 text_4_surface = font_4.render(text_4, True, WHITE)
 
 # Font setting for Next
@@ -98,7 +98,7 @@ font_5_path = 'Matemasie.ttf'
 font_5 = pygame.font.Font(font_5_path, font_5_size)
 
 # Show (Next) on screen
-text_5 = "Next"
+text_5 = "Next >>"
 text_5_surface = font_5.render(text_5, True, WHITE)
 
 # Font setting for Life
@@ -156,13 +156,13 @@ button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
 
 # Back button
 text_4_width, text_4_height = text_4_surface.get_size()
-text_4_button_x = (screen_width - text_4_width) // 2 +400
+text_4_button_x = (screen_width - text_4_width) // 2 -400
 text_4_button_y = screen_height - text_4_height // 2 -50
 text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
 
 # Next button 
 text_5_width, text_5_height = text_4_surface.get_size()
-text_5_button_x = (screen_width - text_5_width) // 2 +200
+text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
@@ -592,7 +592,7 @@ while running:
         how_text2_surface = font_3.render(how_text2_, True, WHITE)
         how_text2_width, how_to_play_2_height = how_text2_surface.get_size()
         how_text2_x = (screen_width - how_text2_width) // 2
-        how_text2_y = (screen_height - how_to_play_2_height) // 2 + 30
+        how_text2_y = (screen_height - how_to_play_2_height) // 2 
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
