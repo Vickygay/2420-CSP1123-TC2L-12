@@ -364,6 +364,25 @@ while running:
             pygame.quit()
             sys.exit()
         
+
+#FOR TESTING PURPOSE        
+        elif event.type == pygame.KEYDOWN:
+            # Increase or decrease player HP
+            if event.key == pygame.K_UP:
+                player.current_hp = min(player.max_hp, player.current_hp + 1)  # Increase HP
+
+            elif event.key == pygame.K_DOWN:
+                player.current_hp = max(0, player.current_hp - 1)  # Decrease HP
+            
+            # Increase or decrease AI HP
+            elif event.key == pygame.K_LEFT:
+                ai.ai_current_hp = max(0, ai.ai_current_hp - 1)  # Decrease AI HP
+
+            elif event.key == pygame.K_RIGHT:
+                ai.ai_current_hp = min(ai.max_hp, ai.ai_current_hp + 1)  # Increase AI HP
+
+        
+        
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
 
@@ -560,4 +579,6 @@ while running:
     pygame.display.flip()
     
     pygame.time.Clock().tick(fps)
+
+    
     
