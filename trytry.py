@@ -317,7 +317,7 @@ class player(pygame.sprite.Sprite):
         self.image = pygame.Surface((50, 50))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
-        self.rect.center = (screen_width // 4, screen_height // 2)
+        self.rect.center = (screen_width // 10, screen_height // 2)
         self.max_hp = max_hp
         self.current_hp = max_hp
         self.hp_positions = [(0, 0), (50, 0), (100, 0)]
@@ -333,7 +333,7 @@ class ai(pygame.sprite.Sprite):
         self.image = pygame.Surface((50, 50))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-        self.rect.center = (screen_width * 3 // 4, screen_height // 2)
+        self.rect.center = (screen_width * 5 // 5.5, screen_height // 2)
         self.max_hp = ai_hp
         self.ai_current_hp = ai_hp
         self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
@@ -562,8 +562,4 @@ while running:
     pygame.time.Clock().tick(fps)
 
     #vicky try merge
-<<<<<<< HEAD
     
-=======
-    
->>>>>>> ec69b06c15de39f3745a9501279b5099a4f9fa98
