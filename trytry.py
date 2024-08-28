@@ -143,6 +143,8 @@ tooltip_font = pygame.freetype.SysFont('Edu.ttf', 20)
 tooltip_text = "Magnifier: Allows you to check your current bullet's status"
 tooltip_bg_color = BLACK
 tooltip_text_color = WHITE
+tooltip_width = 150
+tooltip_height = 50
 
 # Image with frame settings for Magnifer
 frame_thickness = 10
@@ -305,6 +307,7 @@ while running:
         if image_rect.collidepoint(mouse_x, mouse_y):
             tooltip_surface, tooltip_rect = tooltip_font.render(tooltip_text, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
             tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  
+            tooltip_x = mouse_x - tooltip_width // 2
             screen.blit(tooltip_surface, tooltip_rect)
 
     for event in pygame.event.get():
@@ -461,7 +464,7 @@ while running:
         image_1_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
         if image_1_rect.collidepoint(mouse_x, mouse_y):
             tooltip_surface, tooltip_rect = tooltip_font.render(tooltip_text, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
-            tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  # Position the tooltip
+            tooltip_rect.topleft = (mouse_x + 10, mouse_y + 10)  
             screen.blit(tooltip_surface, tooltip_rect)
 
     elif current_screen == SCREEN_STORY1:
