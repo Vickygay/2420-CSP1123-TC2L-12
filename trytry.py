@@ -53,7 +53,7 @@ LIGHTSKYBLUE4 = (96, 123, 139, 255)
 LIGHTCYAN2 = (209, 238, 238, 255)
 
 # Font setting for Life Roulette
-font_1_size = 70
+font_1_size = 85
 font_1_path = 'Creepster.ttf' 
 font_1 = pygame.font.Font(font_1_path, font_1_size)
 
@@ -62,7 +62,7 @@ text_1 = "Life Roulette"
 text_1_surface = font_1.render(text_1, True, RED)
 
 # Font setting for Start
-font_2_size = 60
+font_2_size = 70
 font_2_path = 'Creepster.ttf'  
 font_2 = pygame.font.Font(font_2_path, font_2_size)
 
@@ -71,7 +71,7 @@ text_2 = "Start"
 text_2_surface = font_2.render(text_2, True, RED)
 
 # Font setting for How to Play
-font_3_size = 50
+font_3_size = 60
 font_3_path = 'Creepster.ttf'  
 font_3 = pygame.font.Font(font_3_path, font_3_size)
 
@@ -144,11 +144,11 @@ text_1_y = (screen_height - text_1_height) // 2 -150
 
 text_2_width, text_2_height = text_2_surface.get_size()
 text_2_x = (screen_width - text_2_width) // 2
-text_2_y = (screen_height - text_2_height) // 2 -25  
+text_2_y = (screen_height - text_2_height) // 2 -10 
 
 text_3_width, text_3_height = text_3_surface.get_size()
 text_3_x = (screen_width - text_3_width) // 2
-text_3_y = (screen_height - text_3_height) // 2 +75 
+text_3_y = (screen_height - text_3_height) // 2 +110
 
 # Button areas for How to Play (Back)
 button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
