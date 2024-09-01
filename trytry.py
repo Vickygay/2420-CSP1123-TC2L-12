@@ -101,10 +101,14 @@ font_5 = pygame.font.Font(font_5_path, font_5_size)
 text_5 = "Next >>"
 text_5_surface = font_5.render(text_5, True, WHITE)
 
-# Font setting for Life
-font_5_size = 30
-font_5_path = 'Matemasie.ttf'
-font_5 = pygame.font.Font(font_5_path, font_5_size)
+# Font setting for Back to Main
+font_8_size = 45
+font_8_path = 'Matemasie.ttf'
+font_8 = pygame.font.Font(font_8_path, font_8_size)
+
+# Show (Back to Main) on screen
+text_8 = "<< Main"
+text_8_surface = font_8.render(text_8, True, WHITE)
 
 # Show (Life) on screen and positioning
 life_text = "Life:"
@@ -161,11 +165,16 @@ text_4_button_y = screen_height - text_4_height // 2 -50
 text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
 
 # Next button 
-text_5_width, text_5_height = text_4_surface.get_size()
+text_5_width, text_5_height = text_5_surface.get_size()
 text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
 
+# Main button 
+text_8_width, text_8_height = text_8_surface.get_size()
+text_8_button_x = (screen_width - text_8_width) // 2 -400
+text_8_button_y = screen_height - text_8_height // 2 -50
+text_8_button_rect = pygame.Rect(text_8_button_x, text_8_button_y, text_8_width, text_8_height)
 # Image settings for magnifier
 image_1 = pygame.image.load('magnifier.png') 
 image_1_size = (200, 200)
@@ -241,6 +250,7 @@ SCREEN_STORY4 = 6
 SCREEN_STORY5 = 7
 SCREEN_STORY6 = 8
 SCREEN_PLAY1 = 9
+SCREENNAME = 10
 current_screen = SCREEN_MAIN
 
 #Import and resize images
@@ -521,11 +531,28 @@ while running:
             elif current_screen == SCREEN_STORY4:
                 if text_5_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
-                    current_screen = SCREEN_STORY5
+                    current_screen = SCREENNAME
+                    pygame.display.set_caption('Enter your Name')
                 elif text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
                     current_screen = SCREEN_STORY3
                     pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREENNAME:
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY5
+                    pygame.display.set_caption('Playing')
+                elif text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY4
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREEN_STORY5:
+                if text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
             
     # Key control for SCREEN_PLAY
     keys = pygame.key.get_pressed()
@@ -663,12 +690,19 @@ while running:
         draw_custom_shape(screen, WHITE, 700, 300, 200)
         draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 300, max_width=140)
 
+    elif current_screen == SCREENNAME:
+        # Show on Enter your name screen
+        screen.fill(YELLOW) 
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
+
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
         screen.fill(BLACK) 
         all_sprites.draw(screen)
         player.draw_hp(screen)
         ai.draw_hp(screen)
+        screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
 
     pygame.display.flip()
     
