@@ -31,6 +31,7 @@ sound_play = pygame.mixer.Sound('clicksound.mp3')
 sound_how_to_play = pygame.mixer.Sound('clicksound.mp3')
 sound_back = pygame.mixer.Sound('clicksound.mp3')
 sound_next = pygame.mixer.Sound('clicksound.mp3')
+sound_clickbox = pygame.mixer.Sound("clickbox.mp3")
 
 # Colours code in RGB
 WHITE = (255, 255, 255)
@@ -39,7 +40,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 LIGHTBLUE = (173, 216, 230)
 CHARCOAL = (54, 69, 79)
-PINK = (255,192,203)
+LIGHTRED = (255,0,0)
 PURPLE = (160, 32, 240)
 YELLOW = (255, 255, 0)
 DARKRED = (139, 0, 0)
@@ -53,7 +54,7 @@ LIGHTSKYBLUE4 = (96, 123, 139, 255)
 LIGHTCYAN2 = (209, 238, 238, 255)
 
 # Font setting for Life Roulette
-font_1_size = 70
+font_1_size = 85
 font_1_path = 'Creepster.ttf' 
 font_1 = pygame.font.Font(font_1_path, font_1_size)
 
@@ -62,7 +63,7 @@ text_1 = "Life Roulette"
 text_1_surface = font_1.render(text_1, True, RED)
 
 # Font setting for Start
-font_2_size = 60
+font_2_size = 70
 font_2_path = 'Creepster.ttf'  
 font_2 = pygame.font.Font(font_2_path, font_2_size)
 
@@ -71,7 +72,7 @@ text_2 = "Start"
 text_2_surface = font_2.render(text_2, True, RED)
 
 # Font setting for How to Play
-font_3_size = 50
+font_3_size = 60
 font_3_path = 'Creepster.ttf'  
 font_3 = pygame.font.Font(font_3_path, font_3_size)
 
@@ -101,10 +102,23 @@ font_5 = pygame.font.Font(font_5_path, font_5_size)
 text_5 = "Next >>"
 text_5_surface = font_5.render(text_5, True, WHITE)
 
-# Font setting for Life
-font_5_size = 30
-font_5_path = 'Matemasie.ttf'
-font_5 = pygame.font.Font(font_5_path, font_5_size)
+# Font setting for Back to Main
+font_8_size = 45
+font_8_path = 'Matemasie.ttf'
+font_8 = pygame.font.Font(font_8_path, font_8_size)
+
+# Show (Back to Main) on screen
+text_8 = "<< Main"
+text_8_surface = font_8.render(text_8, True, WHITE)
+
+# Font setting for Click Shift first before enter your name
+font_11_size = 45
+font_11_path = 'Nerko.ttf'
+font_11 = pygame.font.Font(font_11_path, font_11_size)
+
+# Show (Click Shift first before enter your name)
+text_11 = "Click Shift key before Entering your Name!"
+text_11_surface = font_11.render(text_11, True, WHITE)
 
 # Show (Life) on screen and positioning
 life_text = "Life:"
@@ -144,11 +158,11 @@ text_1_y = (screen_height - text_1_height) // 2 -150
 
 text_2_width, text_2_height = text_2_surface.get_size()
 text_2_x = (screen_width - text_2_width) // 2
-text_2_y = (screen_height - text_2_height) // 2 -25  
+text_2_y = (screen_height - text_2_height) // 2 -10 
 
 text_3_width, text_3_height = text_3_surface.get_size()
 text_3_x = (screen_width - text_3_width) // 2
-text_3_y = (screen_height - text_3_height) // 2 +75 
+text_3_y = (screen_height - text_3_height) // 2 +110
 
 # Button areas for How to Play (Back)
 button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
@@ -161,10 +175,22 @@ text_4_button_y = screen_height - text_4_height // 2 -50
 text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
 
 # Next button 
-text_5_width, text_5_height = text_4_surface.get_size()
+text_5_width, text_5_height = text_5_surface.get_size()
 text_5_button_x = (screen_width - text_5_width) // 2 +400
 text_5_button_y = screen_height - text_5_height // 2 -50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
+
+# Main button 
+text_8_width, text_8_height = text_8_surface.get_size()
+text_8_button_x = (screen_width - text_8_width) // 2 -400
+text_8_button_y = screen_height - text_8_height // 2 -50
+text_8_button_rect = pygame.Rect(text_8_button_x, text_8_button_y, text_8_width, text_8_height)
+
+# Click Shift button
+text_11_width, text_11_height = text_11_surface.get_size()
+text_11_button_x = (screen_width - text_11_width) // 2 
+text_11_button_y = screen_width // 2- text_11_height - 250
+text_11_button_rect = pygame.Rect(text_11_button_x, text_11_button_y, text_11_width, text_11_height)
 
 # Image settings for magnifier
 image_1 = pygame.image.load('magnifier.png') 
@@ -209,7 +235,6 @@ pygame.draw.rect(image_with_frame_surface_2, frame_color_2, (0, 0, image_with_fr
 
 image_with_frame_surface_2.blit(image_2, (frame_thickness_2, frame_thickness_2))
 
-
 image_3 = pygame.image.load('handsaw.png') 
 image_3_size = (200, 200)
 image_3 = pygame.transform.scale(image_3, image_3_size)
@@ -241,6 +266,8 @@ SCREEN_STORY4 = 6
 SCREEN_STORY5 = 7
 SCREEN_STORY6 = 8
 SCREEN_PLAY1 = 9
+SCREENNAME = 10
+SCREENDISPLAY = 11
 current_screen = SCREEN_MAIN
 
 #Import and resize images
@@ -272,7 +299,6 @@ def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
 font2 = pygame.font.Font('DMRegular.ttf', 28)
-
 
 def draw_custom_shape(surface, color, x, y, size):
     points = [
@@ -337,7 +363,6 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     #Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
 ##########################################################################################################################################################################
-
 # Function to create a speech bubble with multiple lines
 def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_radius=10):
     bubble_surface_2 = pygame.Surface((width, height), pygame.SRCALPHA)
@@ -355,7 +380,6 @@ def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_rad
         bubble_surface_2.blit(line_surface_2, line_rect_2)
     # Draw the bubble on the screen
     screen.blit(bubble_surface_2, (x, y))
-
 ##########################################################################################################################################################################
 #Define initial hp
 max_hp = 3
@@ -405,12 +429,81 @@ ai = ai()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 all_sprites.add(ai)
-
 ##########################################################################################################################################################################
+font_10 = pygame.font.Font("Gloria.ttf", 47)
+input_font_name = pygame.font.Font("Gloria.ttf", 50)
 
+def player_name():
+    input_box = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 75, 600, 120)
+    color_inactive = pygame.Color(WHITE)
+    color_active = pygame.Color(LIGHTRED)
+    color = color_inactive
+    active = False
+    text = ' '
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos):
+                    sound_clickbox.play()
+                    active = not active
+                else:
+                    active = False
+                color = color_active if active else color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        return text
+                    else:
+                        text += event.unicode
+
+        screen.fill(BLACK)
+        txt_surface = input_font_name.render(text, True, color)
+        width = max(600, txt_surface.get_width()+10)
+        input_box.w = width
+        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+        pygame.draw.rect(screen, color, input_box, 10)
+        screen.blit(text_11_surface,(text_11_button_x, text_11_button_y))
+
+        pygame.display.flip()
+        clock.tick(30)
+
+def SCREENDISPLAY(name):
+    clock = pygame.time.Clock()
+    global current_screen
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                
+                # Check if the mouse click is on the "Next" button
+                if text_5_button_rect.collidepoint(mouse_pos):
+                    sound_next.play()
+                    current_screen = SCREEN_STORY5  
+                    pygame.display.set_caption('Storyline')
+                    return
+
+        screen.fill(BLACK)
+        name_surface = font_10.render(f'Hello, {name}, Welcome to Life Roulette', True, RED)
+        screen.blit(name_surface, (screen_width // 2 - name_surface.get_width() // 2, screen_height // 2 - name_surface.get_height() // 2))
+        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
+
+        pygame.display.flip()
+        clock.tick(30)
 ##########################################################################################################################################################################
 # IMPORTANT!!!
-##########################################################################################################################################################################
+show_input_box = False
 running = True
 while running:
 
@@ -439,7 +532,6 @@ while running:
             pygame.quit()
             sys.exit()
         
-
 #FOR TESTING PURPOSE        
         elif event.type == pygame.KEYDOWN:
             # Increase or decrease player HP
@@ -455,9 +547,7 @@ while running:
 
             elif event.key == pygame.K_RIGHT:
                 ai.ai_current_hp = min(ai.max_hp, ai.ai_current_hp + 1)  # Increase AI HP
-
-        
-        
+      
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
 
@@ -523,18 +613,24 @@ while running:
             elif current_screen == SCREEN_STORY4:
                 if text_5_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
-                    current_screen = SCREEN_STORY5
+                    show_input_box = True
+                    current_screen = SCREENNAME
+                    pygame.display.set_caption('Enter your Name')
                 elif text_4_button_rect.collidepoint(mouse_pos):
                     sound_back.play()
                     current_screen = SCREEN_STORY3
                     pygame.display.set_caption('Storyline')
-            
-    # Key control for SCREEN_PLAY
-    keys = pygame.key.get_pressed()
-    if current_screen == SCREEN_PLAY and keys[pygame.K_b]:
-        current_screen = SCREEN_MAIN
-        pygame.display.set_caption('Life Roulette')
 
+            elif current_screen == SCREENNAME:
+                name = player_name()
+                SCREENDISPLAY(name)
+            
+            elif current_screen == SCREEN_STORY5:
+                if text_4_button_rect.collidepoint(mouse_pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
+            
     # Current screen update
     screen.fill(BLACK)
     if current_screen == SCREEN_MAIN:
@@ -636,8 +732,7 @@ while running:
         screen.blit(man, (player_x, player_y))
         create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time—ten days! Just ten days, and I’ll get you your money!",
         player_x + 400, player_y - 90, width=400, height=130)
-        
-        
+          
     elif current_screen == SCREEN_STORY2:
         # Show on Story 2 Screen
         screen.fill(BLACK)
@@ -665,16 +760,23 @@ while running:
         draw_custom_shape(screen, WHITE, 700, 300, 200)
         draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 300, max_width=140)
 
+    elif current_screen == SCREENNAME:
+        # Show on Enter your name Screen
+        screen.fill(BLACK)
+        name = player_name()  
+        SCREENDISPLAY(name)
+
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
         screen.fill(BLACK) 
         all_sprites.draw(screen)
         player.draw_hp(screen)
         ai.draw_hp(screen)
+        screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
 
     pygame.display.flip()
     
-    pygame.time.Clock().tick(fps)
+    pygame.time.Clock().tick(30)
 
     
     
