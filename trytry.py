@@ -378,6 +378,7 @@ class player(pygame.sprite.Sprite):
         for i in range(self.current_hp):
             surface.blit(hearts, self.hp_positions[i])
 
+
 #AI class
 class ai(pygame.sprite.Sprite):
     def __init__(self):
@@ -393,6 +394,7 @@ class ai(pygame.sprite.Sprite):
     def draw_hp(self, surface):
         for i in range(self.ai_current_hp):
             surface.blit(hearts, self.ai_hp_positions[i])
+            
 
 
 #Create player and AI objects
@@ -592,7 +594,7 @@ while running:
         how_text2_surface = font_3.render(how_text2_, True, WHITE)
         how_text2_width, how_to_play_2_height = how_text2_surface.get_size()
         how_text2_x = (screen_width - how_text2_width) // 2
-        how_text2_y = (screen_height - how_to_play_2_height) // 2 
+        how_text2_y = (screen_height - how_to_play_2_height) // 2 + 30
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
