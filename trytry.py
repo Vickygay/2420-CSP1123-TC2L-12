@@ -132,10 +132,10 @@ font_6_path = 'Matemasie.ttf'
 font_6 = pygame.font.Font(font_6_path, font_6_size)
 
 # Show (You lose) on screen and positioning
-lose_text = "Guess you have not enough of determination. Try to gamble again would ya?"
+lose_text = "Try to gamble again would ya?"
 lose_text_surface = font_6.render(lose_text, True, RED)
-lose_x = 50
-lose_y = 50
+lose_x = 200
+lose_y = 200
 
 # Font setting for You win
 font_7_size = 40
@@ -147,6 +147,18 @@ win_text = "Your humanity didn't betray you."
 win_text_surface = font_7.render(win_text, True, WHITE)
 win_x = 50
 win_y = 50
+
+# Font setting for Round two
+font_8_size = 40
+font_8_path = 'Matemasie.ttf'
+font_8 = pygame.font.Font(font_8_path, font_8_size)
+
+# Show (Round two) on screen and positioning
+round_2 = "Round 2"
+round_2_surface = font_8.render(round_2, True, WHITE)
+round_2_x = 200
+round_2_y = 100
+
 
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
@@ -286,6 +298,12 @@ hearts = pygame.transform.scale(heartsimage, (50,50))
 broken_hearts = pygame.image.load('broken_hearts.png')
 broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
 
+dealer = pygame.image.load('dealer.png')
+dealer = pygame.transform.scale(dealer, (200,200)) 
+
+user = pygame.image.load('player.png')
+user = pygame.transform.scale(user, (200,200))
+
 #Display positions of images
 player_x = 50
 player_y = 200
@@ -387,43 +405,78 @@ ai_hp = 3
 
 # Class for Player and AI 
 # Player Class
-class player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(GREEN)
+        self.image = user
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 10, screen_height // 2)
         self.max_hp = max_hp
         self.current_hp = max_hp
         self.hp_positions = [(0, 0), (50, 0), (100, 0)]
+        self.game_over = False
 
+#Draw out the hearts for Player
     def draw_hp(self, surface):
-        for i in range(self.current_hp):
-            surface.blit(hearts, self.hp_positions[i])
+        for i in range(self.max_hp):
+            if i < self.current_hp:
+                surface.blit(hearts, self.hp_positions[i])
+            else:
+                surface.blit(broken_hearts, self.hp_positions[i])
 
+#Check for player's heart
+    def player_check_hp(self):
+        if self.current_hp <= 0:
+            self.game_over = True
+
+#Draw out defeated screen when player is defeated
+    def draw_lose_screen(self):
+        if self.game_over:
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
+
+#Reset the gameplay after player was defeated
+    def reset(self):
+        self.current_hp = max_hp
+        self.game_over = False
+    
 
 #AI class
 class ai(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(RED)
+        self.image = dealer
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width * 5 // 5.5, screen_height // 2)
         self.max_hp = ai_hp
         self.ai_current_hp = ai_hp
         self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
+        self.game_over = False
 
     def draw_hp(self, surface):
-        for i in range(self.ai_current_hp):
-            surface.blit(hearts, self.ai_hp_positions[i])
-            
+        for i in range(self.max_hp):
+            if i < self.ai_current_hp:
+                surface.blit(hearts, self.ai_hp_positions[i])
+            else:
+                surface.blit(broken_hearts, self.ai_hp_positions[i])
+
+    def reset(self):
+            self.ai_current_hp = ai_hp
+
+    def ai_check_hp(self):
+        if self.ai_current_hp <= 0:
+            return True
+
+def reset_game():
+    player.reset()
+    ai.reset()
+    global current_screen
+    current_screen = SCREEN_MAIN
 
 
 #Create player and AI objects
-player = player()
-ai = ai()
+player = Player()
+ai = ai()   
 
 #Group the sprite
 all_sprites = pygame.sprite.Group()
@@ -769,8 +822,15 @@ while running:
     elif current_screen == SCREEN_STORY5:
         # Show on Story 5 Screen
         screen.fill(BLACK) 
-        all_sprites.draw(screen)
+        all_sprites.draw(screen)        #Draw out the class and def for player and ai
         player.draw_hp(screen)
+        player.player_check_hp()
+        if player.game_over:
+            screen.fill(BLACK)
+            player.draw_lose_screen()
+            reset_game()
+        else:
+            pass
         ai.draw_hp(screen)
         screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
 
