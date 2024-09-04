@@ -846,7 +846,6 @@ while running:
         screen.blit(real_bullets_text, (10, 50))
         screen.blit(fake_bullets_text, (300, 50))
         screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
-
         shoot_message_text = font_12.render(shoot_message, True, WHITE)
         screen.blit(shoot_message_text, (10, 100))
 
