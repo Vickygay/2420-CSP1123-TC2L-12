@@ -837,6 +837,3 @@ while running:
     pygame.display.flip()
     
     pygame.time.Clock().tick(30)
-
-    
-    
