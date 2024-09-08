@@ -432,8 +432,9 @@ class Player(pygame.sprite.Sprite):
 #Draw out defeated screen when player is defeated
     def draw_lose_screen(self):
         if self.game_over:
-            screen.fill(BLACK)
-            screen.blit(lose_text_surface, (lose_x, lose_y))
+                screen.fill(BLACK)
+                screen.blit(lose_text_surface, (lose_x, lose_y))
+
 
 #Reset the gameplay after player was defeated
     def reset(self):
@@ -826,13 +827,14 @@ while running:
         player.draw_hp(screen)
         player.player_check_hp()
         if player.game_over:
-            screen.fill(BLACK)
             player.draw_lose_screen()
+            pygame.display.update()
+            pygame.time.delay(5000)
             reset_game()
         else:
             pass
         ai.draw_hp(screen)
-        screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
+        
 
     pygame.display.flip()
     
