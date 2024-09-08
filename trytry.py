@@ -159,7 +159,6 @@ round_2_surface = font_8.render(round_2, True, WHITE)
 round_2_x = 200
 round_2_y = 100
 
-
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
 
@@ -432,9 +431,8 @@ class Player(pygame.sprite.Sprite):
 #Draw out defeated screen when player is defeated
     def draw_lose_screen(self):
         if self.game_over:
-                screen.fill(BLACK)
-                screen.blit(lose_text_surface, (lose_x, lose_y))
-
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
 
 #Reset the gameplay after player was defeated
     def reset(self):
@@ -555,6 +553,77 @@ def SCREENDISPLAY(name):
 
         pygame.display.flip()
         clock.tick(30)
+##########################################################################################################################################################################
+# Bullet setting for round 1
+num_real_bullets = 5
+num_fake_bullets = 3
+turn = "player"
+shoot_message = " "
+ai_shoot_message = " "
+
+def bullet():
+    global num_real_bullets, num_fake_bullets, shoot_message
+    mouse_pos = pygame.mouse.get_pos()
+    
+    #Define the first turn for player first
+    if turn == "player":
+        mouse_pos = pygame.mouse.get_pos()
+
+    # Click on Image
+    if image_4_x <= mouse_pos[0] <= image_4_x + image_4_width and image_4_y <= mouse_pos[1] <= image_4_y + image_4_height:
+        if num_real_bullets > 0 or num_fake_bullets > 0:
+            available_bullets = []
+            if num_real_bullets > 0:
+                available_bullets.append("real")
+            if num_fake_bullets > 0:
+                available_bullets.append("fake")
+
+            bullet_type = random.choice(available_bullets)
+
+            if bullet_type == "real":
+                num_real_bullets -= 1
+                gun_sound.play()
+                shoot_message = (f"{name} shot a Real bullet!")
+            else:
+                num_fake_bullets -= 1
+                emptygun_sound.play()
+                shoot_message = (f"{name} shot a Fake bullet!")
+        else:
+            shoot_message = "No bullets left!"
+
+        turn == "ai"
+
+    #Define the next turn after player for AI
+    elif turn == "ai":
+        ai_fire()
+        turn == "player" #Switch to player after AI
+
+#Define for AI to fire 
+def ai_fire():
+    global num_real_bullets_ai, num_fake_bullets_ai, ai_shoot_message
+
+    if num_real_bullets_ai > 0 or num_fake_bullets_ai > 0:
+        available_bullets_ai = []
+        if num_real_bullets_ai > 0:
+            available_bullets_ai.append("real")
+        if num_fake_bullets_ai > 0:
+            available_bullets_ai.append("fake")
+
+        bullet_type_ai = random.choice(available_bullets_ai)
+
+        if bullet_type_ai == "real":
+            num_real_bullets_ai -= 1
+            gun_sound.play()
+            ai_shoot_message = "AI shot a Real bullet!"
+        else:
+            num_fake_bullets_ai -= 1
+            emptygun_sound.play()
+            ai_shoot_message = "AI shot a Fake bullet!"
+    else:
+        ai_shoot_message = "AI has no bullets left!"
+
+
+
 ##########################################################################################################################################################################
 # IMPORTANT!!!
 show_input_box = False
