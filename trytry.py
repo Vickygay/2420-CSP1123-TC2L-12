@@ -2,6 +2,7 @@ import pygame
 import sys
 from moviepy.editor import VideoFileClip
 import numpy as np
+import random
 
 # Initialize Pygame
 pygame.init()
@@ -32,6 +33,9 @@ sound_how_to_play = pygame.mixer.Sound('clicksound.mp3')
 sound_back = pygame.mixer.Sound('clicksound.mp3')
 sound_next = pygame.mixer.Sound('clicksound.mp3')
 sound_clickbox = pygame.mixer.Sound("clickbox.mp3")
+gun_sound = pygame.mixer.Sound("gunsound.mp3")
+emptygun_sound = pygame.mixer.Sound("emptygun.mp3")
+delete_sound = pygame.mixer.Sound("delete.mp3")
 
 # Colours code in RGB
 WHITE = (255, 255, 255)
@@ -111,14 +115,33 @@ font_8 = pygame.font.Font(font_8_path, font_8_size)
 text_8 = "<< Main"
 text_8_surface = font_8.render(text_8, True, WHITE)
 
-# Font setting for Click Shift first before enter your name
-font_11_size = 45
+#Font setting for Skip
+font_9_size = 45
+font_9_path = 'Matemasie.ttf'
+font_9 = pygame.font.Font(font_9_path, font_9_size)
+
+#Show (skip) on screen
+text_9 = "Skip"
+skip_x = 880
+skip_y = 720
+
+# Font setting Enter Your Name
+font_11_size = 70
 font_11_path = 'Nerko.ttf'
 font_11 = pygame.font.Font(font_11_path, font_11_size)
 
-# Show (Click Shift first before enter your name)
-text_11 = "Click Shift key before Entering your Name!"
+# Show Enter your name
+text_11 = "Enter Your Name!"
 text_11_surface = font_11.render(text_11, True, WHITE)
+
+# Fonts setting for How many bullets left
+font_12_size = 36
+font_12_path = "Nerko.ttf"
+font_12 = pygame.font.Font(font_12_path, font_12_size)
+
+font_13_size = 28
+font_13_path = "Nerko.ttf"
+font_13 = pygame.font.Font(font_13_path, font_13_size)
 
 # Show (Life) on screen and positioning
 life_text = "Life:"
@@ -132,18 +155,18 @@ font_6_path = 'Matemasie.ttf'
 font_6 = pygame.font.Font(font_6_path, font_6_size)
 
 # Show (You lose) on screen and positioning
-lose_text = "Try to gamble again would ya?"
+lose_text = "Foolish gambler.Try again would ya?"
 lose_text_surface = font_6.render(lose_text, True, RED)
-lose_x = 200
-lose_y = 200
+lose_x = 125
+lose_y = 250
 
-# Font setting for You win
+# Font setting for You win 
 font_7_size = 40
 font_7_path = 'Matemasie.ttf'
 font_7 = pygame.font.Font(font_7_path, font_7_size)
 
 # Show (You win) on screen and positioning
-win_text = "Your humanity didn't betray you."
+win_text = "Congratulations, your humanity didn't betray you."
 win_text_surface = font_7.render(win_text, True, WHITE)
 win_x = 50
 win_y = 50
@@ -154,10 +177,10 @@ font_8_path = 'Matemasie.ttf'
 font_8 = pygame.font.Font(font_8_path, font_8_size)
 
 # Show (Round two) on screen and positioning
-round_2 = "Round 2"
+round_2 = "Round Two"
 round_2_surface = font_8.render(round_2, True, WHITE)
-round_2_x = 200
-round_2_y = 100
+round_2_x = 375
+round_2_y = 0
 
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
@@ -200,7 +223,7 @@ text_8_button_rect = pygame.Rect(text_8_button_x, text_8_button_y, text_8_width,
 # Click Shift button
 text_11_width, text_11_height = text_11_surface.get_size()
 text_11_button_x = (screen_width - text_11_width) // 2 
-text_11_button_y = screen_width // 2- text_11_height - 250
+text_11_button_y = screen_width // 2- text_11_height - 200
 text_11_button_rect = pygame.Rect(text_11_button_x, text_11_button_y, text_11_width, text_11_height)
 
 # Image settings for magnifier
@@ -233,7 +256,7 @@ image_2_width, image_2_height = image_2.get_size()
 image_2_x = 390
 image_2_y = (screen_height - image_1_height) // 2 + 150 
 
-tooltip_text_2 = "MED KIT: 50% chance to get heal or else deduct"
+tooltip_text_2 = "Expired Med Kit: 50% chance to get heal or else deduct"
 
 frame_thickness_2 = 10
 frame_color_2 = BLACK
@@ -265,6 +288,21 @@ image_with_frame_surface_3.fill(background_color_3)
 pygame.draw.rect(image_with_frame_surface_3, frame_color_3, (0, 0, image_with_frame_surface_3.get_width(), image_with_frame_surface_3.get_height()), frame_thickness_3)
 
 image_with_frame_surface_3.blit(image_3, (frame_thickness_3, frame_thickness_3))
+
+# Load and scale the image for Gun 
+image_4 = pygame.image.load('Gun.png')
+image_4_size = (150, 100)
+image_4 = pygame.transform.scale(image_4, image_4_size)
+image_4_width, image_4_height = image_4.get_size()
+image_4_x = (screen_width - image_4_width) // 2
+image_4_y = (screen_height - image_4_height) // 2
+
+# Frame around the image 
+frame_thickness_4 = 10
+image_with_frame_surface_4 = pygame.Surface((image_4_width + 2 * frame_thickness_4, image_4_height + 2 * frame_thickness_4), pygame.SRCALPHA)
+image_with_frame_surface_4.fill(WHITE)
+pygame.draw.rect(image_with_frame_surface_4, DARKRED, (0, 0, image_with_frame_surface_4.get_width(), image_with_frame_surface_4.get_height()), frame_thickness_4)
+image_with_frame_surface_4.blit(image_4, (frame_thickness_4, frame_thickness_4))
 
 # Define screen states
 SCREEN_MAIN = 0
@@ -310,6 +348,13 @@ player_y = 200
 # Load fonts
 font = pygame.font.Font("DMRegular.ttf", 18)
 font3 = pygame.font.Font("Nerko.ttf", 22)
+
+#Draw out a functional Skip button
+def draw_skip_button():
+    skip_text = font_9.render(text_9, True, WHITE)
+    screen.blit(skip_text, (skip_x, skip_y))
+    text_rect = skip_text.get_rect(topleft=(skip_x, skip_y))
+    return text_rect
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
@@ -423,22 +468,32 @@ class Player(pygame.sprite.Sprite):
             else:
                 surface.blit(broken_hearts, self.hp_positions[i])
 
-#Check for player's heart
+#Check for player's hp
     def player_check_hp(self):
         if self.current_hp <= 0:
             self.game_over = True
+
+#Reset the gameplay after player was defeated
+    def reset(self):
+        self.current_hp = max_hp
+        self.game_over = False
+        global current_screen, num_fake_bullets, num_real_bullets
+        current_screen = SCREEN_MAIN
+        num_real_bullets = 5
+        num_fake_bullets = 3
+
+#Reset hp for player
+    def hp_reset(self):
+        self.current_hp = max_hp
 
 #Draw out defeated screen when player is defeated
     def draw_lose_screen(self):
         if self.game_over:
             screen.fill(BLACK)
             screen.blit(lose_text_surface, (lose_x, lose_y))
-
-#Reset the gameplay after player was defeated
-    def reset(self):
-        self.current_hp = max_hp
-        self.game_over = False
-    
+            pygame.display.update()
+            pygame.time.delay(2000)
+            self.reset
 
 #AI class
 class ai(pygame.sprite.Sprite):
@@ -452,6 +507,7 @@ class ai(pygame.sprite.Sprite):
         self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
         self.game_over = False
 
+#Draw out the hp for AI
     def draw_hp(self, surface):
         for i in range(self.max_hp):
             if i < self.ai_current_hp:
@@ -459,19 +515,20 @@ class ai(pygame.sprite.Sprite):
             else:
                 surface.blit(broken_hearts, self.ai_hp_positions[i])
 
+#Reset AI status
     def reset(self):
-            self.ai_current_hp = ai_hp
+        self.ai_current_hp = max_hp
+        self.game_over = False
 
+#Reset hp of AI
+    def ai_hp_reset(self):
+        self.ai_current_hp = ai_hp
+
+#Check the status of AI hp
     def ai_check_hp(self):
         if self.ai_current_hp <= 0:
-            return True
-
-def reset_game():
-    player.reset()
-    ai.reset()
-    global current_screen
-    current_screen = SCREEN_MAIN
-
+            self.game_over = True
+            
 
 #Create player and AI objects
 player = Player()
@@ -509,11 +566,14 @@ def player_name():
             if event.type == pygame.KEYDOWN:
                 if active:
                     if event.key == pygame.K_BACKSPACE:
+                        delete_sound.play()
                         text = text[:-1]
                     elif event.key == pygame.K_RETURN:
+                        sound_clickbox.play()
                         return text
                     else:
                         text += event.unicode
+                        delete_sound.play()
 
         screen.fill(BLACK)
         txt_surface = input_font_name.render(text, True, color)
@@ -542,12 +602,12 @@ def SCREENDISPLAY(name):
                 # Check if the mouse click is on the "Next" button
                 if text_5_button_rect.collidepoint(mouse_pos):
                     sound_next.play()
-                    current_screen = SCREEN_STORY5  
+                    current_screen = SCREEN_PLAY1 
                     pygame.display.set_caption('Storyline')
                     return
 
         screen.fill(BLACK)
-        name_surface = font_10.render(f'Hello, {name}, Welcome to Life Roulette', True, RED)
+        name_surface = font_10.render(f'Hello{name}, Welcome to Life Roulette', True, RED)
         screen.blit(name_surface, (screen_width // 2 - name_surface.get_width() // 2, screen_height // 2 - name_surface.get_height() // 2))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
 
@@ -561,8 +621,20 @@ turn = "player"
 shoot_message = " "
 ai_shoot_message = " "
 
+#Showcase for round 2
+def round_2():
+    screen.blit(round_2_surface, (round_2_x,round_2_y))
+    pygame.display.update()
+    pygame.time.delay(2000)
+    global turn, num_real_bullets, num_fake_bullets
+    num_real_bullets = 3
+    num_fake_bullets = 2
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
+
 def bullet():
-    global num_real_bullets, num_fake_bullets, shoot_message
+    global num_real_bullets, num_fake_bullets, shoot_message, turn
     mouse_pos = pygame.mouse.get_pos()
     
     #Define the first turn for player first
@@ -583,44 +655,45 @@ def bullet():
             if bullet_type == "real":
                 num_real_bullets -= 1
                 gun_sound.play()
-                shoot_message = (f"{name} shot a Real bullet!")
+                shoot_message = (f"{name} shot a real bullet!")
+                ai.ai_current_hp -= 1
             else:
                 num_fake_bullets -= 1
                 emptygun_sound.play()
-                shoot_message = (f"{name} shot a Fake bullet!")
+                shoot_message = (f"{name} shot a fake bullet!")
         else:
             shoot_message = "No bullets left!"
 
-        turn == "ai"
-
-    #Define the next turn after player for AI
-    elif turn == "ai":
+#Define the next turn after player for AI
+        turn = "ai"
         ai_fire()
         turn == "player" #Switch to player after AI
 
 #Define for AI to fire 
 def ai_fire():
-    global num_real_bullets_ai, num_fake_bullets_ai, ai_shoot_message
+    global num_real_bullets, num_fake_bullets, ai_shoot_message
 
-    if num_real_bullets_ai > 0 or num_fake_bullets_ai > 0:
-        available_bullets_ai = []
-        if num_real_bullets_ai > 0:
-            available_bullets_ai.append("real")
-        if num_fake_bullets_ai > 0:
-            available_bullets_ai.append("fake")
 
-        bullet_type_ai = random.choice(available_bullets_ai)
+    if num_real_bullets > 0 or num_fake_bullets > 0:
+        available_bullets = []
+        if num_real_bullets > 0:
+            available_bullets.append("real")
+        if num_fake_bullets > 0:
+            available_bullets.append("fake")
 
-        if bullet_type_ai == "real":
-            num_real_bullets_ai -= 1
+        bullet_type = random.choice(available_bullets)
+
+        if bullet_type == "real":
+            num_real_bullets -= 1
             gun_sound.play()
-            ai_shoot_message = "AI shot a Real bullet!"
+            ai_shoot_message = "Debtor shot a Real bullet!"
+            player.current_hp -= 1
         else:
-            num_fake_bullets_ai -= 1
+            num_fake_bullets -= 1
             emptygun_sound.play()
-            ai_shoot_message = "AI shot a Fake bullet!"
+            ai_shoot_message = "Debtor shot a Fake bullet!"
     else:
-        ai_shoot_message = "AI has no bullets left!"
+        ai_shoot_message = "Debtor has no bullets left!"
 
 
 
@@ -629,8 +702,96 @@ def ai_fire():
 show_input_box = False
 running = True
 while running:
-
     mouse_x, mouse_y = pygame.mouse.get_pos()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if current_screen == SCREEN_PLAY1:
+                bullet()
+
+            # Settings for click on Play and move to storyline
+            if current_screen == SCREEN_MAIN:
+                if button_text2_rect.collidepoint(event.pos):
+                    sound_play.play()
+                    current_screen = SCREEN_PLAY
+                    pygame.display.set_caption('Storyline')
+
+                # Settings for How to Play and How to Play Back
+                elif button_text3_rect.collidepoint(event.pos):
+                    sound_how_to_play.play()
+                    current_screen = SCREEN_HOW_TO_PLAY
+                    pygame.display.set_caption('How to Play')
+            elif current_screen == SCREEN_HOW_TO_PLAY:
+                if text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
+
+                # Setting for Play and move to Story 1 and Screen Play back to Main
+            elif current_screen == SCREEN_PLAY:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_next.play()
+                    current_screen = SCREEN_STORY1
+                    pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
+
+                # Setting for Story 1 and move to Story 2 and Story 1 back to Play
+            elif current_screen == SCREEN_STORY1:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_next.play()
+                    current_screen = SCREEN_STORY2
+                    pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_PLAY
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREEN_STORY2:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY3
+                    pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY1
+                    pygame.display.set_caption('Storyline')
+            
+            elif current_screen == SCREEN_STORY3:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY4
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY2
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREEN_STORY4:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    show_input_box = True
+                    current_screen = SCREENNAME
+                    pygame.display.set_caption('Enter your Name')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY3
+                    pygame.display.set_caption('Storyline')
+
+            elif current_screen == SCREENNAME:
+                name = player_name()
+                SCREENDISPLAY(name)
+            
+            elif current_screen == SCREEN_PLAY1:
+                if text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
+
     if current_screen == SCREEN_HOW_TO_PLAY:
         image_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
         if image_rect.collidepoint(mouse_x, mouse_y):
@@ -649,111 +810,7 @@ while running:
             tooltip_surface_3, tooltip_rect_3 = tooltip_font.render(tooltip_text_3, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
             tooltip_rect_3.topright = (mouse_x -10, mouse_y - 10)
             screen.blit(tooltip_surface_3, tooltip_rect_3)
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        
-#FOR TESTING PURPOSE        
-        elif event.type == pygame.KEYDOWN:
-            # Increase or decrease player HP
-            if event.key == pygame.K_UP:
-                player.current_hp = min(player.max_hp, player.current_hp + 1)  # Increase HP
-
-            elif event.key == pygame.K_DOWN:
-                player.current_hp = max(0, player.current_hp - 1)  # Decrease HP
-            
-            # Increase or decrease AI HP
-            elif event.key == pygame.K_LEFT:
-                ai.ai_current_hp = max(0, ai.ai_current_hp - 1)  # Decrease AI HP
-
-            elif event.key == pygame.K_RIGHT:
-                ai.ai_current_hp = min(ai.max_hp, ai.ai_current_hp + 1)  # Increase AI HP
-      
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = pygame.mouse.get_pos()
-
-            # Settings for click on Play and move to storyline
-            if current_screen == SCREEN_MAIN:
-                if button_text2_rect.collidepoint(mouse_pos):
-                    sound_play.play()
-                    current_screen = SCREEN_PLAY
-                    pygame.display.set_caption('Storyline')
-
-                # Settings for How to Play and How to Play Back
-                elif button_text3_rect.collidepoint(mouse_pos):
-                    sound_how_to_play.play()
-                    current_screen = SCREEN_HOW_TO_PLAY
-                    pygame.display.set_caption('How to Play')
-            elif current_screen == SCREEN_HOW_TO_PLAY:
-                if text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Life Roulette')
-
-                # Setting for Play and move to Story 1 and Screen Play back to Main
-            elif current_screen == SCREEN_PLAY:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_next.play()
-                    current_screen = SCREEN_STORY1
-                    pygame.display.set_caption('Storyline')
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Life Roulette')
-
-                # Setting for Story 1 and move to Story 2 and Story 1 back to Play
-            elif current_screen == SCREEN_STORY1:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_next.play()
-                    current_screen = SCREEN_STORY2
-                    pygame.display.set_caption('Storyline')
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_PLAY
-                    pygame.display.set_caption('Storyline')
-
-            elif current_screen == SCREEN_STORY2:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY3
-                    pygame.display.set_caption('Storyline')
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY1
-                    pygame.display.set_caption('Storyline')
-            
-            elif current_screen == SCREEN_STORY3:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY4
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY2
-                    pygame.display.set_caption('Storyline')
-
-            elif current_screen == SCREEN_STORY4:
-                if text_5_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    show_input_box = True
-                    current_screen = SCREENNAME
-                    pygame.display.set_caption('Enter your Name')
-                elif text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_STORY3
-                    pygame.display.set_caption('Storyline')
-
-            elif current_screen == SCREENNAME:
-                name = player_name()
-                SCREENDISPLAY(name)
-            
-            elif current_screen == SCREEN_STORY5:
-                if text_4_button_rect.collidepoint(mouse_pos):
-                    sound_back.play()
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Life Roulette')
-            
+                  
     # Current screen update
     screen.fill(BLACK)
     if current_screen == SCREEN_MAIN:
@@ -813,15 +870,21 @@ while running:
         how_text2_surface = font_3.render(how_text2_, True, WHITE)
         how_text2_width, how_to_play_2_height = how_text2_surface.get_size()
         how_text2_x = (screen_width - how_text2_width) // 2
-        how_text2_y = (screen_height - how_to_play_2_height) // 2 + 30
+        how_text2_y = (screen_height - how_to_play_2_height) // 2 
+        how_text3_ = "Notes: There will be hidden objects; grab them if you see them. GOOD LUCK"
+        how_text3_surface = font_13.render(how_text3_, True, BLACK)
+        how_text3_width, how_to_play_3_height = how_text3_surface.get_size()
+        how_text3_x = (screen_width - how_text3_width) // 2
+        how_text3_y = (screen_height - how_to_play_3_height) // 2 - 60
         screen.blit(how_text1_surface, (how_text1_x, how_text1_y))
         screen.blit(how_text2_surface, (how_text2_x, how_text2_y))
+        screen.blit(how_text3_surface, (how_text3_x,how_text3_y))
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y)) 
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))
         screen.blit(image_with_frame_surface_2, (image_2_x, image_2_y))
         screen.blit(image_with_frame_surface_3, (image_3_x, image_3_y))
-        create_rounded_speech_bubble_2("The game consists of three rounds. At the start of the round the dealer loads the shotgun with a certain amount of red live shells and grey blanks shells in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the shell is live then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. At the first two round you will be save by defibrillators, at the third round where everything gets serious defibrillators will be cut off no more waking up.  Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
-        player_x +6 , player_y -100 , width=900, height=255)
+        create_rounded_speech_bubble_2("The game consists of three rounds. At the start of the round, the dealer loads the shotgun with a certain amount of real bullets and fake bullets in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the bullet is real, then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
+        player_x +6 , player_y -100 , width=900, height=200)
 
         # Tooltip logic
         image_1_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
@@ -888,23 +951,43 @@ while running:
         screen.fill(BLACK)
         name = player_name()  
         SCREENDISPLAY(name)
+        current_screen = SCREEN_PLAY1
 
-    elif current_screen == SCREEN_STORY5:
-        # Show on Story 5 Screen
+    elif current_screen == SCREEN_PLAY1:
+        # Show on Screen Play
         screen.fill(BLACK) 
-        all_sprites.draw(screen)        #Draw out the class and def for player and ai
+        all_sprites.draw(screen)
         player.draw_hp(screen)
+        ai.draw_hp(screen)
         player.player_check_hp()
-        if player.game_over:
-            player.draw_lose_screen()
-            pygame.display.update()
-            pygame.time.delay(5000)
-            reset_game()
+        ai.ai_check_hp()
+        if ai.game_over:
+            ai.reset()
+            round_2()
         else:
             pass
-        ai.draw_hp(screen)
-        
 
-    pygame.display.flip()
-    
+        screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
+        real_bullets_text = font_12.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
+        fake_bullets_text = font_12.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
+        screen.blit(real_bullets_text, (10, 50))
+        screen.blit(fake_bullets_text, (300, 50))
+        screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
+        shoot_message_text = font_12.render(shoot_message, True, WHITE)
+        screen.blit(shoot_message_text, (10, 100))
+        ai_shoot_message_text =font_12.render(ai_shoot_message, True, WHITE)
+        screen.blit(ai_shoot_message_text, (625, 100))
+
+        #Define for skip button
+        skip_text_rect = draw_skip_button()
+
+        if player.game_over:
+            player.draw_lose_screen()
+            player.reset()
+            ai.ai_hp_reset()
+        else:
+            pass
+
+    pygame.display.flip()   
     pygame.time.Clock().tick(30)
+    
