@@ -115,6 +115,16 @@ font_8 = pygame.font.Font(font_8_path, font_8_size)
 text_8 = "<< Main"
 text_8_surface = font_8.render(text_8, True, WHITE)
 
+#Font setting for Skip
+font_9_size = 45
+font_9_path = 'Matemasie.ttf'
+font_9 = pygame.font.Font(font_9_path, font_9_size)
+
+#Show (skip) on screen
+text_9 = "Skip"
+skip_x = 880
+skip_y = 720
+
 # Font setting Enter Your Name
 font_11_size = 70
 font_11_path = 'Nerko.ttf'
@@ -145,21 +155,32 @@ font_6_path = 'Matemasie.ttf'
 font_6 = pygame.font.Font(font_6_path, font_6_size)
 
 # Show (You lose) on screen and positioning
-lose_text = "Guess you have not enough of determination. Try to gamble again would ya?"
+lose_text = "Foolish gambler.Try again would ya?"
 lose_text_surface = font_6.render(lose_text, True, RED)
-lose_x = 50
-lose_y = 50
+lose_x = 125
+lose_y = 250
 
-# Font setting for You win
+# Font setting for You win 
 font_7_size = 40
 font_7_path = 'Matemasie.ttf'
 font_7 = pygame.font.Font(font_7_path, font_7_size)
 
 # Show (You win) on screen and positioning
-win_text = "Your humanity didn't betray you."
+win_text = "Congratulations, your humanity didn't betray you."
 win_text_surface = font_7.render(win_text, True, WHITE)
 win_x = 50
 win_y = 50
+
+# Font setting for Round two
+font_8_size = 40
+font_8_path = 'Matemasie.ttf'
+font_8 = pygame.font.Font(font_8_path, font_8_size)
+
+# Show (Round two) on screen and positioning
+round_2 = "Round Two"
+round_2_surface = font_8.render(round_2, True, WHITE)
+round_2_x = 375
+round_2_y = 0
 
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
@@ -314,6 +335,12 @@ hearts = pygame.transform.scale(heartsimage, (50,50))
 broken_hearts = pygame.image.load('broken_hearts.png')
 broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
 
+dealer = pygame.image.load('dealer.png')
+dealer = pygame.transform.scale(dealer, (200,200)) 
+
+user = pygame.image.load('player.png')
+user = pygame.transform.scale(user, (200,200))
+
 #Display positions of images
 player_x = 50
 player_y = 200
@@ -321,6 +348,13 @@ player_y = 200
 # Load fonts
 font = pygame.font.Font("DMRegular.ttf", 18)
 font3 = pygame.font.Font("Nerko.ttf", 22)
+
+#Draw out a functional Skip button
+def draw_skip_button():
+    skip_text = font_9.render(text_9, True, WHITE)
+    screen.blit(skip_text, (skip_x, skip_y))
+    text_rect = skip_text.get_rect(topleft=(skip_x, skip_y))
+    return text_rect
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
@@ -415,41 +449,90 @@ ai_hp = 3
 
 # Class for Player and AI 
 # Player Class
-class player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(GREEN)
+        self.image = user
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 10, screen_height // 2)
         self.max_hp = max_hp
         self.current_hp = max_hp
         self.hp_positions = [(0, 0), (50, 0), (100, 0)]
+        self.game_over = False
 
+#Draw out the hearts for Player
     def draw_hp(self, surface):
-        for i in range(self.current_hp):
-            surface.blit(hearts, self.hp_positions[i])
+        for i in range(self.max_hp):
+            if i < self.current_hp:
+                surface.blit(hearts, self.hp_positions[i])
+            else:
+                surface.blit(broken_hearts, self.hp_positions[i])
+
+#Check for player's hp
+    def player_check_hp(self):
+        if self.current_hp <= 0:
+            self.game_over = True
+
+#Reset the gameplay after player was defeated
+    def reset(self):
+        self.current_hp = max_hp
+        self.game_over = False
+        global current_screen, num_fake_bullets, num_real_bullets
+        current_screen = SCREEN_MAIN
+        num_real_bullets = 5
+        num_fake_bullets = 3
+
+#Reset hp for player
+    def hp_reset(self):
+        self.current_hp = max_hp
+
+#Draw out defeated screen when player is defeated
+    def draw_lose_screen(self):
+        if self.game_over:
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            self.reset
 
 #AI class
 class ai(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(RED)
+        self.image = dealer
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width * 5 // 5.5, screen_height // 2)
         self.max_hp = ai_hp
         self.ai_current_hp = ai_hp
         self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
+        self.game_over = False
 
+#Draw out the hp for AI
     def draw_hp(self, surface):
-        for i in range(self.ai_current_hp):
-            surface.blit(hearts, self.ai_hp_positions[i])
+        for i in range(self.max_hp):
+            if i < self.ai_current_hp:
+                surface.blit(hearts, self.ai_hp_positions[i])
+            else:
+                surface.blit(broken_hearts, self.ai_hp_positions[i])
 
+#Reset AI status
+    def reset(self):
+        self.ai_current_hp = max_hp
+        self.game_over = False
+
+#Reset hp of AI
+    def ai_hp_reset(self):
+        self.ai_current_hp = ai_hp
+
+#Check the status of AI hp
+    def ai_check_hp(self):
+        if self.ai_current_hp <= 0:
+            self.game_over = True
+            
 
 #Create player and AI objects
-player = player()
-ai = ai()
+player = Player()
+ai = ai()   
 
 #Group the sprite
 all_sprites = pygame.sprite.Group()
@@ -534,11 +617,29 @@ def SCREENDISPLAY(name):
 # Bullet setting for round 1
 num_real_bullets = 5
 num_fake_bullets = 3
+turn = "player"
 shoot_message = " "
+ai_shoot_message = " "
+
+#Showcase for round 2
+def round_2():
+    screen.blit(round_2_surface, (round_2_x,round_2_y))
+    pygame.display.update()
+    pygame.time.delay(2000)
+    global turn, num_real_bullets, num_fake_bullets
+    num_real_bullets = 3
+    num_fake_bullets = 2
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
 
 def bullet():
-    global num_real_bullets, num_fake_bullets, shoot_message
+    global num_real_bullets, num_fake_bullets, shoot_message, turn
     mouse_pos = pygame.mouse.get_pos()
+    
+    #Define the first turn for player first
+    if turn == "player":
+        mouse_pos = pygame.mouse.get_pos()
 
     # Click on Image
     if image_4_x <= mouse_pos[0] <= image_4_x + image_4_width and image_4_y <= mouse_pos[1] <= image_4_y + image_4_height:
@@ -554,13 +655,47 @@ def bullet():
             if bullet_type == "real":
                 num_real_bullets -= 1
                 gun_sound.play()
-                shoot_message = (f"{name} shot a Real bullet!")
+                shoot_message = (f"{name} shot a real bullet!")
+                ai.ai_current_hp -= 1
             else:
                 num_fake_bullets -= 1
                 emptygun_sound.play()
-                shoot_message = (f"{name} shot a Fake bullet!")
+                shoot_message = (f"{name} shot a fake bullet!")
         else:
             shoot_message = "No bullets left!"
+
+#Define the next turn after player for AI
+        turn = "ai"
+        ai_fire()
+        turn == "player" #Switch to player after AI
+
+#Define for AI to fire 
+def ai_fire():
+    global num_real_bullets, num_fake_bullets, ai_shoot_message
+
+
+    if num_real_bullets > 0 or num_fake_bullets > 0:
+        available_bullets = []
+        if num_real_bullets > 0:
+            available_bullets.append("real")
+        if num_fake_bullets > 0:
+            available_bullets.append("fake")
+
+        bullet_type = random.choice(available_bullets)
+
+        if bullet_type == "real":
+            num_real_bullets -= 1
+            gun_sound.play()
+            ai_shoot_message = "Debtor shot a Real bullet!"
+            player.current_hp -= 1
+        else:
+            num_fake_bullets -= 1
+            emptygun_sound.play()
+            ai_shoot_message = "Debtor shot a Fake bullet!"
+    else:
+        ai_shoot_message = "Debtor has no bullets left!"
+
+
 
 ##########################################################################################################################################################################
 # IMPORTANT!!!
@@ -675,22 +810,6 @@ while running:
             tooltip_surface_3, tooltip_rect_3 = tooltip_font.render(tooltip_text_3, fgcolor=tooltip_text_color, bgcolor=tooltip_bg_color)
             tooltip_rect_3.topright = (mouse_x -10, mouse_y - 10)
             screen.blit(tooltip_surface_3, tooltip_rect_3)
-                        
-#FOR TESTING PURPOSE        
-        elif event.type == pygame.KEYDOWN:
-            # Increase or decrease player HP
-            if event.key == pygame.K_UP:
-                player.current_hp = min(player.max_hp, player.current_hp + 1)  # Increase HP
-
-            elif event.key == pygame.K_DOWN:
-                player.current_hp = max(0, player.current_hp - 1)  # Decrease HP
-            
-            # Increase or decrease AI HP
-            elif event.key == pygame.K_LEFT:
-                ai.ai_current_hp = max(0, ai.ai_current_hp - 1)  # Decrease AI HP
-
-            elif event.key == pygame.K_RIGHT:
-                ai.ai_current_hp = min(ai.max_hp, ai.ai_current_hp + 1)  # Increase AI HP
                   
     # Current screen update
     screen.fill(BLACK)
@@ -840,15 +959,34 @@ while running:
         all_sprites.draw(screen)
         player.draw_hp(screen)
         ai.draw_hp(screen)
+        player.player_check_hp()
+        ai.ai_check_hp()
+        if ai.game_over:
+            ai.reset()
+            round_2()
+        else:
+            pass
+
         screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
         real_bullets_text = font_12.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
         fake_bullets_text = font_12.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
         screen.blit(real_bullets_text, (10, 50))
         screen.blit(fake_bullets_text, (300, 50))
         screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
-
         shoot_message_text = font_12.render(shoot_message, True, WHITE)
         screen.blit(shoot_message_text, (10, 100))
+        ai_shoot_message_text =font_12.render(ai_shoot_message, True, WHITE)
+        screen.blit(ai_shoot_message_text, (625, 100))
+
+        #Define for skip button
+        skip_text_rect = draw_skip_button()
+
+        if player.game_over:
+            player.draw_lose_screen()
+            player.reset()
+            ai.ai_hp_reset()
+        else:
+            pass
 
     pygame.display.flip()   
     pygame.time.Clock().tick(30)
