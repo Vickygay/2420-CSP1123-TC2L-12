@@ -347,6 +347,7 @@ player_y = 200
 
 # Load fonts
 font = pygame.font.Font("DMRegular.ttf", 18)
+font2 = pygame.font.Font('DMRegular.ttf', 26)
 font3 = pygame.font.Font("Nerko.ttf", 22)
 
 #Draw out a functional Skip button
@@ -360,7 +361,6 @@ def draw_skip_button():
 def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
-font2 = pygame.font.Font('DMRegular.ttf', 28)
 
 def draw_custom_shape(surface, color, x, y, size):
     points = [
@@ -404,19 +404,15 @@ def draw_multiline_text(surface, text, font2, color, x, y, max_width, line_spaci
         text_rect = text_surface.get_rect(center=(x, start_y + i * (font2.get_height() + line_spacing)))
         surface.blit(text_surface, text_rect)
 
-# Function to create a speech bubble with multiple lines
+
 def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radius=10):
-    # Create a surface for the speech bubble with transparency
     bubble_surface = pygame.Surface((width, height), pygame.SRCALPHA)
     
-    # Draw a rounded rectangle for the bubble
     draw_rounded_rect(bubble_surface, WHITE, bubble_surface.get_rect(), corner_radius)
     pygame.draw.rect(bubble_surface, BLACK, bubble_surface.get_rect(), 2, border_radius=corner_radius)
     
-    # Wrap the text into multiple lines
-    wrapped_lines = wrap_text(text, font, width - 20)  # Adjust for padding
+    wrapped_lines = wrap_text(text, font, width - 20) 
     
-    # Render each line
     for i, line in enumerate(wrapped_lines):
         line_surface = font.render(line, True, BLACK)
         line_rect = line_surface.get_rect(center=(width//2, 20 + i * 30))  # Adjust y position for each line
@@ -853,10 +849,14 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
-        player_x + 400, player_y - 150, width=400, height=230)
-        draw_custom_shape(screen, WHITE, 700, 490, 200)
-        draw_multiline_text(screen, "Dad, please! Help me!", font2, RED, 700, 500, max_width=140)
+        create_rounded_speech_bubble("Well, well... look who's finally picked up. Took you long enough. You know why I'm calling, don’t you? Your little girl… she’s with me now.",
+        player_x + 400, player_y - 150, width=400, height=100)
+        
+        create_rounded_speech_bubble("You’ve been dodging me for months. RM10,000,000. With that 20% interest, you owe me over RM12,000,000. And now? Time’s up. Your luck’s run dry.",
+        player_x + 500, player_y + 30, width=400, height=130)
+        
+        draw_custom_shape(screen,WHITE, 700, 490, 200)
+        draw_multiline_text(screen,"Dad, please! Help me! Please!", font2, RED, 700, 500, max_width=140)
         
     elif current_screen == SCREEN_HOW_TO_PLAY:
         # Show on How to Play screen 
@@ -916,7 +916,7 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
-        create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time—ten days! Just ten days, and I’ll get you your money!",
+        create_rounded_speech_bubble("Please, listen, I… I don’t have that kind of money right now! Let her go! Just give me more time! Ten days, that’s all I’m asking for!",
         player_x + 400, player_y - 90, width=400, height=130)
           
     elif current_screen == SCREEN_STORY2:
@@ -925,8 +925,11 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal—you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
-        player_x + 400, player_y - 150, width=410, height=200)
+        create_rounded_speech_bubble("Time? Do you think you can bargain with me? ",
+        player_x + 400, player_y - 150, width=410, height=80)
+        create_rounded_speech_bubble("Here’s how it’s going to work. You’re going to play a game. My game. Win, and you’ll get 20 days to gather my money. Lose? Well… your daughter won’t see another sunrise. ",
+        player_x + 500, player_y + 40, width=410, height=150)
+
 
     elif current_screen == SCREEN_STORY3:
         # Show on Story 3 Screen
