@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Life Roulette')
 
 # Video
-video_clip = VideoFileClip('video.mp4')  
+video_clip = VideoFileClip('video.mp4')
 fps = video_clip.fps  
 
 def get_frame_as_surface(frame):
@@ -115,16 +115,6 @@ font_8 = pygame.font.Font(font_8_path, font_8_size)
 text_8 = "<< Main"
 text_8_surface = font_8.render(text_8, True, WHITE)
 
-#Font setting for Skip
-font_9_size = 45
-font_9_path = 'Matemasie.ttf'
-font_9 = pygame.font.Font(font_9_path, font_9_size)
-
-#Show (skip) on screen
-text_9 = "Skip"
-skip_x = 880
-skip_y = 720
-
 # Font setting Enter Your Name
 font_11_size = 70
 font_11_path = 'Nerko.ttf'
@@ -182,6 +172,17 @@ round_2_surface = font_8.render(round_2, True, WHITE)
 round_2_x = 375
 round_2_y = 0
 
+# Font setting for Final Round)
+font_9_size = 40
+font_9_path = "Matemasie.ttf"
+font_9 = pygame.font.Font(font_9_path, font_9_size)
+
+#Show (Final Round) on screen and positioning
+round_3 = "Final Round"
+round_3_surface = font_9.render(round_3, True, RED)
+round_3_x = 375
+round_3_y = 0
+
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
 transparent_surface.fill((0, 0, 0, 128))
 
@@ -233,6 +234,14 @@ image_1 = pygame.transform.scale(image_1, image_1_size)
 image_1_width, image_1_height = image_1.get_size()
 image_1_x = 70
 image_1_y = (screen_height - image_1_height) // 2 + 150
+
+# Image settings for magnifier (In game)
+image_mag = pygame.image.load("magnifier.png")
+image_mag_size = (100, 100)
+image_mag = pygame.transform.scale(image_mag, image_mag_size)
+image_mag_width, image_mag_height = image_mag.get_size()
+image_mag_x = 225
+image_mag_y = 200
 
 # Tooltip settings
 tooltip_font = pygame.freetype.SysFont('Edu.ttf', 20)
@@ -349,12 +358,6 @@ player_y = 200
 font = pygame.font.Font("DMRegular.ttf", 18)
 font3 = pygame.font.Font("Nerko.ttf", 22)
 
-#Draw out a functional Skip button
-def draw_skip_button():
-    skip_text = font_9.render(text_9, True, WHITE)
-    screen.blit(skip_text, (skip_x, skip_y))
-    text_rect = skip_text.get_rect(topleft=(skip_x, skip_y))
-    return text_rect
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
@@ -481,6 +484,8 @@ class Player(pygame.sprite.Sprite):
         current_screen = SCREEN_MAIN
         num_real_bullets = 5
         num_fake_bullets = 3
+        current_round = 1
+        round_1()
 
 #Reset hp for player
     def hp_reset(self):
@@ -538,6 +543,29 @@ ai = ai()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 all_sprites.add(ai)
+
+#Track button click for only once
+button_clicked = False
+
+#Item for magnifier
+def magnifier_button():
+    global button_clicked
+
+    screen.blit(image_mag, (image_mag_x, image_mag_y))
+    mouse_pos =pygame.mouse.get_pos()
+    mouse_click = pygame.mouse.get_pressed()
+
+    if image_mag_x < mouse_pos[0] < image_mag_x + image_mag_width and image_mag_y < mouse_pos[1] < image_mag_y + image_mag_height:
+        if mouse_click[0]:
+            if not button_clicked:    #To make sure it wont trigger multiple input while held down the left button
+                bullet_info = current_bullet()
+                print (bullet_info)
+                button_clicked = True
+        else:
+            button_clicked = False 
+
+
+
 ##########################################################################################################################################################################
 font_10 = pygame.font.Font("Gloria.ttf", 47)
 input_font_name = pygame.font.Font("Gloria.ttf", 50)
@@ -615,87 +643,161 @@ def SCREENDISPLAY(name):
         clock.tick(30)
 ##########################################################################################################################################################################
 # Bullet setting for round 1
+bullets = []
 num_real_bullets = 5
 num_fake_bullets = 3
+
+#Define the array for bullets
+bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+
+#Define the turn
 turn = "player"
+
+#Message given by system
 shoot_message = " "
 ai_shoot_message = " "
+shoot_message_time = 0  
+ai_shoot_message_time = 0  
 
+#Define the rounds
+current_round = 1
+
+#Define for reset bullets for every round
+def bullets_reset():
+    global bullets, num_fake_bullets, num_real_bullets
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
+
+#Showcase for round 1
+def round_1():
+    global turn, num_real_bullets, num_fake_bullets, bullets
+    num_real_bullets = 5
+    num_fake_bullets = 3
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
+    bullets_reset()
+ 
 #Showcase for round 2
 def round_2():
     screen.blit(round_2_surface, (round_2_x,round_2_y))
     pygame.display.update()
     pygame.time.delay(2000)
-    global turn, num_real_bullets, num_fake_bullets
+    global turn, num_real_bullets, num_fake_bullets, bullets
     num_real_bullets = 3
     num_fake_bullets = 2
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
     turn = "player"
     shoot_message = " "
     ai_shoot_message = " "
+    bullets_reset()
 
+#Showcase for round 3 (Final Round)
+def round_3():
+    screen.blit(round_3_surface, (round_3_x, round_3_y))
+    pygame.display.update()
+    pygame.time.delay(2000)
+    global turn, num_real_bullets, num_fake_bullets, bullets
+    num_real_bullets = 2
+    num_fake_bullets = 2
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
+    bullets_reset()
+
+#To track the current bullet that player is holding
+next_bullet_type = None
+
+#Define the function of what is the current bullet that player is handling
+def current_bullet():
+    global bullets, next_bullet_type
+
+    if bullets:
+        next_bullet_type = bullets[0]
+        if next_bullet_type == 1:
+            return "This is a real bullet."
+
+        else:
+            return "This is a fake bullet."
+    else:
+        return "No bullet left."
+
+
+#Define the function of bullet
 def bullet():
-    global num_real_bullets, num_fake_bullets, shoot_message, turn
+    global num_real_bullets, num_fake_bullets, shoot_message, turn, bullets, next_bullet_type
     mouse_pos = pygame.mouse.get_pos()
-    
-    #Define the first turn for player first
-    if turn == "player":
-        mouse_pos = pygame.mouse.get_pos()
+
 
     # Click on Image
     if image_4_x <= mouse_pos[0] <= image_4_x + image_4_width and image_4_y <= mouse_pos[1] <= image_4_y + image_4_height:
-        if num_real_bullets > 0 or num_fake_bullets > 0:
-            available_bullets = []
-            if num_real_bullets > 0:
-                available_bullets.append("real")
-            if num_fake_bullets > 0:
-                available_bullets.append("fake")
 
-            bullet_type = random.choice(available_bullets)
+        if bullets:
+            bullet_type = bullets.pop(0)
 
-            if bullet_type == "real":
+            if bullet_type == 1:
                 num_real_bullets -= 1
                 gun_sound.play()
                 shoot_message = (f"{name} shot a real bullet!")
                 ai.ai_current_hp -= 1
+
             else:
                 num_fake_bullets -= 1
                 emptygun_sound.play()
                 shoot_message = (f"{name} shot a fake bullet!")
+
+            turn = "ai"
+
         else:
             shoot_message = "No bullets left!"
 
-#Define the next turn after player for AI
-        turn = "ai"
-        ai_fire()
-        turn == "player" #Switch to player after AI
+    return shoot_message
 
 #Define for AI to fire 
 def ai_fire():
-    global num_real_bullets, num_fake_bullets, ai_shoot_message
 
+    global num_real_bullets, num_fake_bullets, ai_shoot_message, turn, bullets
 
-    if num_real_bullets > 0 or num_fake_bullets > 0:
-        available_bullets = []
-        if num_real_bullets > 0:
-            available_bullets.append("real")
-        if num_fake_bullets > 0:
-            available_bullets.append("fake")
+#Make the turn to player once ai is defeated    
+    if ai.ai_current_hp <= 0:
+        turn = "player"
+        return
 
-        bullet_type = random.choice(available_bullets)
-
-        if bullet_type == "real":
+    if bullets:
+        bullet_type = bullets.pop(0)
+        if bullet_type == 1:
             num_real_bullets -= 1
             gun_sound.play()
             ai_shoot_message = "Debtor shot a Real bullet!"
             player.current_hp -= 1
+
         else:
             num_fake_bullets -= 1
             emptygun_sound.play()
             ai_shoot_message = "Debtor shot a Fake bullet!"
+                
     else:
-        ai_shoot_message = "Debtor has no bullets left!"
+        ai_shoot_message = "Debtor has no bullets left!"    
+        turn = "player"
+    return shoot_message
 
-
+def draw_game_state():
+    screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
+    real_bullets_text = font_12.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
+    fake_bullets_text = font_12.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
+    screen.blit(real_bullets_text, (10, 50))
+    screen.blit(fake_bullets_text, (300, 50))
+    screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
+    shoot_message_text = font_12.render(shoot_message, True, WHITE)
+    screen.blit(shoot_message_text, (10, 100))
+    ai_shoot_message_text =font_12.render(ai_shoot_message, True, WHITE)
+    screen.blit(ai_shoot_message_text, (625, 100))
+    pygame.display.update()
 
 ##########################################################################################################################################################################
 # IMPORTANT!!!
@@ -961,32 +1063,48 @@ while running:
         ai.draw_hp(screen)
         player.player_check_hp()
         ai.ai_check_hp()
+        magnifier_button()
+        if turn == "ai":
+            ai_fire()
+            turn = "player"
+
         if ai.game_over:
-            ai.reset()
-            round_2()
+            if current_round == 1:
+                ai.reset()
+                current_round += 1
+                round_2()
+                turn = "player"
+                shoot_message = None
+                ai_shoot_message = None
+
+            elif current_round == 2:
+                ai.reset()
+                current_round += 1
+                round_3()
+                turn = "player"
+                shoot_message = None
+                ai_shoot_message = None
         else:
             pass
-
-        screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
-        real_bullets_text = font_12.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
-        fake_bullets_text = font_12.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
-        screen.blit(real_bullets_text, (10, 50))
-        screen.blit(fake_bullets_text, (300, 50))
-        screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
-        shoot_message_text = font_12.render(shoot_message, True, WHITE)
-        screen.blit(shoot_message_text, (10, 100))
-        ai_shoot_message_text =font_12.render(ai_shoot_message, True, WHITE)
-        screen.blit(ai_shoot_message_text, (625, 100))
-
-        #Define for skip button
-        skip_text_rect = draw_skip_button()
-
+        draw_game_state()
+  
         if player.game_over:
             player.draw_lose_screen()
-            player.reset()
-            ai.ai_hp_reset()
+            shoot_message = None
+            ai_shoot_message = None
+
+            if current_round == 2:
+                current_screen = SCREEN_PLAY1
+                current_round = 1
+                player.reset()
+                ai.ai_hp_reset()
+                round_1()
+            else:
+                player.reset()
+                ai.ai_hp_reset()
         else:
             pass
+            
 
     pygame.display.flip()   
     pygame.time.Clock().tick(30)
