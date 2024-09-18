@@ -36,6 +36,8 @@ sound_clickbox = pygame.mixer.Sound("clickbox.mp3")
 gun_sound = pygame.mixer.Sound("gunsound.mp3")
 emptygun_sound = pygame.mixer.Sound("emptygun.mp3")
 delete_sound = pygame.mixer.Sound("delete.mp3")
+ring_sound = pygame.mixer.Sound("ring.mp3")
+
 
 # Colours code in RGB
 WHITE = (255, 255, 255)
@@ -293,9 +295,12 @@ SCREEN_STORY3 = 5
 SCREEN_STORY4 = 6
 SCREEN_STORY5 = 7
 SCREEN_STORY6 = 8
-SCREEN_PLAY1 = 9
-SCREENNAME = 10
-SCREENDISPLAY = 11
+SCREEN_STORY7 = 9
+SCREEN_STORY8 = 10
+SCREEN_STORY9 = 11
+SCREEN_PLAY1 = 12
+SCREENNAME = 13
+SCREENDISPLAY = 14
 current_screen = SCREEN_MAIN
 
 #Import and resize images
@@ -314,19 +319,22 @@ hearts = pygame.transform.scale(heartsimage, (50,50))
 broken_hearts = pygame.image.load('broken_hearts.png')
 broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
 
+witchimage = pygame.image.load('witch.png')
+witch = pygame.transform.scale(witchimage, (500,500))
+
 #Display positions of images
 player_x = 50
 player_y = 200
 
 # Load fonts
 font = pygame.font.Font("DMRegular.ttf", 18)
+font2 = pygame.font.Font('DMRegular.ttf', 26)
 font3 = pygame.font.Font("Nerko.ttf", 22)
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
-font2 = pygame.font.Font('DMRegular.ttf', 28)
 
 def draw_custom_shape(surface, color, x, y, size):
     points = [
@@ -608,6 +616,10 @@ while running:
 
                 # Setting for Story 1 and move to Story 2 and Story 1 back to Play
             elif current_screen == SCREEN_STORY1:
+                if button_text2_rect.collidepoint(event.pos):
+                    ring_sound.play()
+                    current_screen = SCREEN_STORY2
+                    pygame.display.set_caption('Storyline')
                 if text_5_button_rect.collidepoint(event.pos):
                     sound_next.play()
                     current_screen = SCREEN_STORY2
@@ -639,12 +651,22 @@ while running:
             elif current_screen == SCREEN_STORY4:
                 if text_5_button_rect.collidepoint(event.pos):
                     sound_back.play()
+                    current_screen = SCREEN_STORY5
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY3
+                    pygame.display.set_caption('Storyline')
+
+            
+            elif current_screen == SCREEN_STORY5:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
                     show_input_box = True
                     current_screen = SCREENNAME
                     pygame.display.set_caption('Enter your Name')
                 elif text_4_button_rect.collidepoint(event.pos):
                     sound_back.play()
-                    current_screen = SCREEN_STORY3
+                    current_screen = SCREEN_STORY4 
                     pygame.display.set_caption('Storyline')
 
             elif current_screen == SCREENNAME:
@@ -734,10 +756,13 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
-        player_x + 400, player_y - 150, width=400, height=230)
+        ring_sound.play
+        create_rounded_speech_bubble("Well, well… finally answering, huh? Took your sweet time. Your little girl… she’s with me now.",
+        player_x + 400, player_y - 140, width=400, height=80)
+        create_rounded_speech_bubble("You’ve been dodging me for months. RM10,000,000. With that 20% interest, you owe me over RM12,000,000. And now? Time’s up. Your luck’s run dry.",
+        player_x + 500, player_y  + 10, width=400, height=150)
         draw_custom_shape(screen, WHITE, 700, 490, 200)
-        draw_multiline_text(screen, "Dad, please! Help me!", font2, RED, 700, 500, max_width=140)
+        draw_multiline_text(screen, "Dad, please! Help me! Please!", font2, RED, 700, 500, max_width=140)
         
     elif current_screen == SCREEN_HOW_TO_PLAY:
         # Show on How to Play screen 
@@ -797,8 +822,8 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
-        create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time—ten days! Just ten days, and I’ll get you your money!",
-        player_x + 400, player_y - 90, width=400, height=130)
+        create_rounded_speech_bubble("Please, listen, I… I don’t have that kind of money right now! Let her go! Just give me more time! Ten days, that’s all I’m asking for!",
+        player_x + 400, player_y - 90, width=400, height=120)
           
     elif current_screen == SCREEN_STORY2:
         # Show on Story 2 Screen
@@ -806,8 +831,10 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal—you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
-        player_x + 400, player_y - 150, width=410, height=200)
+        create_rounded_speech_bubble("Time? You really think you get to bargain with me?",
+        player_x + 400, player_y - 130, width=410, height=70)
+        create_rounded_speech_bubble("Here’s how it’s going to work. You’re going to play a game. My game. Win, and you’ll get 20 days to gather my money. Lose? Well… your daughter won’t see another sunrise.",
+        player_x + 500, player_y +30, width=410, height=140)
 
     elif current_screen == SCREEN_STORY3:
         # Show on Story 3 Screen
@@ -826,6 +853,22 @@ while running:
         screen.blit(monster, (player_x, player_y)) 
         draw_custom_shape(screen, WHITE, 700, 300, 200)
         draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 300, max_width=140)
+
+    elif current_screen == SCREEN_STORY5:
+        screen.fill(BLACK) 
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
+        screen.blit(witch, (player_x, player_y))
+        draw_custom_shape(screen, WHITE, 700, 100, 200)
+        draw_multiline_text(screen, "Ahhh, so you’ll play… but will you survive?", font, PURPLE, 700, 100, max_width=140)
+        create_rounded_speech_bubble("But there’s more to this game than you know. A maze awaits you, twisting and shifting. Find the exit and collect three boosts... *only* then will you gain a precious life and an antidote to face the kidnapper",
+        player_x + 450, player_y - 10, width=400, height=160)
+        create_rounded_speech_bubble("But beware—get only two boosts, and while you’ll survive, the antidote will be lost. Without it, you’ll face problems... deadly problems.",
+        player_x + 500, player_y + 150, width=400, height=100)
+        create_rounded_speech_bubble("If find one.... or none,your fate is sealed. You and your daughter will perish. No mercy. No escape. The maze decides, not you.",
+        player_x + 500, player_y +250, width=400, height=100)
+    
+    
 
     elif current_screen == SCREENNAME:
         # Show on Enter your name Screen
