@@ -509,7 +509,7 @@ class ai(pygame.sprite.Sprite):
         self.rect.center = (screen_width * 5 // 5.5, screen_height // 2)
         self.max_hp = ai_hp
         self.ai_current_hp = ai_hp
-        self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
+        self.ai_hp_positions = [(950, 0), (900, 0), (850, 0)]
         self.game_over = False
 
 #Draw out the hp for AI
@@ -551,18 +551,21 @@ button_clicked = False
 def magnifier_button():
     global button_clicked
 
-    screen.blit(image_mag, (image_mag_x, image_mag_y))
-    mouse_pos =pygame.mouse.get_pos()
-    mouse_click = pygame.mouse.get_pressed()
+    #Only show the button before it was clicked
+    if not button_clicked:              
+        screen.blit(image_mag, (image_mag_x, image_mag_y))
+        mouse_pos =pygame.mouse.get_pos()
+        mouse_click = pygame.mouse.get_pressed()
 
-    if image_mag_x < mouse_pos[0] < image_mag_x + image_mag_width and image_mag_y < mouse_pos[1] < image_mag_y + image_mag_height:
-        if mouse_click[0]:
-            if not button_clicked:    #To make sure it wont trigger multiple input while held down the left button
-                bullet_info = current_bullet()
-                print (bullet_info)
-                button_clicked = True
-        else:
-            button_clicked = False 
+        if image_mag_x < mouse_pos[0] < image_mag_x + image_mag_width and image_mag_y < mouse_pos[1] < image_mag_y + image_mag_height:
+            if mouse_click[0]:
+                if not button_clicked:    #To make sure it wont trigger multiple input while held down the left button
+                    bullet_info = current_bullet()
+                    print (bullet_info)
+                    button_clicked = True
+
+            else:
+                pass
 
 
 
@@ -693,6 +696,8 @@ def round_2():
     turn = "player"
     shoot_message = " "
     ai_shoot_message = " "
+    if current_round == 2:
+        magnifier_button()
     bullets_reset()
 
 #Showcase for round 3 (Final Round)
@@ -701,8 +706,13 @@ def round_3():
     pygame.display.update()
     pygame.time.delay(2000)
     global turn, num_real_bullets, num_fake_bullets, bullets
-    num_real_bullets = 2
-    num_fake_bullets = 2
+    #Define the new max hp for player and ai in the last round
+    player.max_hp = 1
+    player.current_hp = player.max_hp
+    ai.max_hp = 1
+    ai.ai_current_hp = ai.max_hp
+    num_real_bullets = 1
+    num_fake_bullets = 1
     bullets = [1] * num_real_bullets + [0] * num_fake_bullets
     random.shuffle(bullets)
     turn = "player"
@@ -715,15 +725,15 @@ next_bullet_type = None
 
 #Define the function of what is the current bullet that player is handling
 def current_bullet():
-    global bullets, next_bullet_type
+    global bullets, next_bullet_type, shoot_message
 
     if bullets:
         next_bullet_type = bullets[0]
         if next_bullet_type == 1:
-            return "This is a real bullet."
+            shoot_message = "This is a real bullet."
 
         else:
-            return "This is a fake bullet."
+            shoot_message = "This is a fake bullet."
     else:
         return "No bullet left."
 
@@ -763,7 +773,7 @@ def ai_fire():
 
     global num_real_bullets, num_fake_bullets, ai_shoot_message, turn, bullets
 
-#Make the turn to player once ai is defeated    
+#Make the turn to player once ai is defeated
     if ai.ai_current_hp <= 0:
         turn = "player"
         return
@@ -1063,10 +1073,12 @@ while running:
         ai.draw_hp(screen)
         player.player_check_hp()
         ai.ai_check_hp()
-        magnifier_button()
         if turn == "ai":
             ai_fire()
             turn = "player"
+
+        if current_round == 2:
+            magnifier_button()
 
         if ai.game_over:
             if current_round == 1:
