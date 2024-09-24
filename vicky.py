@@ -19,16 +19,12 @@ def resize_video(video_clip, size):
     return video_clip.resize(newsize=size)
 
 video_clip = VideoFileClip('video.mp4')
-debtorturn_video = VideoFileClip('gun 2.mp4')
-playerturn_video = VideoFileClip('gun 1.mp4')
 totem = VideoFileClip('totem.mp4')
 handsawvideo1 = VideoFileClip('handsawvideo1.mp4')
 handsawvideo2 = VideoFileClip('handsawvideo2.mp4')
 
 # Resize videos to fit the screen
 video_size = (200, 200)
-debtorturn_video = resize_video(debtorturn_video, video_size)
-playerturn_video = resize_video(playerturn_video, video_size)
 totem = resize_video(totem, video_size)
 handsawvideo1 = resize_video(handsawvideo1, video_size)
 handsawvideo2 = resize_video(handsawvideo2, video_size)
@@ -66,13 +62,13 @@ BLUE = (0, 0, 255)
 LIGHTGREY = (211, 211, 211)
 
 # Player and AI images
-player_img = pygame.image.load('player.png')
-player_img = pygame.transform.scale(player_img, (200, 200))
-player_rect = player_img.get_rect(topleft=(50, 300))
+user = pygame.image.load('player.png')
+user = pygame.transform.scale(user, (200, 200))
+user_rect = user.get_rect(topleft=(50, 300))
 
-ai_img = pygame.image.load('dealer.png')
-ai_img = pygame.transform.scale(ai_img, (200, 200))
-ai_rect = ai_img.get_rect(topleft=(750, 300))
+dealer = pygame.image.load('dealer.png')
+dealer = pygame.transform.scale(dealer, (200, 200))
+dealer_rect = dealer.get_rect(topleft=(750, 300))
 
 handsaw1 = pygame.image.load('handsaw1.png')
 handsaw1 = pygame.transform.scale(handsaw1, (100, 100))
@@ -298,7 +294,7 @@ def render_player_image():
     if player_hit_time and current_time - player_hit_time <= player_blood_duration:
         screen.blit(playerblood, playerblood_rect.topleft)
     else:
-        screen.blit(player_img, player_rect.topleft)
+        screen.blit(user, user_rect.topleft)
 
 def render_ai_image():
     current_time = pygame.time.get_ticks()
@@ -307,7 +303,7 @@ def render_ai_image():
     if ai_hit_time and current_time - ai_hit_time <= ai_blood_duration:
         screen.blit(debtorblood, debtorblood_rect.topleft)
     else:
-        screen.blit(ai_img, ai_rect.topleft)
+        screen.blit(dealer, dealer_rect.topleft)
 
 def restore_health():
     global player_hp, ai_hp, player_restored, ai_restored, player_heart, ai_heart, playing_totem
@@ -467,9 +463,9 @@ def player_turn():
 
     # If handsaw video finished, player chooses target
     if handsaw_damage_pending_player:
-        if player_rect.collidepoint(mouse_pos):
+        if user_rect.collidepoint(mouse_pos):
             handle_handsaw_usage("player", "player")
-        elif ai_rect.collidepoint(mouse_pos):
+        elif dealer_rect.collidepoint(mouse_pos):
             handle_handsaw_usage("player", "ai")
             handsaw_damage_pending_player = False
             turn = "ai"
@@ -487,7 +483,7 @@ def player_turn():
         return  # Skip the rest of the logic during cooldown
 
     # Player shoots themselves
-    if player_rect.collidepoint(mouse_pos):
+    if user_rect.collidepoint(mouse_pos):
         bullet_type = random.choice(['real', 'fake'])
         if bullet_type == 'real' and num_real_bullets > 0:
             num_real_bullets -= 1
@@ -506,7 +502,7 @@ def player_turn():
         return  # Player keeps the turn
 
     # Player shoots the AI
-    elif ai_rect.collidepoint(mouse_pos):
+    elif dealer_rect.collidepoint(mouse_pos):
         bullet_type = 'real' if num_real_bullets > 0 else 'fake'
         if bullet_type == 'real':
             num_real_bullets -= 1
@@ -648,7 +644,6 @@ while running:
             # Display the video frame
             frame = get_frame_as_surface(current_video_clip.get_frame(frame_time))
             frame_rect = frame.get_rect(center=(screen_width // 2, screen_height // 2))
-            screen.blit(frame, frame_rect.topleft)
         else:
             # Video has finished
             video_playing = False
@@ -656,7 +651,7 @@ while running:
 
             # Apply handsaw damage after video finishes, based on player's and AI's target
             if handsaw_damage_pending_player:
-                if player_rect.collidepoint(pygame.mouse.get_pos()):  # Player shoots themselves
+                if user_rect.collidepoint(pygame.mouse.get_pos()):  # Player shoots themselves
                     if num_real_bullets > 0:
                         num_real_bullets -= 1
                         player_hp -= 2  # Apply -2 HP to Player
@@ -668,7 +663,7 @@ while running:
                     if player_hp <= 0:
                         handle_hp_restoration()  # Handle player health restoration if necessary
                     check_game_over()  # Check if game over
-                elif ai_rect.collidepoint(pygame.mouse.get_pos()):  # Player shoots AI
+                elif dealer_rect.collidepoint(pygame.mouse.get_pos()):  # Player shoots AI
                     if num_real_bullets > 0:
                         num_real_bullets -= 1
                         ai_hp -= 2  # Apply -2 HP to AI
@@ -713,6 +708,9 @@ while running:
     # After the video finishes, check if the game is over
     check_game_over() 
 
+    if video_playing:
+        print("Playing video...")
+
     # Render the turn message
     turn_message = f"{'Player' if turn == 'player' else 'AI'}'s Turn"
     turn_surface = font_turn.render(turn_message, True, WHITE)
@@ -728,7 +726,7 @@ while running:
         screen.blit(debtorblood, debtorblood_rect.topleft)
     else:
         # After 3 seconds, show the normal AI image again
-        screen.blit(ai_img, ai_rect.topleft)
+        screen.blit(dealer, dealer_rect.topleft)
 
     # Show medicine result if it was used
     render_medicine_result()
