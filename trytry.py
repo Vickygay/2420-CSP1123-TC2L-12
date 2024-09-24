@@ -34,6 +34,7 @@ playerturn_video = resize_video(playerturn_video, video_size)
 totem = resize_video(totem, video_size)
 handsawvideo1 = resize_video(handsawvideo1, video_size)
 handsawvideo2 = resize_video(handsawvideo2, video_size)
+=======
 fps = video_clip.fps  
 
 def get_frame_as_surface(frame):
@@ -90,6 +91,7 @@ text_2_surface = font_2.render("Start", True, RED)
 text_2_x, text_2_y = (screen_width - text_2_surface.get_width()) // 2, (screen_height - text_2_surface.get_height()) // 2 - 10 
 button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_surface.get_width(), text_2_surface.get_height())
 
+
 font_3 = pygame.font.Font('Creepster.ttf', 60)
 text_3_surface = font_3.render("How to Play", True, WHITE)
 text_3_x, text_3_y = (screen_width - text_3_surface.get_width()) // 2, (screen_height - text_3_surface.get_height()) // 2 + 110
@@ -100,12 +102,89 @@ font_4 = pygame.font.Font('Matemasie.ttf', 45)
 text_4_surface = font_4.render("<< Back", True, WHITE)
 text_4_button_x, text_4_button_y = (screen_width - text_4_surface.get_width()) // 2 - 400, screen_height - text_4_surface.get_height() // 2 - 50
 text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_surface.get_width(), text_4_surface.get_height())
+=======
+# Font setting for Life Roulette
+font_1_size = 85
+font_1_path = 'Creepster.ttf' 
+font_1 = pygame.font.Font(font_1_path, font_1_size)
+
+# Show (Life Roulette) on screen
+text_1 = "Life Roulette"
+text_1_surface = font_1.render(text_1, True, RED)
+
+# Font setting for Start
+font_2_size = 70
+font_2_path = 'Creepster.ttf'  
+font_2 = pygame.font.Font(font_2_path, font_2_size)
+
+# Show (Start) on screen
+text_2 = "Start"
+text_2_surface = font_2.render(text_2, True, RED)
+
+# Font setting for How to Play
+font_3_size = 60
+font_3_path = 'Creepster.ttf'  
+font_3 = pygame.font.Font(font_3_path, font_3_size)
+
+# Show (How to Play) on screen
+text_3 = "How to Play"
+text_3_surface = font_3.render(text_3, True, WHITE) 
+
+# Show (How to Play) on screen
+text_3 = "How to Play"
+text_3_surface = font_3.render(text_3, True, WHITE) 
+
+# Font setting for Back
+font_4_size = 45
+font_4_path = 'Matemasie.ttf'  
+font_4 = pygame.font.Font(font_4_path, font_4_size)
+
+# Show (Back) on screen
+text_4 = "<< Back"
+text_4_surface = font_4.render(text_4, True, WHITE)
+
+# Font setting for Next
+font_5_size = 45
+font_5_path = 'Matemasie.ttf'  
+font_5 = pygame.font.Font(font_5_path, font_5_size)
+
+# Show (Next) on screen
+text_5 = "Next >>"
+text_5_surface = font_5.render(text_5, True, WHITE)
+
+# Font setting for Back to Main
+font_8_size = 45
+font_8_path = 'Matemasie.ttf'
+font_8 = pygame.font.Font(font_8_path, font_8_size)
+
+# Show (Back to Main) on screen
+text_8 = "<< Main"
+text_8_surface = font_8.render(text_8, True, WHITE)
+
+# Font setting Enter Your Name
+font_11_size = 70
+font_11_path = 'Nerko.ttf'
+font_11 = pygame.font.Font(font_11_path, font_11_size)
+
+# Show Enter your name
+text_11 = "Enter Your Name!"
+text_11_surface = font_11.render(text_11, True, WHITE)
+
+# Fonts setting for How many bullets left
+font_12_size = 36
+font_12_path = "Nerko.ttf"
+font_12 = pygame.font.Font(font_12_path, font_12_size)
+
+font_13_size = 28
+font_13_path = "Nerko.ttf"
+font_13 = pygame.font.Font(font_13_path, font_13_size)
 
 font_5 = pygame.font.Font('Matemasie.ttf', 45)
 text_5_surface = font_5.render("Next >>", True, WHITE)
 text_5_button_x, text_5_button_y = (screen_width - text_5_surface.get_width()) // 2 + 400, screen_height - text_5_surface.get_height() // 2 - 50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_surface.get_width(), text_5_surface.get_height())
 # Show (Life) on screen and positioning
+
 life_text_surface = font_5.render("Life:", True, RED)
 life_x, life_y = 3, 0
 
@@ -150,6 +229,99 @@ turn_message = "Player's Turn"
 
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
 transparent_surface.fill((0, 0, 0, 0)) 
+=======
+life_text = "Life:"
+life_text_surface = font_5.render(life_text, True, RED)
+life_x = 3
+life_y = 0
+
+# Font setting for You lose
+font_6_size = 40
+font_6_path = 'Matemasie.ttf'
+font_6 = pygame.font.Font(font_6_path, font_6_size)
+
+# Show (You lose) on screen and positioning
+lose_text = "Foolish gambler.Try again would ya?"
+lose_text_surface = font_6.render(lose_text, True, RED)
+lose_x = 125
+lose_y = 250
+
+# Font setting for You win 
+font_7_size = 40
+font_7_path = 'Matemasie.ttf'
+font_7 = pygame.font.Font(font_7_path, font_7_size)
+
+# Show (You win) on screen and positioning
+win_text = "Congratulations, your humanity didn't betray you."
+win_text_surface = font_7.render(win_text, True, WHITE)
+win_x = 50
+win_y = 50
+
+# Font setting for Round two
+font_8_size = 40
+font_8_path = 'Matemasie.ttf'
+font_8 = pygame.font.Font(font_8_path, font_8_size)
+
+# Show (Round two) on screen and positioning
+round_2 = "Round Two"
+round_2_surface = font_8.render(round_2, True, WHITE)
+round_2_x = 375
+round_2_y = 0
+
+# Font setting for Final Round)
+font_9_size = 40
+font_9_path = "Matemasie.ttf"
+font_9 = pygame.font.Font(font_9_path, font_9_size)
+
+#Show (Final Round) on screen and positioning
+round_3 = "Final Round"
+round_3_surface = font_9.render(round_3, True, RED)
+round_3_x = 375
+round_3_y = 0
+
+transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA) # Every pixel on screen is transparent
+transparent_surface.fill((0, 0, 0, 128))
+
+# All text position settings
+text_1_width, text_1_height = text_1_surface.get_size()
+text_1_x = (screen_width - text_1_width) // 2
+text_1_y = (screen_height - text_1_height) // 2 -150
+
+text_2_width, text_2_height = text_2_surface.get_size()
+text_2_x = (screen_width - text_2_width) // 2
+text_2_y = (screen_height - text_2_height) // 2 -10 
+
+text_3_width, text_3_height = text_3_surface.get_size()
+text_3_x = (screen_width - text_3_width) // 2
+text_3_y = (screen_height - text_3_height) // 2 +110
+
+# Button areas for How to Play (Back)
+button_text2_rect = pygame.Rect(text_2_x, text_2_y, text_2_width, text_2_height)
+button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_width, text_3_height)
+
+# Back button
+text_4_width, text_4_height = text_4_surface.get_size()
+text_4_button_x = (screen_width - text_4_width) // 2 -400
+text_4_button_y = screen_height - text_4_height // 2 -50
+text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_width, text_4_height)
+
+# Next button 
+text_5_width, text_5_height = text_5_surface.get_size()
+text_5_button_x = (screen_width - text_5_width) // 2 +400
+text_5_button_y = screen_height - text_5_height // 2 -50
+text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_width, text_5_height)
+
+# Main button 
+text_8_width, text_8_height = text_8_surface.get_size()
+text_8_button_x = (screen_width - text_8_width) // 2 -400
+text_8_button_y = screen_height - text_8_height // 2 -50
+text_8_button_rect = pygame.Rect(text_8_button_x, text_8_button_y, text_8_width, text_8_height)
+
+# Click Shift button
+text_11_width, text_11_height = text_11_surface.get_size()
+text_11_button_x = (screen_width - text_11_width) // 2 
+text_11_button_y = screen_width // 2- text_11_height - 200
+text_11_button_rect = pygame.Rect(text_11_button_x, text_11_button_y, text_11_width, text_11_height)
 
 # Image settings for magnifier
 image_1 = pygame.image.load('magnifier.png') 
@@ -293,6 +465,7 @@ SCREEN_PLAY1 = 9
 SCREENNAME = 10
 SCREENDISPLAY = 11
 current_screen = SCREEN_MAIN
+
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
@@ -474,12 +647,45 @@ class AI:
     def reset(self):
         self.hp = 3
         self.game_over = False
-
+        
 class Player:
     def __init__(self):
         self.hp = 3  # Initial health value for the player
         self.game_over = False  # Start with game_over as False
         self.totem_used = False  # Track if the totem has been used
+=======
+        global current_screen, num_fake_bullets, num_real_bullets
+        current_screen = SCREEN_MAIN
+        num_real_bullets = 5
+        num_fake_bullets = 3
+        current_round = 1
+        round_1()
+
+#Reset hp for player
+    def hp_reset(self):
+        self.current_hp = max_hp
+
+#Draw out defeated screen when player is defeated
+    def draw_lose_screen(self):
+        if self.game_over:
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            self.reset
+
+#AI class
+class ai(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = dealer
+        self.rect = self.image.get_rect()
+        self.rect.center = (screen_width * 5 // 5.5, screen_height // 2)
+        self.max_hp = ai_hp
+        self.ai_current_hp = ai_hp
+        self.ai_hp_positions = [(950, 0), (900, 0), (850, 0)]
+        self.game_over = False
+
 
     def check_if_game_over(self):
         if self.hp <= 0 and self.totem_used:  # Only game over if the totem has been used
@@ -1154,6 +1360,11 @@ def ai_turn():
 player = Player()
 ai = AI()
 
+#Group the sprite
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+all_sprites.add(ai)
+
 ##########################################################################################################################################################################
 font_10 = pygame.font.Font("Gloria.ttf", 47)
 input_font_name = pygame.font.Font("Gloria.ttf", 50)
@@ -1341,6 +1552,143 @@ def current_bullet():
         return bullets[0]  # Return the type of the current bullet (1 for real, 0 for fake)
     else:
         return None  # Return None if there are no bullets left
+
+=======
+    global turn, num_real_bullets, num_fake_bullets, bullets
+    num_real_bullets = 5
+    num_fake_bullets = 3
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
+    bullets_reset()
+ 
+#Showcase for round 2
+def round_2():
+    screen.blit(round_2_surface, (round_2_x,round_2_y))
+    pygame.display.update()
+    pygame.time.delay(2000)
+    global turn, num_real_bullets, num_fake_bullets, bullets
+    num_real_bullets = 3
+    num_fake_bullets = 2
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
+    if current_round == 2:
+        magnifier_button()
+    bullets_reset()
+
+#Showcase for round 3 (Final Round)
+def round_3():
+    screen.blit(round_3_surface, (round_3_x, round_3_y))
+    pygame.display.update()
+    pygame.time.delay(2000)
+    global turn, num_real_bullets, num_fake_bullets, bullets
+    #Define the new max hp for player and ai in the last round
+    player.max_hp = 1
+    player.current_hp = player.max_hp
+    ai.max_hp = 1
+    ai.ai_current_hp = ai.max_hp
+    num_real_bullets = 1
+    num_fake_bullets = 1
+    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)
+    turn = "player"
+    shoot_message = " "
+    ai_shoot_message = " "
+    bullets_reset()
+
+#To track the current bullet that player is holding
+next_bullet_type = None
+
+#Define the function of what is the current bullet that player is handling
+def current_bullet():
+    global bullets, next_bullet_type, shoot_message
+
+    if bullets:
+        next_bullet_type = bullets[0]
+        if next_bullet_type == 1:
+            shoot_message = "This is a real bullet."
+
+        else:
+            shoot_message = "This is a fake bullet."
+    else:
+        return "No bullet left."
+
+
+#Define the function of bullet
+def bullet():
+    global num_real_bullets, num_fake_bullets, shoot_message, turn, bullets, next_bullet_type
+    mouse_pos = pygame.mouse.get_pos()
+
+
+    # Click on Image
+    if image_4_x <= mouse_pos[0] <= image_4_x + image_4_width and image_4_y <= mouse_pos[1] <= image_4_y + image_4_height:
+
+        if bullets:
+            bullet_type = bullets.pop(0)
+
+            if bullet_type == 1:
+                num_real_bullets -= 1
+                gun_sound.play()
+                shoot_message = (f"{name} shot a real bullet!")
+                ai.ai_current_hp -= 1
+
+            else:
+                num_fake_bullets -= 1
+                emptygun_sound.play()
+                shoot_message = (f"{name} shot a fake bullet!")
+
+            turn = "ai"
+
+        else:
+            shoot_message = "No bullets left!"
+
+    return shoot_message
+
+#Define for AI to fire 
+def ai_fire():
+
+    global num_real_bullets, num_fake_bullets, ai_shoot_message, turn, bullets
+
+#Make the turn to player once ai is defeated
+    if ai.ai_current_hp <= 0:
+        turn = "player"
+        return
+
+    if bullets:
+        bullet_type = bullets.pop(0)
+        if bullet_type == 1:
+            num_real_bullets -= 1
+            gun_sound.play()
+            ai_shoot_message = "Debtor shot a Real bullet!"
+            player.current_hp -= 1
+
+        else:
+            num_fake_bullets -= 1
+            emptygun_sound.play()
+            ai_shoot_message = "Debtor shot a Fake bullet!"
+                
+    else:
+        ai_shoot_message = "Debtor has no bullets left!"    
+        turn = "player"
+    return shoot_message
+
+def draw_game_state():
+    screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
+    real_bullets_text = font_12.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
+    fake_bullets_text = font_12.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
+    screen.blit(real_bullets_text, (10, 50))
+    screen.blit(fake_bullets_text, (300, 50))
+    screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
+    shoot_message_text = font_12.render(shoot_message, True, WHITE)
+    screen.blit(shoot_message_text, (10, 100))
+    ai_shoot_message_text =font_12.render(ai_shoot_message, True, WHITE)
+    screen.blit(ai_shoot_message_text, (625, 100))
+    pygame.display.update()
 
 
 ##########################################################################################################################################################################
@@ -1788,6 +2136,38 @@ while running:
         else:
             pass
 
+        all_sprites.draw(screen)
+        player.draw_hp(screen)
+        ai.draw_hp(screen)
+        player.player_check_hp()
+        ai.ai_check_hp()
+        if turn == "ai":
+            ai_fire()
+            turn = "player"
+
+        if current_round == 2:
+            magnifier_button()
+
+        if ai.game_over:
+            if current_round == 1:
+                ai.reset()
+                current_round += 1
+                round_2()
+                turn = "player"
+                shoot_message = None
+                ai_shoot_message = None
+
+            elif current_round == 2:
+                ai.reset()
+                current_round += 1
+                round_3()
+                turn = "player"
+                shoot_message = None
+                ai_shoot_message = None
+        else:
+            pass
+        draw_game_state()
+  
         if player.game_over:
             player.draw_lose_screen()
             shoot_message = None
