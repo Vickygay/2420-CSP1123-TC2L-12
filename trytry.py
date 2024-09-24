@@ -532,14 +532,11 @@ class AI:
         if self.hp <= 0 and self.totem_used:
             self.game_over = True
 
-    def reset(self):
-        self.hp = 3
-        self.game_over = False
-
 class Player:
     def __init__(self):
         self.hp = 3  # Initial health value for the player
         self.totem_used = False  # Track if the totem has been used
+        self.game_over = False  # Add game_over attribute
 
     def check_if_game_over(self):
         if self.hp <= 0 and self.totem_used:
