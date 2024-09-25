@@ -1502,9 +1502,9 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(kidnapper, (player_x, player_y))
         create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
-        player_x + 400, player_y - 150, width=400, height=230)
-        draw_custom_shape(screen, WHITE, 700, 490, 200)
-        draw_multiline_text(screen, "Dad, please! Help me!", font2, RED, 700, 500, max_width=140)
+        player_x + 400, player_y - 150, width=500, height=230)
+        draw_custom_shape(screen, WHITE, 700, 490, 210, 220)
+        draw_multiline_text(screen, "Dad, I'm scared ! Help me!", fonttext1, RED, 700, 510, max_width=140)
         
     elif current_screen == SCREEN_HOW_TO_PLAY:
         # Show on How to Play screen 
@@ -1564,7 +1564,7 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
-        create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time—ten days! Just ten days, and I’ll get you your money!",
+        create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time, ten days! Just ten days, and I'll get you your money!",
         player_x + 400, player_y - 90, width=400, height=130)
           
     elif current_screen == SCREEN_STORY2:
@@ -1573,8 +1573,8 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal—you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
-        player_x + 400, player_y - 150, width=410, height=200)
+        create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
+        player_x + 400, player_y - 150, width=500, height=200)
 
     elif current_screen == SCREEN_STORY3:
         # Show on Story 3 Screen
