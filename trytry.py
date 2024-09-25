@@ -3,6 +3,10 @@ import sys
 from moviepy.editor import VideoFileClip
 import numpy as np
 import random
+import turtle
+import math
+import time
+
 
 # Initialize Pygame
 pygame.init()
@@ -126,6 +130,16 @@ font_11 = pygame.font.Font(font_11_path, font_11_size)
 text_11 = "Enter Your Name!"
 text_11_surface = font_11.render(text_11, True, WHITE)
 
+text_12 = "Do you want to play maze?"
+text_12_surface = font_3.render(text_12, True, WHITE)
+
+text_13 = "YES"
+text_13_surface = font_3.render(text_13, True, WHITE)
+
+text_14 = "NO"
+text_14_surface = font_3.render(text_14, True, WHITE)
+
+
 # Fonts setting for How many bullets left
 font_12_size = 36
 font_12_path = "Nerko.ttf"
@@ -145,12 +159,6 @@ life_y = 0
 font_6_size = 40
 font_6_path = 'Matemasie.ttf'
 font_6 = pygame.font.Font(font_6_path, font_6_size)
-
-# Show (You lose) on screen and positioning
-lose_text = "Guess you have not enough of determination. Try to gamble again would ya?"
-lose_text_surface = font_6.render(lose_text, True, RED)
-lose_x = 50
-lose_y = 50
 
 # Font setting for You win
 font_7_size = 40
@@ -206,6 +214,21 @@ text_11_width, text_11_height = text_11_surface.get_size()
 text_11_button_x = (screen_width - text_11_width) // 2 
 text_11_button_y = screen_width // 2- text_11_height - 200
 text_11_button_rect = pygame.Rect(text_11_button_x, text_11_button_y, text_11_width, text_11_height)
+
+text_12_width, text_12_height = text_12_surface.get_size()
+text_12_button_x = (screen_width - text_11_width) // 2 -50
+text_12_button_y = screen_width // 2- text_11_height - 200
+text_12_button_rect = pygame.Rect(text_12_button_x, text_12_button_y, text_12_width, text_12_height)
+
+text_13_width, text_13_height = text_13_surface.get_size()
+text_13_button_x = (screen_width - text_13_width) // 2 -100
+text_13_button_y = screen_height - text_13_height // 2 -400
+text_13_button_rect = pygame.Rect(text_13_button_x, text_13_button_y, text_13_width, text_13_height)
+
+text_14_width, text_14_height = text_14_surface.get_size()
+text_14_button_x = (screen_width - text_14_width) // 2 +100
+text_14_button_y = screen_height - text_14_height // 2 -400
+text_14_button_rect = pygame.Rect(text_14_button_x, text_14_button_y, text_14_width, text_14_height)
 
 # Image settings for magnifier
 image_1 = pygame.image.load('magnifier.png') 
@@ -294,9 +317,9 @@ SCREEN_STORY2 = 4
 SCREEN_STORY3 = 5
 SCREEN_STORY4 = 6
 SCREEN_STORY5 = 7
-SCREEN_STORY6 = 8
-SCREEN_STORY7 = 9
-SCREEN_STORY8 = 10
+SCREEN_PLAYMAZE = 8
+SCREEN_MAZE = 9
+SCREEN_ENDING1 = 10
 SCREEN_STORY9 = 11
 SCREEN_PLAY1 = 12
 SCREENNAME = 13
@@ -330,6 +353,9 @@ player_y = 200
 font = pygame.font.Font("DMRegular.ttf", 18)
 font2 = pygame.font.Font('DMRegular.ttf', 26)
 font3 = pygame.font.Font("Nerko.ttf", 22)
+
+
+
 
 # Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
@@ -417,53 +443,11 @@ def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_rad
     # Draw the bubble on the screen
     screen.blit(bubble_surface_2, (x, y))
 ##########################################################################################################################################################################
-#Define initial hp
-max_hp = 3
-ai_hp = 3
 
-# Class for Player and AI 
-# Player Class
-class player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(GREEN)
-        self.rect = self.image.get_rect()
-        self.rect.center = (screen_width // 10, screen_height // 2)
-        self.max_hp = max_hp
-        self.current_hp = max_hp
-        self.hp_positions = [(0, 0), (50, 0), (100, 0)]
-
-    def draw_hp(self, surface):
-        for i in range(self.current_hp):
-            surface.blit(hearts, self.hp_positions[i])
-
-#AI class
-class ai(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        self.rect.center = (screen_width * 5 // 5.5, screen_height // 2)
-        self.max_hp = ai_hp
-        self.ai_current_hp = ai_hp
-        self.ai_hp_positions = [(850, 0), (900, 0), (950, 0)]
-
-    def draw_hp(self, surface):
-        for i in range(self.ai_current_hp):
-            surface.blit(hearts, self.ai_hp_positions[i])
-
-
-#Create player and AI objects
-player = player()
-ai = ai()
-
-#Group the sprite
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
-all_sprites.add(ai)
 ##########################################################################################################################################################################
+
+###################################################################################################
+
 font_10 = pygame.font.Font("Gloria.ttf", 47)
 input_font_name = pygame.font.Font("Gloria.ttf", 50)
 
@@ -538,52 +522,235 @@ def SCREENDISPLAY(name):
 
         pygame.display.flip()
         clock.tick(30)
+
+
 ##########################################################################################################################################################################
-# Bullet setting for round 1
-num_real_bullets = 5
-num_fake_bullets = 3
-shoot_message = " "
+import pygame
+import sys
+import math
+import random
+import time
 
-def bullet():
-    global num_real_bullets, num_fake_bullets, shoot_message
-    mouse_pos = pygame.mouse.get_pos()
+# Pygame initialization
+pygame.init()
 
-    # Click on Image
-    if image_4_x <= mouse_pos[0] <= image_4_x + image_4_width and image_4_y <= mouse_pos[1] <= image_4_y + image_4_height:
-        if num_real_bullets > 0 or num_fake_bullets > 0:
-            available_bullets = []
-            if num_real_bullets > 0:
-                available_bullets.append("real")
-            if num_fake_bullets > 0:
-                available_bullets.append("fake")
+# Screen setup
+screen = pygame.display.set_mode((1000, 800))
+pygame.display.set_caption("A Maze Game")
 
-            bullet_type = random.choice(available_bullets)
+# Clock to control FPS
+clock = pygame.time.Clock()
 
-            if bullet_type == "real":
-                num_real_bullets -= 1
-                gun_sound.play()
-                shoot_message = (f"{name} shot a Real bullet!")
-            else:
-                num_fake_bullets -= 1
-                emptygun_sound.play()
-                shoot_message = (f"{name} shot a Fake bullet!")
+move_sound = pygame.mixer.Sound("footsteps.wav")
+collision_sound = pygame.mixer.Sound("collision.wav")
+pick_sound = pygame.mixer.Sound("pick.wav")
+
+player_right_img = pygame.image.load("player_right.png")
+player_left_img = pygame.image.load("player_left.png")
+boost_img = pygame.image.load("boost.png")
+wall_img = pygame.image.load("wall.png")
+monster_left_img = pygame.image.load("monster_left.png")
+monster_right_img = pygame.image.load("monster_right.png")
+heart_img = pygame.image.load("heart.png")
+exit_img = pygame.image.load("exit.png")
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Font setup for text
+font = pygame.font.Font(None, 36)
+
+# Class Definitions
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = player_right_img
+        self.rect = self.image.get_rect()
+        self.power = 0
+        self.lives = 3
+        self.boost_count = 0
+        self.last_collision_time = 0
+
+    def move(self, dx=0, dy=0, walls=None):
+        old_x, old_y = self.rect.x, self.rect.y
+        self.rect.x += dx
+        self.rect.y += dy
+
+        # Collision with walls: rollback if collided
+        if walls and pygame.sprite.spritecollideany(self, walls):
+            self.rect.x, self.rect.y = old_x, old_y  # Revert movement if collision occurs
         else:
-            shoot_message = "No bullets left!"
+            move_sound.play()  # Play sound only if movement is valid
+
+    def is_collision(self, other):
+        return self.rect.colliderect(other.rect)
+    
+    def collect_boost(self):
+        self.boost_count += 1
+        pick_sound.play()
+
+    def handle_collision_with_enemy(self):
+        """Handle the collision with the enemy and lose a life if necessary."""
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_collision_time > 1000:  # 1 second delay
+            self.lives -= 1
+            collision_sound.play()
+            self.last_collision_time = current_time
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = wall_img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+class Boost(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = boost_img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def destroy(self):
+        self.kill()  # Remove boost from game
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = monster_left_img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.direction = random.choice(["up", "down", "left", "right"])
+        self.last_move_time = pygame.time.get_ticks()
+
+    def move(self, walls, player):
+        current_time = pygame.time.get_ticks()
+
+        # Move every 500ms to slow down enemy movement
+        if current_time - self.last_move_time >= 500:
+            dx, dy = 0, 0
+            if self.direction == "up":
+                dy = -24
+            elif self.direction == "down":
+                dy = 24
+            elif self.direction == "left":
+                dx = -24
+                self.image = monster_left_img
+            elif self.direction == "right":
+                dx = 24
+                self.image = monster_right_img
+
+            old_x, old_y = self.rect.x, self.rect.y
+            self.rect.x += dx
+            self.rect.y += dy
+
+            # Check for wall collision
+            if pygame.sprite.spritecollideany(self, walls):
+                self.rect.x, self.rect.y = old_x, old_y  # Revert movement if collision occurs
+                self.direction = random.choice(["up", "down", "left", "right"])  # Change direction
+
+            # Update move time
+            self.last_move_time = current_time
+            
+class Exit(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = exit_img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+# Setup maze layout
+walls = pygame.sprite.Group()
+boosts = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
+
+def setup_maze(level):
+    global exit_point
+    for y, row in enumerate(level):
+        for x, char in enumerate(row):
+            screen_x = x * 24
+            screen_y = y * 24
+            if char == "X":
+                wall = Wall(screen_x, screen_y)
+                walls.add(wall)
+                all_sprites.add(wall)
+            elif char == "B":
+                boost = Boost(screen_x, screen_y)
+                boosts.add(boost)
+                all_sprites.add(boost)
+            elif char == "E":
+                enemy = Enemy(screen_x, screen_y)
+                enemies.add(enemy)
+                all_sprites.add(enemy)
+            elif char == "P":
+                player.rect.x = screen_x
+                player.rect.y = screen_y
+            elif char == "Z":
+                exit_point = Exit(screen_x, screen_y)
+                all_sprites.add(exit_point)
+
+# Define the game level
+level_1 = [
+"                                 ",
+"                                 ",
+"                                 ",
+"        XXXXXXXXXXXXXXXXXXXXXXXXX",
+"        XP XXXXXXXE          XXXX",
+"        X  XXXXXXX   XXXXX   XXXX",
+"        X       XX   XXXXX   XXXX",
+"        X       XX   XXX       XX",
+"        XXXXXX  XX   XXX      EXX",
+"        XXXXXX  XX   XXXXX   XXXX",
+"        XXXXXX         XXXB  XXXX",
+"        X  XXX     XXXXXXXXXXXXXX",
+"        X EXXX         XXXXXXXXXX",
+"        X               XXXXB   X",
+"        XXXXXXXXX       XXXX    X",
+"        XXXZXXXXXXXX    XXXX    X",
+"        XX    XXXXXX            X",
+"        XXX                     X",
+"        XXX             XXXXXXXXX",
+"        XXXXXXXXX       XXXXXXXXX",
+"        XXXXXXXXXX             XX",   
+"        XXB   XXXX             XX",
+"        XX    XXXXXXXXXX       XX",
+"        XX    XXXXXXXXXX     XXXX",
+"        XX     XXXXXXXXX     XXXX",
+"        XX         XXXXX        X",
+"        XXXE                    X",
+"        XXXXXXXXXXXXXXXXXXXXXXXXX",
+]
+
+# Create the player and add to the sprite group
+player = Player()
+all_sprites.add(player)
+
+# Initialize game state
+setup_maze(level_1)
+
+exit_message = ""
+show_exit_message = False
+message_start_time = 0
 
 ##########################################################################################################################################################################
 # IMPORTANT!!!
 show_input_box = False
 running = True
+
 while running:
     mouse_x, mouse_y = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            running = False
             pygame.quit()
             sys.exit()
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if current_screen == SCREEN_PLAY1:
-                bullet()
 
             # Settings for click on Play and move to storyline
             if current_screen == SCREEN_MAIN:
@@ -656,18 +823,34 @@ while running:
                     sound_back.play()
                     current_screen = SCREEN_STORY3
                     pygame.display.set_caption('Storyline')
-
             
             elif current_screen == SCREEN_STORY5:
                 if text_5_button_rect.collidepoint(event.pos):
                     sound_back.play()
                     show_input_box = True
-                    current_screen = SCREENNAME
+                    current_screen = SCREEN_PLAYMAZE
                     pygame.display.set_caption('Enter your Name')
                 elif text_4_button_rect.collidepoint(event.pos):
                     sound_back.play()
                     current_screen = SCREEN_STORY4 
                     pygame.display.set_caption('Storyline')
+            
+            elif current_screen == SCREEN_PLAYMAZE:
+                if text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY5
+                if text_13_button_rect.collidepoint(event.pos): #YES
+                    sound_back.play()
+                    current_screen = SCREEN_MAZE
+                if text_14_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREENNAME
+                    pygame.display.set_caption('Maze')          
+            
+            elif current_screen == SCREEN_MAZE:
+                if text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREENNAME
 
             elif current_screen == SCREENNAME:
                 name = player_name()
@@ -678,6 +861,24 @@ while running:
                     sound_back.play()
                     current_screen = SCREEN_MAIN
                     pygame.display.set_caption('Life Roulette')
+            
+            elif current_screen == SCREEN_ENDING1:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    show_input_box = True
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Ending')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Ending') 
+                pygame.display.flip()
+                time.sleep(3)  # Pause for 3 seconds to let the player see the message
+                pygame.quit()
+                sys.exit()  
+
+            else:
+                pygame.display.update()
 
     if current_screen == SCREEN_HOW_TO_PLAY:
         image_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
@@ -698,21 +899,6 @@ while running:
             tooltip_rect_3.topright = (mouse_x -10, mouse_y - 10)
             screen.blit(tooltip_surface_3, tooltip_rect_3)
                         
-#FOR TESTING PURPOSE        
-        elif event.type == pygame.KEYDOWN:
-            # Increase or decrease player HP
-            if event.key == pygame.K_UP:
-                player.current_hp = min(player.max_hp, player.current_hp + 1)  # Increase HP
-
-            elif event.key == pygame.K_DOWN:
-                player.current_hp = max(0, player.current_hp - 1)  # Decrease HP
-            
-            # Increase or decrease AI HP
-            elif event.key == pygame.K_LEFT:
-                ai.ai_current_hp = max(0, ai.ai_current_hp - 1)  # Decrease AI HP
-
-            elif event.key == pygame.K_RIGHT:
-                ai.ai_current_hp = min(ai.max_hp, ai.ai_current_hp + 1)  # Increase AI HP
                   
     # Current screen update
     screen.fill(BLACK)
@@ -863,13 +1049,95 @@ while running:
         draw_multiline_text(screen, "Ahhh, so you’ll play… but will you survive?", font, PURPLE, 700, 100, max_width=140)
         create_rounded_speech_bubble("But there’s more to this game than you know. A maze awaits you, twisting and shifting. Find the exit and collect three boosts... *only* then will you gain a precious life and an antidote to face the kidnapper",
         player_x + 450, player_y - 10, width=400, height=160)
-        create_rounded_speech_bubble("But beware—get only two boosts, and while you’ll survive, the antidote will be lost. Without it, you’ll face problems... deadly problems.",
+        create_rounded_speech_bubble("But beware—get at least two boosts, and while you’ll survive, the antidote will be lost. Without it, you’ll face problems... deadly problems.",
         player_x + 500, player_y + 150, width=400, height=100)
         create_rounded_speech_bubble("If find one.... or none,your fate is sealed. You and your daughter will perish. No mercy. No escape. The maze decides, not you.",
         player_x + 500, player_y +250, width=400, height=100)
-    
-    
 
+    elif current_screen == SCREEN_PLAYMAZE :
+        screen.fill(BLACK)
+        screen.blit(text_12_surface, (text_12_button_x, text_12_button_y))
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+        screen.blit(text_14_surface, (text_14_button_x, text_14_button_y))
+        screen.blit(text_13_surface, (text_13_button_x, text_13_button_y))
+
+    elif current_screen == SCREEN_MAZE:
+        screen.fill(BLACK)
+        # Main game loop
+        maze_running = True
+        while maze_running:
+            screen.fill((BLACK)) 
+
+            # Event handling
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                # Player movement on key press (one box per press)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        player.move(dx=-24, walls=walls)
+                    if event.key == pygame.K_RIGHT:
+                        player.move(dx=24, walls=walls)
+                    if event.key == pygame.K_UP:
+                        player.move(dy=-24, walls=walls)
+                    if event.key == pygame.K_DOWN:
+                        player.move(dy=24, walls=walls)
+
+            # Handle player-boost collisions
+            for boost in boosts:
+                if player.is_collision(boost):
+                    pick_sound.play()
+                    boost.destroy()
+                    player.boost_count += 1
+
+            # Handle enemy movements and chase logic
+            for enemy in enemies:
+                enemy.move(walls, player)
+                if player.is_collision(enemy):
+                    player.handle_collision_with_enemy()
+                    collision_sound.play()
+            
+                # Check if player loses all lives
+            if player.lives <= 0:
+                current_screen = SCREEN_ENDING1
+                break
+
+            # Check if player reaches the exit and has enough boosts
+            if player.is_collision(exit_point) and player.boost_count >= 2:
+                current_screen = SCREENNAME
+                break
+
+            if player.is_collision(exit_point):
+                if player.boost_count >= 2:
+                    current_screen = SCREENNAME
+                else:
+                    exit_message = "Get at least two boosts to exit"
+                    show_exit_message = True
+                    message_start_time = pygame.time.get_ticks()
+            
+            # Show exit message for 2 seconds if necessary
+            if show_exit_message:
+                current_time = pygame.time.get_ticks()
+                if current_time - message_start_time > 2000:  # 2000 ms = 2 seconds
+                    show_exit_message = False
+                else:
+                    message_surface = font.render(exit_message, True, WHITE)
+                    screen.blit(message_surface, (screen.get_width() // 2 - message_surface.get_width() // 2, screen.get_height() // 2 - 350))
+
+            # Drawing everything
+            all_sprites.draw(screen)
+
+                # Display player lives
+            for i in range(player.lives):
+                screen.blit(heart_img, (10 + i * 40, 10))
+
+            # Update display and control frame rate
+            pygame.display.flip()
+            clock.tick(60)
+       
+    
     elif current_screen == SCREENNAME:
         # Show on Enter your name Screen
         screen.fill(BLACK)
@@ -880,19 +1148,16 @@ while running:
     elif current_screen == SCREEN_PLAY1:
         # Show on Screen Play
         screen.fill(BLACK) 
-        all_sprites.draw(screen)
-        player.draw_hp(screen)
-        ai.draw_hp(screen)
         screen.blit(text_8_surface, (text_8_button_x, text_8_button_y))
-        real_bullets_text = font_12.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
-        fake_bullets_text = font_12.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
-        screen.blit(real_bullets_text, (10, 50))
-        screen.blit(fake_bullets_text, (300, 50))
         screen.blit(image_with_frame_surface_4, (image_4_x, image_4_y))
 
-        shoot_message_text = font_12.render(shoot_message, True, WHITE)
-        screen.blit(shoot_message_text, (10, 100))
+    elif current_screen == SCREEN_ENDING1:
+        screen.fill(BLACK) 
+        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
+        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
 
     pygame.display.flip()   
     pygame.time.Clock().tick(30)
+
+pygame.quit
     

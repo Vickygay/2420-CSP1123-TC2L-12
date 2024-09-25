@@ -4,7 +4,7 @@ import random
 import pygame
 import time
 
-pygame.mixer.init()
+pygame.mixer.init() 
 
 move_sound = pygame.mixer.Sound("footsteps.wav")
 collision_sound = pygame.mixer.Sound("collision.wav")
@@ -18,10 +18,34 @@ win.setup(1000,800)
 win.tracer(0)
 
 images = ["player_right.gif","player_left.gif","boost.gif","wall.gif",
-          "monster_left.gif","monster_right.gif","hearts.gif"]
+          "monster_left.gif","monster_right.gif","hearts.gif","exit.gif"]
 
 for image in images:
     turtle.register_shape(image)
+
+legend_turtle = turtle.Turtle()
+legend_turtle.penup()
+legend_turtle.hideturtle()
+legend_turtle.speed(0)
+
+def show_legend():
+    start_x = -250 
+    start_y = 320  
+
+    legend_turtle.goto(start_x, start_y)
+    legend_turtle.shape("boost.gif")
+    legend_turtle.stamp()  # Show image
+    legend_turtle.goto(start_x, start_y - 30)
+    legend_turtle.color("white")
+    legend_turtle.write("Boost", align="center", font=("Arial", 12, "normal"))
+    
+    legend_turtle.goto(start_x + 80, start_y)
+    legend_turtle.shape("exit.gif")
+    legend_turtle.stamp()  
+    legend_turtle.goto(start_x + 80, start_y - 30)
+    legend_turtle.write("Exit", align="center", font=("Arial", 12, "normal"))
+
+show_legend()
 
 
 class Pen(turtle.Turtle):
@@ -84,7 +108,7 @@ class Player(turtle.Turtle):
         distance = math.sqrt((a ** 2) + (b ** 2) )
 
         current_time = time.time()
-        if distance < 24 and (current_time - self.last_collision_time > 1.5):
+        if distance < 24 and (current_time - self.last_collision_time > 1.0):
             self.last_collision_time = current_time
             return True
         else:
@@ -92,30 +116,14 @@ class Player(turtle.Turtle):
     
     def collect_boost(self):
         self.boost_count += 1
-        if self.boost_count == 2:
-            self.check_exit_option()
-    
-    def check_exit_option(self):
-        if self.boost_count == 2 and self.lives == 1 and not self.exit_prompt_shown:
-            self.exit_prompt_shown = True  
-            answer = turtle.textinput("Exit Option", "You have 1 life left and 2 boosts. Do you want to exit the maze? (yes/no)")
-            if answer and answer.lower() == "yes":
-                print("You chose to exit the maze. Game Over!")
-                turtle.bye()  # Exit the game window
-            else:
-                print("You chose to continue. Good luck!")
+
             
     def lose_life(self):
         if self.lives > 0:
             self.lives -= 1
-            print(f"Player hit! Lives remaining: {self.lives}")
             display_lives() 
 
-            if self.lives == 1:
-                self.check_exit_option() 
-
             if self.lives == 0:
-                print("Game Over!")
                 time.sleep(2)
                 turtle.bye()  # Exit the game when out of lives
 
@@ -193,29 +201,31 @@ class Enemy(turtle.Turtle):
 class Exit(turtle.Turtle):
     def __init__(self, x, y):
         turtle.Turtle.__init__(self)
-        self.shape("circle")
-        self.color("blue")
+        self.shape("exit.gif")
         self.penup()
         self.speed(0)
         self.goto(x, y)
 
     def reached_exit(self):
-        answer = turtle.textinput("Maze Exit", "Do you want to exit the maze? (yes/no)")
-        if answer and answer.lower() == "yes":
-            print("You chose to exit. Game Over!")
-            turtle.bye()
-        elif answer and answer.lower() == "no":
-            show_continue_message()
-            win.update()
-            time.sleep(2)
-            turtle.bye() 
+        if player.boost_count >= 2:   
+            answer = turtle.textinput("Maze Exit", "Do you want to exit the maze? (yes/no)")
+            if answer and answer.lower() == "yes":
+                print("You chose to exit. Game Over!")
+                turtle.bye()
+            elif answer and answer.lower() == "no":
+                show_continue_message()
+                win.update()
+                time.sleep(2)
+                turtle.bye() 
+            else:
+                show_error_message()
+                win.update()
+                time.sleep(2)
+                return False
+            return True
         else:
-            show_error_message()
-            win.update()
-            time.sleep(2)
+            show_cannotexit_message()
             return False
-        return True
-    
 
 
 levels = [""]
@@ -293,7 +303,6 @@ def setup_maze(level):
 message_turtle = turtle.Turtle()
 message_turtle.hideturtle()  # Hide the turtle pointer
 
-
 def show_continue_message():
     message_turtle.clear()
     message_turtle.penup()
@@ -310,6 +319,19 @@ def show_error_message():
     message_turtle.color("white")
     message_turtle.write("Invalid choice. Please try again.", align="center", font=("Arial", 16, "normal"))
 
+def show_cannotexit_message():
+    message_turtle.clear()
+    message_turtle.penup()
+    message_turtle.hideturtle()
+    message_turtle.goto(0, 0)
+    message_turtle.color("white")
+    message_turtle.write("You need at least 2 boosts to exit the maze.", align="center", font=("Arial", 16, "normal"))
+
+    turtle.ontimer(clear_message, 2000)
+
+def clear_message():
+    message_turtle.clear()
+
 def display_lives():
     lives_display.clear()
     lives_display.goto(220,290)
@@ -317,8 +339,7 @@ def display_lives():
         lives_display.shape("hearts.gif")
         lives_display.stamp()
         lives_display.forward(30)
-    
-    
+
 
 setup_maze(levels[1])
 
