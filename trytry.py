@@ -743,7 +743,6 @@ def bullet():
     global num_real_bullets, num_fake_bullets, shoot_message, turn, bullets, next_bullet_type
     mouse_pos = pygame.mouse.get_pos()
 
-
     # Click on Image
     if image_4_x <= mouse_pos[0] <= image_4_x + image_4_width and image_4_y <= mouse_pos[1] <= image_4_y + image_4_height:
 
