@@ -146,7 +146,6 @@ text_4_button_rect = pygame.Rect(text_4_button_x, text_4_button_y, text_4_surfac
 text_5_surface = font_4.render("Next >>", True, WHITE)
 text_5_button_x, text_5_button_y = (screen_width - text_5_surface.get_width()) // 2 + 400, screen_height - text_5_surface.get_height() // 2 - 50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_surface.get_width(), text_5_surface.get_height())
-# Show (Life) on screen and positioning
 
 font_6 = pygame.font.Font('Matemasie.ttf', 40)
 lose_text_surface = font_6.render("Foolish gambler. Try again would ya?", True, RED)
@@ -1264,7 +1263,7 @@ def current_bullet():
     if bullets:
         return bullets[0]  
     else:
-        return None  
+        return None 
 ##########################################################################################################################################################################
 video_playing = False
 current_video_clip = None
