@@ -100,6 +100,16 @@ pygame.mixer.music.set_volume(0.3)  # (0.0 - 1.0)
 pygame.mixer.music.play(-1)  # Loop music infinity
 
 # Sound effects when click the text
+sound_play = pygame.mixer.Sound('clicksound.mp3')
+sound_how_to_play = pygame.mixer.Sound('clicksound.mp3')
+sound_back = pygame.mixer.Sound('clicksound.mp3')
+sound_next = pygame.mixer.Sound('clicksound.mp3')
+sound_clickbox = pygame.mixer.Sound("clickbox.mp3")
+gun_sound = pygame.mixer.Sound("gunsound.mp3")
+emptygun_sound = pygame.mixer.Sound("emptygun.mp3")
+delete_sound = pygame.mixer.Sound("delete.mp3")
+ring_sound = pygame.mixer.Sound("ring.mp3")
+
 soundclick = pygame.mixer.Sound('clicksound.mp3')
 sound_clickbox = pygame.mixer.Sound("clickbox.mp3")
 gun_sound = pygame.mixer.Sound("gunsound.mp3")
@@ -116,6 +126,9 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 LIGHTBLUE = (173, 216, 230)
 CHARCOAL = (54, 69, 79)
+LIGHTRED = (255,0,0)
+PURPLE = (160, 32, 240)
+YELLOW = (255, 255, 0)
 LIGHTRED = (255,0,0)
 DARKRED = (139, 0, 0)
 TRANSPARENT = (0, 0, 0, 0)
@@ -191,6 +204,36 @@ fontshoot = pygame.font.Font("Gloria.ttf", 25)
 transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
 transparent_surface.fill((0, 0, 0, 0)) 
 
+# Main button 
+text_8_width, text_8_height = text_8_surface.get_size()
+text_8_button_x = (screen_width - text_8_width) // 2 -400
+text_8_button_y = screen_height - text_8_height // 2 -50
+text_8_button_rect = pygame.Rect(text_8_button_x, text_8_button_y, text_8_width, text_8_height)
+
+# Click Shift button
+text_11_width, text_11_height = text_11_surface.get_size()
+text_11_button_x = (screen_width - text_11_width) // 2 
+text_11_button_y = screen_width // 2- text_11_height - 200
+text_11_button_rect = pygame.Rect(text_11_button_x, text_11_button_y, text_11_width, text_11_height)
+
+text_12_width, text_12_height = text_12_surface.get_size()
+text_12_button_x = (screen_width - text_11_width) // 2 -50
+text_12_button_y = screen_width // 2- text_11_height - 200
+text_12_button_rect = pygame.Rect(text_12_button_x, text_12_button_y, text_12_width, text_12_height)
+
+text_13_width, text_13_height = text_13_surface.get_size()
+text_13_button_x = (screen_width - text_13_width) // 2 -100
+text_13_button_y = screen_height - text_13_height // 2 -400
+text_13_button_rect = pygame.Rect(text_13_button_x, text_13_button_y, text_13_width, text_13_height)
+
+text_14_width, text_14_height = text_14_surface.get_size()
+text_14_button_x = (screen_width - text_14_width) // 2 +100
+text_14_button_y = screen_height - text_14_height // 2 -400
+text_14_button_rect = pygame.Rect(text_14_button_x, text_14_button_y, text_14_width, text_14_height)
+
+# Image settings for magnifier
+image_1 = pygame.image.load('magnifier.png') 
+image_1_size = (200, 200)
 # Image settings for magnifier
 image_1 = pygame.image.load('magnifier.png') 
 image_1_size = (200, 200)
@@ -222,6 +265,8 @@ image_with_frame_surface.fill((DARKGREY))
 pygame.draw.rect(image_with_frame_surface, BLACK, (0, 0, image_with_frame_surface.get_width(), image_with_frame_surface.get_height()), frame_thickness)
 image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
 
+image_2 = pygame.image.load('medicine.png') 
+
 image_2 = pygame.image.load('medicine1.png') 
 image_2_size = (200, 200)
 image_2 = pygame.transform.scale(image_2, image_2_size)
@@ -241,6 +286,8 @@ image_with_frame_surface_2.fill(background_color_2)
 pygame.draw.rect(image_with_frame_surface_2, frame_color_2, (0, 0, image_with_frame_surface_2.get_width(), image_with_frame_surface_2.get_height()), frame_thickness_2)
 
 image_with_frame_surface_2.blit(image_2, (frame_thickness_2, frame_thickness_2))
+
+image_3 = pygame.image.load('handsaw.png') 
 
 image_3 = pygame.image.load('handsaw1.png') 
 image_3_size = (200, 200)
@@ -272,6 +319,16 @@ man = pygame.transform.scale(manimage,(500,500))
 monsterimage = pygame.image.load("monster.jpeg")
 monster = pygame.transform.scale(monsterimage,(700,500))
 
+heartsimage = pygame.image.load('hearts.png')
+hearts = pygame.transform.scale(heartsimage, (50,50))
+
+broken_hearts = pygame.image.load('broken_hearts.png')
+broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
+
+witchimage = pygame.image.load('witch.png')
+witch = pygame.transform.scale(witchimage, (500,500))
+
+#Display positions of images
 heartsimage = pygame.image.load('hearts.png')
 hearts = pygame.transform.scale(heartsimage, (50,50))
 
@@ -383,19 +440,15 @@ def draw_multiline_text(surface, text, font2, color, x, y, max_width, line_spaci
         text_rect = text_surface.get_rect(center=(x, start_y + i * (font2.get_height() + line_spacing)))
         surface.blit(text_surface, text_rect)
 
-# Function to create a speech bubble with multiple lines
+
 def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radius=10):
-    # Create a surface for the speech bubble with transparency
     bubble_surface = pygame.Surface((width, height), pygame.SRCALPHA)
     
-    # Draw a rounded rectangle for the bubble
     draw_rounded_rect(bubble_surface, WHITE, bubble_surface.get_rect(), corner_radius)
     pygame.draw.rect(bubble_surface, BLACK, bubble_surface.get_rect(), 2, border_radius=corner_radius)
     
-    # Wrap the text into multiple lines
-    wrapped_lines = wrap_text(text, font, width - 20)  # Adjust for padding
+    wrapped_lines = wrap_text(text, font, width - 20) 
     
-    # Render each line
     for i, line in enumerate(wrapped_lines):
         line_surface = font.render(line, True, BLACK)
         line_rect = line_surface.get_rect(center=(width//2, 20 + i * 30))  # Adjust y position for each line
@@ -1291,19 +1344,34 @@ while running:
             # Main screen button handling
             if current_screen == SCREEN_MAIN:
                 if button_text2_rect.collidepoint(event.pos):
+                    sound_play.play()
+                if button_text2_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_PLAY
                     pygame.display.set_caption('Storyline')
+
+                # Settings for How to Play and How to Play Back
+                elif button_text3_rect.collidepoint(event.pos):
+                    sound_how_to_play.play()
                 elif button_text3_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_HOW_TO_PLAY
                     pygame.display.set_caption('How to Play')
+            elif current_screen == SCREEN_HOW_TO_PLAY:
+                if text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Life Roulette')
 
             elif current_screen == SCREEN_PLAY:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_next.play()
                 if text_5_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY1
                     pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
                 elif text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_MAIN
@@ -1317,33 +1385,54 @@ while running:
 
             # Story screens
             elif current_screen == SCREEN_STORY1:
+                if button_text2_rect.collidepoint(event.pos):
+                    ring_sound.play()
+                    current_screen = SCREEN_STORY2
+                    pygame.display.set_caption('Storyline')
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_next.play()
                 if text_5_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY2
                     pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
                 elif text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_PLAY
 
             elif current_screen == SCREEN_STORY2:
                 if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                if text_5_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY3
                     pygame.display.set_caption('Storyline')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
                 elif text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY1
 
             elif current_screen == SCREEN_STORY3:
                 if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                if text_5_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     dealerlaugh.play()
                     current_screen = SCREEN_STORY4
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
                 elif text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY2
 
             elif current_screen == SCREEN_STORY4:
+                if text_5_button_rect.collidepoint(event.pos):
+                    sound_back.play()
+                    current_screen = SCREEN_STORY5
+                elif text_4_button_rect.collidepoint(event.pos):
+                    sound_back.play()
                 if text_5_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     show_input_box = True
@@ -1513,6 +1602,13 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(kidnapper, (player_x, player_y))
+        ring_sound.play
+        create_rounded_speech_bubble("Well, well… finally answering, huh? Took your sweet time. Your little girl… she’s with me now.",
+        player_x + 400, player_y - 140, width=400, height=80)
+        create_rounded_speech_bubble("You’ve been dodging me for months. RM10,000,000. With that 20% interest, you owe me over RM12,000,000. And now? Time’s up. Your luck’s run dry.",
+        player_x + 500, player_y  + 10, width=400, height=150)
+        draw_custom_shape(screen, WHITE, 700, 490, 200)
+        draw_multiline_text(screen, "Dad, please! Help me! Please!", font2, RED, 700, 500, max_width=140)
         create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
         player_x + 400, player_y - 150, width=500, height=230)
         draw_custom_shape(screen, WHITE, 700, 490, 210, 220)
@@ -1576,6 +1672,9 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
+        create_rounded_speech_bubble("Please, listen, I… I don’t have that kind of money right now! Let her go! Just give me more time! Ten days, that’s all I’m asking for!",
+        player_x + 400, player_y - 90, width=400, height=120)
+          
         create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time, ten days! Just ten days, and I'll get you your money!",
         player_x + 400, player_y - 90, width=400, height=130)
           
@@ -1585,6 +1684,10 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(kidnapper, (player_x, player_y))
+        create_rounded_speech_bubble("Time? You really think you get to bargain with me?",
+        player_x + 400, player_y - 130, width=410, height=70)
+        create_rounded_speech_bubble("Here’s how it’s going to work. You’re going to play a game. My game. Win, and you’ll get 20 days to gather my money. Lose? Well… your daughter won’t see another sunrise.",
+        player_x + 500, player_y +30, width=410, height=140)
         create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
         player_x + 400, player_y - 150, width=500, height=200)
 
@@ -1594,6 +1697,8 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(man, (player_x, player_y))
+        create_rounded_speech_bubble("I’ll do it. I’ll play your game. Just don’t hurt her, please!!",
+        player_x + 400, player_y - 90, width=400, height=100)
         create_rounded_speech_bubble("I'll do it. I'll play your game. Just don't hurt her, please!!",
         player_x + 400, player_y - 90, width=400, height=70)
 
@@ -1603,6 +1708,8 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
         screen.blit(monster, (player_x, player_y)) 
+        draw_custom_shape(screen, WHITE, 700, 300, 200)
+        draw_multiline_text(screen, "Good. Then let's begin.", font2, RED, 700, 300, max_width=140)
         draw_custom_shape(screen, WHITE, 700, 300, 220, 220)
         draw_multiline_text(screen, "Good ! Let's begin!", fonttext2, RED, 700, 320, max_width=170)
 
