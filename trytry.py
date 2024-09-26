@@ -4,7 +4,6 @@ from moviepy.editor import VideoFileClip
 import numpy as np
 import random
 from moviepy.editor import *
-from PIL import Image
 
 # Initialize Pygame
 pygame.init()
@@ -205,7 +204,7 @@ transparent_surface = pygame.Surface((screen_width, screen_height), pygame.SRCAL
 transparent_surface.fill((0, 0, 0, 0)) 
 
 # Main button 
-text_8_width, text_8_height = text_8_surface.get_size()
+text_8_width, text_8_height = text_1_surface.get_size()
 text_8_button_x = (screen_width - text_8_width) // 2 -400
 text_8_button_y = screen_height - text_8_height // 2 -50
 text_8_button_rect = pygame.Rect(text_8_button_x, text_8_button_y, text_8_width, text_8_height)
@@ -476,7 +475,7 @@ def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_rad
     screen.blit(bubble_surface_2, (x, y))
 ##########################################################################################################################################################################
 #Define initial hp
-max_hp = 3
+max_hp = 5
 ai_hp = 3
 player_hp = 3
 
@@ -691,15 +690,11 @@ def round_1():
     magnifier2_used_by_ai = False
 
 def round_2():
-    global turn, num_real_bullets, num_fake_bullets, bullets, current_round, max_hp, ai_hp, player_hp
+    global turn, num_real_bullets, num_fake_bullets, bullets, current_round
     global handsaw1_used_by_player, handsaw_damage_pending_player, handsaw2_used_by_ai, handsaw_damage_pending_ai
     global magnifier1_used_by_player, magnifier2_used_by_ai
 
     print("Starting Round 2")
-    # Define the different hp for each round
-    max_hp = 2
-    ai_hp = 2
-    player_hp = 2
 
     # Set the number of real and fake bullets for Round 2
     num_real_bullets = 3
@@ -720,7 +715,7 @@ def round_2():
     roundmessage("Welcome to Round 2")
 
 def round_3():
-    global turn, num_real_bullets, num_fake_bullets, bullets, max_hp, ai_hp, player_hp
+    global turn, num_real_bullets, num_fake_bullets, bullets
     global handsaw1_used_by_player, handsaw_damage_pending_player
     global handsaw2_used_by_ai, handsaw_damage_pending_ai
     global magnifier1_used_by_player, magnifier2_used_by_ai
@@ -728,9 +723,6 @@ def round_3():
 
     print("Starting Round 3")
 
-    max_hp = 1
-    ai_hp = 2
-    player_hp = 2
     num_real_bullets = 1
     num_fake_bullets = 1
     bullets = [1] * num_real_bullets + [0] * num_fake_bullets
