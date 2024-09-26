@@ -4,8 +4,6 @@ from moviepy.editor import VideoFileClip
 import numpy as np
 import random
 from moviepy.editor import *
-import math
-import time
 
 # Initialize Pygame
 pygame.init()
@@ -279,17 +277,14 @@ image_with_frame_surface_3.blit(image_3, (frame_thickness_3, frame_thickness_3))
 kidnapperimage = pygame.image.load('kidnapper.png')
 kidnapper = pygame.transform.scale(kidnapperimage,(500,500))
 
-fatherimage = pygame.image.load('father.png')
-father = pygame.transform.scale(fatherimage,(500,500))
+manimage = pygame.image.load('father.png')
+man = pygame.transform.scale(manimage,(500,500))
 
 monsterimage = pygame.image.load("monster.jpeg")
 monster = pygame.transform.scale(monsterimage,(700,500))
 
 heartsimage = pygame.image.load('hearts.png')
 hearts = pygame.transform.scale(heartsimage, (50,50))
-
-witchimage = pygame.image.load('witch.png')
-witch = pygame.transform.scale(witchimage, (500,500))
 
 broken_hearts = pygame.image.load('broken_hearts.png')
 broken_hearts = pygame.transform.scale(broken_hearts, (50,50))
@@ -301,7 +296,6 @@ dealer_rect = dealer.get_rect(topleft=(750, 300))
 user = pygame.image.load('player.png')
 user = pygame.transform.scale(user, (200, 200))
 user_rect = user.get_rect(topleft=(50, 300))
-
 
 #Display positions of images
 player_x = 50
@@ -353,9 +347,7 @@ SCREENDISPLAY = 12
 SCREEN_ENDING1 = 13
 current_screen = SCREEN_MAIN
 
-font = pygame.font.Font("gennaro.ttf", 25)
-
-
+# Function to create a rounded rectangle
 def draw_rounded_rect(surface, color, rect, corner_radius):
     pygame.draw.rect(surface, color, rect, border_radius=corner_radius)
 
@@ -442,8 +434,8 @@ def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_rad
         bubble_surface_2.blit(line_surface_2, line_rect_2)
     # Draw the bubble on the screen
     screen.blit(bubble_surface_2, (x, y))
-##########################################################################################################################################################################
 
+##########################################################################################################################################################################
 # Clock to control FPS
 clock = pygame.time.Clock()
 
@@ -463,8 +455,10 @@ exit_img = pygame.image.load("exit.png")
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-font_Maze = pygame.font.Font(None, 36)
+# Font setup for text
+font = pygame.font.Font(None, 36)
 
+# Class Definitions
 class Man(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -640,7 +634,6 @@ setup_maze(level_1)
 exit_message = ""
 show_exit_message = False
 message_start_time = 0
-
 
 ##########################################################################################################################################################################
 #Define initial hp
@@ -1349,7 +1342,7 @@ def SCREENDISPLAY(name):
                 if text_5_button_rect.collidepoint(mouse_pos):
                     soundclick.play()
                     current_screen = SCREEN_PLAY1 
-                    pygame.display.set_caption('Life Roulette')
+                    pygame.display.set_caption('Storyline')
                     return
 
         screen.fill(BLACK)
@@ -1495,7 +1488,6 @@ show_input_box = False
 running = True
 
 while running:
-
     mouse_x, mouse_y = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -1554,7 +1546,6 @@ while running:
                     soundclick.play()
                     dealerlaugh.play()
                     current_screen = SCREEN_STORY4
-                    pygame.display.set_caption('Storyline')
                 elif text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY2
@@ -1568,43 +1559,9 @@ while running:
                 elif text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
                     current_screen = SCREEN_STORY3
-            
+
             elif current_screen == SCREENNAME:
                 name = player_name()
-                pygame.display.set_caption('Storyline') 
-                
-            elif current_screen == SCREEN_STORY5:
-                if text_5_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    show_input_box = True
-                    current_screen = SCREEN_PLAYMAZE
-                    pygame.display.set_caption('Play Maze?')
-                elif text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    current_screen = SCREENNAME
-                    pygame.display.set_caption('Enter your name')    
-
-            elif current_screen == SCREEN_PLAYMAZE:
-                if text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    current_screen = SCREEN_STORY5
-                    pygame.display.set_caption('Storyline') 
-                if text_16_button_rect.collidepoint(event.pos): #YES
-                    soundclick.play()
-                    current_screen = SCREEN_MAZE
-                    pygame.display.set_caption('MAZE')
-                if text_17_button_rect.collidepoint(event.pos): #No
-                    soundclick.play()
-                    SCREENDISPLAY(name)
-                    current_screen = SCREEN_PLAY1
-                    pygame.display.set_caption('Life Roulette')          
-            
-            elif current_screen == SCREEN_MAZE:
-                if text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    SCREENDISPLAY(name)
-                    current_screen = SCREEN_PLAY1
-                    pygame.display.set_caption('Ending')
                 SCREENDISPLAY(name)
 
             elif current_screen == SCREEN_PLAY1:
@@ -1627,24 +1584,6 @@ while running:
 
                 elif current_round == 2:
                     render_items_in_round_2()
-
-            elif current_screen == SCREEN_ENDING1:
-                if text_5_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    show_input_box = True
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Ending')
-                elif text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Ending') 
-                pygame.display.flip()
-                time.sleep(3)  # Pause for 3 seconds to let the player see the message
-                pygame.quit()
-                sys.exit()  
-                
-            else:
-                pygame.display.update()
 
     if turn == "ai" and not ai_waiting:
         ai_delay_start = pygame.time.get_ticks()  
@@ -1781,10 +1720,8 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))  
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Well, well... finally answering, huh? Took your sweet time. Your little girl... she's with me now.",
-        player_x + 400, player_y - 140, width=400, height=100)
-        create_rounded_speech_bubble("You've been dodging me for months. 10 million. With that 20% interest, you owe me over 12 million. And now? Time's up. Your luck's run dry.",
-        player_x + 500, player_y  + 10, width=400, height=140)
+        create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
+        player_x + 400, player_y - 150, width=500, height=230)
         draw_custom_shape(screen, WHITE, 700, 490, 210, 220)
         draw_multiline_text(screen, "Dad, I'm scared ! Help me!", fonttext1, RED, 700, 510, max_width=140)
         
@@ -1845,8 +1782,8 @@ while running:
         how_to_play_y = (screen_height - how_to_play_height) // 2 -350
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
-        screen.blit(father, (player_x, player_y))
-        create_rounded_speech_bubble("Please, listen, I... I don't have that kind of money right now! Let her go! Just give me more time! Ten days, that's all I'm asking for!",
+        screen.blit(man, (player_x, player_y))
+        create_rounded_speech_bubble("Please, I... I don't have that kind of money right now. Just let her go! I need more time, ten days! Just ten days, and I'll get you your money!",
         player_x + 400, player_y - 90, width=400, height=130)
           
     elif current_screen == SCREEN_STORY2:
@@ -1855,17 +1792,15 @@ while running:
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
         screen.blit(kidnapper, (player_x, player_y))
-        create_rounded_speech_bubble("Time? You really think you get to bargain with me?",
-        player_x + 400, player_y - 130, width=410, height=70)
-        create_rounded_speech_bubble("Here's how it's going to work. You're going to play a game. My game. Win, and you'll get 20 days to gather my money. Lose? Well... your daughter won't see another sunrise.",
-        player_x + 500, player_y +30, width=410, height=160)
+        create_rounded_speech_bubble("Time? Do you think you can bargain with me? Here's the deal you don't have a choice. If you want your daughter back, you'll play a little game with me. A game of life and death. Win, and I'll give you 20 days to raise the money. Lose... and your daughter won't live to see tomorrow.",
+        player_x + 400, player_y - 150, width=500, height=200)
 
     elif current_screen == SCREEN_STORY3:
         # Show on Story 3 Screen
         screen.fill(BLACK) 
         screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
-        screen.blit(father, (player_x, player_y))
+        screen.blit(man, (player_x, player_y))
         create_rounded_speech_bubble("I'll do it. I'll play your game. Just don't hurt her, please!!",
         player_x + 400, player_y - 90, width=400, height=70)
 
@@ -1876,107 +1811,15 @@ while running:
         screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
         screen.blit(monster, (player_x, player_y)) 
         draw_custom_shape(screen, WHITE, 700, 300, 220, 220)
-        draw_multiline_text(screen, "Good. Let's begin!", fonttext2, RED, 700, 320, max_width=170)
-    
+        draw_multiline_text(screen, "Good ! Let's begin!", fonttext2, RED, 700, 320, max_width=170)
+
     elif current_screen == SCREENNAME:
         # Show on Enter your name Screen
         screen.fill(BLACK)
         name = player_name()  
-        current_screen = SCREEN_STORY5
+        SCREENDISPLAY(name)
+        current_screen = SCREEN_PLAY1
 
-    elif current_screen == SCREEN_STORY5:
-        screen.fill(BLACK) 
-        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
-        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
-        screen.blit(witch, (player_x, player_y))
-        draw_custom_shape(screen, WHITE, 700, 100, 180, 200)
-        draw_multiline_text(screen, "Ahhh, so you'll play... but will you survive?", font, LIGHTRED, 700, 100, max_width=140)
-        create_rounded_speech_bubble("But there's more to this game than you know. A maze awaits you, twisting and shifting. Collect all the booster and find the exit, only then will you gain a precious life and an antidote to face the kidnapper.",
-        player_x + 500, player_y - 10, width=400, height=190)
-        create_rounded_speech_bubble("But beware -- get at least two boosts, and while you'll survive, but the antidote will be lost. ",
-        player_x + 500, player_y + 190, width=400, height=100)
-        create_rounded_speech_bubble("If you find one.... or none,your fate is sealed. You and your daughter will perish. No mercy. No escape. The maze decides, not you.",
-        player_x + 500, player_y +300, width=400, height=130)
-  
-    elif current_screen == SCREEN_PLAYMAZE :
-        screen.fill(BLACK)
-        screen.blit(text_15_surface, (text_15_button_x, text_15_button_y))
-        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
-        screen.blit(text_16_surface, (text_16_button_x, text_16_button_y))
-        screen.blit(text_17_surface, (text_17_button_x, text_17_button_y))
-
-    elif current_screen == SCREEN_MAZE:
-        screen.fill(BLACK)
-        # Main game loop
-        maze_running = True
-        while maze_running:
-            screen.fill((BLACK)) 
-
-            # Event handling
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-                # Player movement
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        man.move(dx=-24, walls=walls)
-                    if event.key == pygame.K_RIGHT:
-                        man.move(dx=24, walls=walls)
-                    if event.key == pygame.K_UP:
-                        man.move(dy=-24, walls=walls)
-                    if event.key == pygame.K_DOWN:
-                        man.move(dy=24, walls=walls)
-
-            for boost in boosts:
-                if man.is_collision(boost):
-                    pick_sound.play()
-                    boost.destroy()
-                    man.boost_count += 1
-
-            # Handle enemy movements and chase logic
-            for enemy in enemies:
-                enemy.move(walls, man)
-                if man.is_collision(enemy):
-                    man.handle_collision_with_enemy()
-                    collision_sound.play()
-            
-                # Check if player loses all lives
-            if man.lives <= 0:
-                current_screen = SCREEN_ENDING1
-                break
-            
-            # Handle exit point collision
-            if man.is_collision(exit_point):
-                if man.boost_count >= 2:
-                    SCREENDISPLAY(name)
-                    current_screen = SCREEN_PLAY1  # Move to the next screen
-                    maze_running = False  # Exit the maze loop
-                else:
-                    exit_message = "Get at least two boosts to exit"
-                    message_start_time = pygame.time.get_ticks()
-
-            
-            if show_exit_message:
-                current_time = pygame.time.get_ticks()
-                if current_time - message_start_time > 2000:  #2 seconds
-                    show_exit_message = False
-                else:
-                    message_surface = font_Maze.render(exit_message, True, WHITE)
-                    screen.blit(message_surface, (screen.get_width() // 2 - message_surface.get_width() // 2, screen.get_height() // 2 - 350))
-
-            # Drawing everything
-            all_sprites.draw(screen)
-
-                # Display player lives
-            for i in range(man.lives):
-                screen.blit(heart_img, (10 + i * 40, 10))
-
-            # Update display and control frame rate
-            pygame.display.flip()
-            clock.tick(60)
-       
     elif current_screen == SCREEN_PLAY1:
         # Show on Screen Play
         screen.fill(BLACK) 
@@ -2064,11 +1907,6 @@ while running:
                 ai.ai_hp_reset()
         else:
             pass
-
-    elif current_screen == SCREEN_ENDING1:
-        screen.fill(BLACK) 
-        screen.blit(text_4_surface, (text_4_button_x, text_4_button_y))
-        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y)) 
             
     pygame.display.flip()   
     pygame.time.Clock().tick(30)
