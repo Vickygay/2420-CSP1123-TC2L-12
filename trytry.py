@@ -215,12 +215,12 @@ text_11_button_x = (screen_width - text_11_width) // 2
 text_11_button_y = screen_width // 2- text_11_height - 200
 text_11_button_rect = pygame.Rect(text_11_button_x, text_11_button_y, text_11_width, text_11_height)
 
-text_12_width, text_12_height = text_12_surface.get_size()
+text_12_width, text_12_height = text_1_surface.get_size()
 text_12_button_x = (screen_width - text_11_width) // 2 -50
 text_12_button_y = screen_width // 2- text_11_height - 200
 text_12_button_rect = pygame.Rect(text_12_button_x, text_12_button_y, text_12_width, text_12_height)
 
-text_13_width, text_13_height = text_13_surface.get_size()
+text_13_width, text_13_height = text_1_surface.get_size()
 text_13_button_x = (screen_width - text_13_width) // 2 -100
 text_13_button_y = screen_height - text_13_height // 2 -400
 text_13_button_rect = pygame.Rect(text_13_button_x, text_13_button_y, text_13_width, text_13_height)
@@ -264,8 +264,6 @@ image_with_frame_surface.fill((DARKGREY))
 pygame.draw.rect(image_with_frame_surface, BLACK, (0, 0, image_with_frame_surface.get_width(), image_with_frame_surface.get_height()), frame_thickness)
 image_with_frame_surface.blit(image_1, (frame_thickness, frame_thickness))
 
-image_2 = pygame.image.load('medicine.png') 
-
 image_2 = pygame.image.load('medicine1.png') 
 image_2_size = (200, 200)
 image_2 = pygame.transform.scale(image_2, image_2_size)
@@ -285,8 +283,6 @@ image_with_frame_surface_2.fill(background_color_2)
 pygame.draw.rect(image_with_frame_surface_2, frame_color_2, (0, 0, image_with_frame_surface_2.get_width(), image_with_frame_surface_2.get_height()), frame_thickness_2)
 
 image_with_frame_surface_2.blit(image_2, (frame_thickness_2, frame_thickness_2))
-
-image_3 = pygame.image.load('handsaw.png') 
 
 image_3 = pygame.image.load('handsaw1.png') 
 image_3_size = (200, 200)
@@ -1599,8 +1595,8 @@ while running:
         player_x + 400, player_y - 140, width=400, height=80)
         create_rounded_speech_bubble("You’ve been dodging me for months. RM10,000,000. With that 20% interest, you owe me over RM12,000,000. And now? Time’s up. Your luck’s run dry.",
         player_x + 500, player_y  + 10, width=400, height=150)
-        draw_custom_shape(screen, WHITE, 700, 490, 200)
-        draw_multiline_text(screen, "Dad, please! Help me! Please!", font2, RED, 700, 500, max_width=140)
+        draw_custom_shape(screen, WHITE, 700, 490, 200, 10)
+        draw_multiline_text(screen, "Dad, please! Help me! Please!", font, RED, 700, 500, max_width=140)
         create_rounded_speech_bubble("Well, well, look who's finally answering his phone. Your little girl is with me now. You know why, don't you? You owe me RM10,000,000. And with that juicy 20% interest, it's now over RM12,000,000. You've been dodging me for months, wasting your money at the tables. But guess what? Your luck just ran out.",
         player_x + 400, player_y - 150, width=500, height=230)
         draw_custom_shape(screen, WHITE, 700, 490, 210, 220)
