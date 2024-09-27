@@ -512,6 +512,17 @@ class Player:
         self.game_over = False  
         self.totem_used = False
 
+    #Draw out defeated screen when player is defeated
+    def draw_lose_screen(self):
+        if self.game_over:
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            self.reset
+
+        
+
 def check_game_over():
     global ai_hp, player_hp, current_round, ai_totem_used, player_totem_used
 
