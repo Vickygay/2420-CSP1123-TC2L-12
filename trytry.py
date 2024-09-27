@@ -213,6 +213,13 @@ lines_1 = [
     "-->End 1"
 ]
 
+lines_2 = [
+    "Daughter  :  DAD!!",
+    "'Alright  sweetie,  lets  go  back  home'",
+    "--At  least  your  determination  find  you  back--",
+    "--The End--"
+]
+
 
 input_font_name = pygame.font.Font("Gloria.ttf", 50)
 
@@ -324,6 +331,18 @@ debtor = pygame.transform.scale(dealer, (300, 300))
 debtor_rect = dealer.get_rect()
 debtor_rect.x = 350
 debtor_rect.y = 50
+
+crying = pygame.image.load('crying.png')
+crying = pygame.transform.scale(crying, (300, 300))
+crying_rect = crying.get_rect()
+crying_rect.x = 350
+crying_rect.y = 50
+
+hug = pygame.image.load('crying.png')
+hug = pygame.transform.scale(hug, (300, 300))
+hug_rect = hug.get_rect()
+hug_rect.x = 350
+hug_rect.y = 50
 
 user = pygame.image.load('player.png')
 user = pygame.transform.scale(user, (200, 200))
@@ -725,7 +744,7 @@ bad_ending = False
 #Define for Extra hp if player get at least 2 boost in the maze
 def health_boost():
     global max_hp, player_hp
-    if man.boost_count >= 2:
+    if man.boost_count == 2:
         max_hp = 4
         player_hp = 4
     #Ensure it won't exceed the max_hp
@@ -828,9 +847,40 @@ def check_game_over():
             return 
 
         if current_round == 3:
-            show_game_over("Dealer lost. You win!")
-            true_ending()
+            if man.boost_count == 2:
+                screen.fill(BLACK)
+                screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
+
+                text_19_x = 0           #Can ajust for X position
+                base_y = 450            # Starting Y position
+                line_spacing = 60  
+                fixed_y_positions = [base_y, base_y + line_spacing, base_y + 2 * line_spacing, base_y + 3 * line_spacing]
+
+            # Render each line of the long text at fixed positions
+                for i, line in enumerate(lines_1):
+                    text_19_surface = font_7.render(line, True, WHITE)  
+                    screen.blit(text_19_surface, (text_19_x, fixed_y_positions[i]))
+
+                screen.blit(crying, crying_rect.topleft)
+
             return
+
+            if man.boost_count == 3 or man.boost_count == 0:
+                screen.fill(BLACK)
+                screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
+
+                text_20_x = 0           #Can ajust for X position
+                base_y = 450            # Starting Y position
+                line_spacing = 60  
+                fixed_y_positions = [base_y, base_y + line_spacing, base_y + 2 * line_spacing, base_y + 3 * line_spacing]
+
+            # Render each line of the long text at fixed positions
+                for i, line in enumerate(lines_2):
+                    text_20_surface = font_7.render(line, True, WHITE)  
+                    screen.blit(text_20_surface, (text_20_x, fixed_y_positions[i]))
+
+                screen.blit(hug, hug_rect.topleft)
+
 
         if ai_totem_used and current_round == 1:
             current_round = 2  
@@ -2239,7 +2289,7 @@ while running:
                 ai_shoot_message = None
         else:
             pass
-        
+
         if player.game_over:
             player.draw_lose_screen()
             shoot_message = None
@@ -2272,13 +2322,7 @@ while running:
             screen.blit(text_18_surface, (text_18_x, fixed_y_positions[i]))
 
         screen.blit(debtor, debtor_rect.topleft)
-    
-    elif current_screen == SCREEN_PLAY:
-        screen.fill(BLACK)
-        play_surface = font_4.render("Welcome to the Play Screen!", True, WHITE)
-        screen.blit(play_surface, (screen_width // 2 - play_surface.get_width() // 2, screen_height // 2))
-
-
+        
             
     pygame.display.flip()   
     pygame.time.Clock().tick(30)
