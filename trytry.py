@@ -697,7 +697,7 @@ message_start_time = 0
 
 ##########################################################################################################################################################################
 #Define initial hp
-max_hp = 3
+max_hp = 5
 ai_hp = 3
 player_hp = 3
 
@@ -747,14 +747,12 @@ bad_ending = False
 def true_ending():
     global max_hp, player_hp
     if man.boost_count == 3:
-        max_hp = 4
         player_hp = 4
         true_ending = True
         if true_ending == True:
             print ("Congraz")
 
     else:
-        max_hp = 3
         player_hp = min (player_hp, max_hp)
 
 def check_if_all_bullets_used():
@@ -787,6 +785,15 @@ def draw_health_bars():
             screen.blit(hearts, (900 - i * 60, hearts_y))  
         else:
             screen.blit(broken_hearts, (900 - i * 60, hearts_y))  
+
+def health_boost():
+    global max_hp, player_hp
+    if man.boost_count == 0:
+        max_hp = 3
+    if man.boost_count == 2 or man.boost_count == 3:
+        player_hp = 4
+    else:
+        pass
 
 # Initialize global variables for health restoration, totem usage and can be eliminated or not
 player_restored = False
@@ -1335,6 +1342,14 @@ def handle_ai_round_1():
 
     current_time = pygame.time.get_ticks()
 
+    if player_hp <= 0:
+        check_game_over()
+        return
+
+    if num_real_bullets <= 0 and num_fake_bullets <= 0:
+        ai_shoot_message = "Dealer has no bullets left!"
+        return
+
     if medicine2_used_by_ai:
         if current_time < medicine_display_time + medicine_delay_duration:
             return 
@@ -1358,15 +1373,11 @@ def handle_ai_round_1():
 
     bullet_type = handle_shooting("ai", "player")  
 
-    if bullet_type == "real":
+    if bullet_type == "real" and num_real_bullets > 0:
         num_real_bullets -= 1
         gun_sound.play()
 
-        if medicine2_used_by_ai:
-            ai_shoot_message = f"Dealer used medicine and then shot {name} with a real bullet!"
-        else:
-            ai_shoot_message = f"Dealer shot {name} with a real bullet!"
-        
+        ai_shoot_message = f"Dealer shot {name} with a real bullet!"
         player_hp -= 1
         player_hit_time = current_time
         player_heart = broken_hearts  
@@ -1375,15 +1386,11 @@ def handle_ai_round_1():
         turn = "player"  
         return
 
-    elif bullet_type == "fake":
+    elif bullet_type == "fake" and num_fake_bullets > 0:
         num_fake_bullets -= 1
         emptygun_sound.play()
 
-        if medicine2_used_by_ai:
-            ai_shoot_message = f"Dealer used medicine and then shot {name} with a fake bullet!"
-        else:
-            ai_shoot_message = f"Dealer shot {name} with a fake bullet!"
-
+        ai_shoot_message = f"Dealer shot {name} with a fake bullet!"
         turn = "player"  
         return
 
@@ -1720,7 +1727,6 @@ def round_2():
     ai_delay_start = pygame.time.get_ticks()  
     ai_waiting = True  
 
-    health_boost() 
 
 def render_items_in_round_2():
     if current_round == 2:
@@ -2239,12 +2245,7 @@ while running:
         screen.blit(turn_surface, (350, 180))
 
         #Define for boost collected
-        if man.boost_count == 2 or man.boost_count == 3:
-            max_hp = 4
-            player_hp = 4
-        else:
-            max_hp = 3
-
+        health_boost()
         if video_playing and current_video_clip:
             totem_rect = get_video_rect(totem, align="center")
             center_video(current_video_clip, screen_width, screen_height, x=totem_rect[0], y=totem_rect[1])
