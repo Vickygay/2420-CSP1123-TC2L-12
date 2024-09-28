@@ -697,7 +697,7 @@ message_start_time = 0
 
 ##########################################################################################################################################################################
 #Define initial hp
-max_hp = 5
+max_hp = 3
 ai_hp = 3
 player_hp = 3
 
@@ -770,14 +770,6 @@ def check_if_all_bullets_used():
                 show_game_over("Final round completed. It's a draw!")
                 pygame.quit() 
 
-def health_boost():
-    global player_hp, max_hp
-
-    if man.boost_count >= 2:
-        max_hp = 4 
-        player_hp = min(max_hp, player_hp + 1)  
-    else:
-        max_hp = 3 
 def draw_health_bars():
    
     hearts_y = 280
@@ -2245,6 +2237,13 @@ while running:
         turn_message = turn_message = f"{name if turn == 'player' else 'Dealer'}'s Turn"
         turn_surface = font_turn.render(turn_message, True, WHITE)
         screen.blit(turn_surface, (350, 180))
+
+        #Define for boost collected
+        if man.boost_count == 2 or man.boost_count == 3:
+            max_hp = 4
+            player_hp = 4
+        else:
+            max_hp = 3
 
         if video_playing and current_video_clip:
             totem_rect = get_video_rect(totem, align="center")
