@@ -786,14 +786,6 @@ def draw_health_bars():
         else:
             screen.blit(broken_hearts, (900 - i * 60, hearts_y))  
 
-def health_boost():
-    global max_hp, player_hp
-    if man.boost_count == 0:
-        max_hp = 4
-    if man.boost_count == 2 or man.boost_count == 3:
-        player_hp = 4
-    else:
-        pass
 
 # Initialize global variables for health restoration, totem usage and can be eliminated or not
 player_restored = False
@@ -1341,7 +1333,6 @@ def handle_ai_round_1():
     global ai_hit_time, ai_blood_duration, ai_heart, ai_self_shots
     global ai_delay_start, ai_waiting 
 
-    health_boost()
 
     current_time = pygame.time.get_ticks()
 
@@ -1413,16 +1404,15 @@ def handle_ai_round_1():
         turn = "player"
 
 def handle_ai_magnifier():
-    global magnifier2_used_by_ai, magnifier_bullet_type, ai_shoot_message, ai_waiting, ai_delay_start
+    global magnifier_delay_active, magnifier_delay_start, magnifier2_used_by_ai, magnifier_bullet_type, ai_shoot_message, ai_waiting, ai_delay_start
 
     if not magnifier2_used_by_ai:
-        handle_magnifier("ai")  
-        magnifier2_used_by_ai = True 
+        handle_magnifier("ai") 
+        magnifier2_used_by_ai = True
+        magnifier_delay_start = pygame.time.get_ticks()  
+        magnifier_delay_active = True  
         ai_shoot_message = "Dealer used the magnifier!"
-        ai_delay_start = pygame.time.get_ticks()  
-        ai_waiting = True  
-        return True  
-    return False 
+    return True
 
 def handle_ai_handsaw():
     global handsaw2_used_by_ai, handsaw_damage_pending_ai, video_playing, current_video_clip, video_start_time
@@ -1437,7 +1427,7 @@ def handle_ai_handsaw():
         video_start_time = pygame.time.get_ticks()  
 
         ai_delay_start = pygame.time.get_ticks()
-        ai_waiting = True 
+        ai_waiting = True  
     return False  
 
 def handle_ai_round_2():
@@ -1447,7 +1437,61 @@ def handle_ai_round_2():
     global handsaw2_used_by_ai  
     current_time = pygame.time.get_ticks()
 
-    health_boost()
+    if handle_ai_magnifier():
+        if magnifier_bullet_type == "fake":
+            emptygun_sound.play()
+            ai_shoot_message = "Dealer saw: Fake bullet! AI shot itself."
+            ai_self_shots += 1 
+            num_fake_bullets -= 1 
+
+            if not handsaw2_used_by_ai:
+                handle_ai_handsaw()
+                return 
+
+            if not video_playing:
+                handle_handsaw_usage("ai", "ai") 
+                handsaw_damage_pending_ai = False  
+                return 
+
+        elif magnifier_bullet_type == "real":
+            if not handsaw2_used_by_ai:
+                handle_ai_handsaw()
+                return  
+            
+            if not video_playing:
+                handle_handsaw_usage("ai", "player")  
+                handsaw_damage_pending_ai = False  
+                turn = "player"  
+                return
+
+    if ai_waiting:
+        if current_time - ai_delay_start < 3000: 
+            return 
+        ai_waiting = False 
+
+    bullet_type = handle_shooting("ai", "player")  
+    if bullet_type == "real":
+        num_real_bullets -= 1  
+        gun_sound.play()
+        ai_shoot_message = f"Dealer shot {name} with a real bullet!"
+        player_hp -= 2  
+        player_hit_time = current_time  
+        player_heart = broken_hearts  
+        check_game_over()
+    else:
+        num_fake_bullets -= 1  
+        emptygun_sound.play()
+        ai_shoot_message = f"Dealer shot {name} with a fake bullet!"
+
+    turn = "player"  
+
+def handle_ai_round_2():
+    global magnifier_bullet_type, ai_shoot_message, turn, num_real_bullets, num_fake_bullets, player_hp
+    global player_hit_time, player_heart, ai_self_shots, ai_waiting, ai_delay_start, handsaw_damage_pending_ai
+    global video_playing, current_video_clip, video_start_time
+    global handsaw2_used_by_ai  
+    current_time = pygame.time.get_ticks()
+
 
     if handle_ai_magnifier():
         if magnifier_bullet_type == "fake":
@@ -1510,7 +1554,6 @@ turn = "player"
 def handle_ai_round_3():
     global num_real_bullets, num_fake_bullets, ai_shoot_message, turn, player_hp
 
-    health_boost()
 
     bullet_type = handle_shooting("ai", "player")
     if bullet_type == "real":
@@ -2254,8 +2297,11 @@ while running:
         turn_surface = font_turn.render(turn_message, True, WHITE)
         screen.blit(turn_surface, (350, 180))
 
+        #Define for boost count
+        if man.boost_count == 0:
+            max_hp = 4
+
         #Define for boost collected
-        health_boost()
         if video_playing and current_video_clip:
             totem_rect = get_video_rect(totem, align="center")
             center_video(current_video_clip, screen_width, screen_height, x=totem_rect[0], y=totem_rect[1])
