@@ -789,7 +789,7 @@ def draw_health_bars():
 def health_boost():
     global max_hp, player_hp
     if man.boost_count == 0:
-        max_hp = 3
+        max_hp = 4
     if man.boost_count == 2 or man.boost_count == 3:
         player_hp = 4
     else:
@@ -1208,7 +1208,8 @@ def handle_player_hit():
 
     player_hp -= 1
     player_hit_time = pygame.time.get_ticks()  
-    player_heart = broken_hearts  
+    player_heart = broken_hearts 
+
 
 def handle_ai_hit():
     global ai_hp, ai_hit_time, ai_heart, broken_hearts
@@ -1340,6 +1341,8 @@ def handle_ai_round_1():
     global ai_hit_time, ai_blood_duration, ai_heart, ai_self_shots
     global ai_delay_start, ai_waiting 
 
+    health_boost()
+
     current_time = pygame.time.get_ticks()
 
     if player_hp <= 0:
@@ -1373,20 +1376,23 @@ def handle_ai_round_1():
 
     bullet_type = handle_shooting("ai", "player")  
 
-    if bullet_type == "real" and num_real_bullets > 0:
+    if bullet_type == "real":
         num_real_bullets -= 1
         gun_sound.play()
 
         ai_shoot_message = f"Dealer shot {name} with a real bullet!"
         player_hp -= 1
         player_hit_time = current_time
-        player_heart = broken_hearts  
+
+        # Display broken heart if player's HP is less than or equal to 0
+        if player_hp <= 0:
+            player_heart = broken_hearts  
 
         check_game_over() 
         turn = "player"  
         return
 
-    elif bullet_type == "fake" and num_fake_bullets > 0:
+    elif bullet_type == "fake":
         num_fake_bullets -= 1
         emptygun_sound.play()
 
@@ -1440,6 +1446,8 @@ def handle_ai_round_2():
     global video_playing, current_video_clip, video_start_time
     global handsaw2_used_by_ai  
     current_time = pygame.time.get_ticks()
+
+    health_boost()
 
     if handle_ai_magnifier():
         if magnifier_bullet_type == "fake":
@@ -1500,7 +1508,9 @@ def handle_ai_round_2():
 turn = "player"  
 
 def handle_ai_round_3():
-    global num_real_bullets, num_fake_bullets, ai_shoot_message, turn
+    global num_real_bullets, num_fake_bullets, ai_shoot_message, turn, player_hp
+
+    health_boost()
 
     bullet_type = handle_shooting("ai", "player")
     if bullet_type == "real":
