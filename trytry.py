@@ -30,6 +30,7 @@ handsawvideo2 = VideoFileClip('handsawvideo2.mp4')
 
 # Resize videos 
 video_size = (150, 150)
+video_size = (150, 150)
 debtorturn_video = resize_video(debtorturn_video, video_size)
 playerturn_video = resize_video(playerturn_video, video_size)
 totem = resize_video(totem, video_size)
@@ -64,6 +65,7 @@ def get_video_rect(video_clip, x=None, y=None, align="center"):
             x = (screen_width - video_width) // 2  
         if y is None:
             y = (screen_height - video_height) // 2 + 50
+            y = (screen_height - video_height) // 2 + 50
 
     return (x, y, video_width, video_height)
 
@@ -77,6 +79,7 @@ def center_video(video_clip, screen_width, screen_height, x=None, y=None):
         if x is None:
             video_width, video_height = frame_surface.get_size()
             x = (screen_width - video_width) // 2
+            y = (screen_height - video_height) // 2 + 50
             y = (screen_height - video_height) // 2 + 50
 
         screen.blit(frame_surface, (x, y))
@@ -97,7 +100,7 @@ center_video(totem, screen_width, screen_height, x=totem_x, y= totem_y)
 
 # Background music in Menu
 pygame.mixer.music.load('song.mp3')  
-pygame.mixer.music.set_volume(0.0)  # (0.0 - 1.0)
+pygame.mixer.music.set_volume(0.3)  # (0.0 - 1.0)
 pygame.mixer.music.play(-1)  # Loop music infinity
 
 # Sound effects when click the text
@@ -138,7 +141,8 @@ font_3 = pygame.font.Font('Creepster.ttf', 60)
 text_3_surface = font_3.render("How to Play", True, WHITE)
 text_3_x, text_3_y = (screen_width - text_3_surface.get_width()) // 2, (screen_height - text_3_surface.get_height()) // 2 + 110
 button_text3_rect = pygame.Rect(text_3_x, text_3_y, text_3_surface.get_width(), text_3_surface.get_height())
-font3 = pygame.font.Font("Nerko.ttf", 22)
+font3 = pygame.font.Font("Nerko.ttf", 40)
+font4 = pygame.font.Font("Nerko.ttf", 22)
 
 font_4 = pygame.font.Font('Matemasie.ttf', 45)
 text_4_surface = font_4.render("<< Back", True, WHITE)
@@ -152,6 +156,8 @@ text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_surfac
 font_6 = pygame.font.Font('Matemasie.ttf', 40)
 lose_text_surface = font_6.render("Foolish gambler. Try again would ya?", True, RED)
 lose_x, lose_y = 125, 250
+
+font_7 = pygame.font.Font('Creepster.ttf', 3)
 
 font_7 = pygame.font.Font('Creepster.ttf', 3)
 
@@ -197,34 +203,14 @@ text_17_surface = font_3.render("NO", True, WHITE)
 text_17_button_x, text_17_button_y = (screen_width - text_17_surface.get_width()) // 2 + 100 , (screen_width // 2 - 50) - text_17_surface.get_height() // 2 - 50
 text_17_button_rect = pygame.Rect(text_17_button_x, text_17_button_y, text_17_surface.get_width(), text_17_surface.get_height())
 
-lines = [
-    "Debtor : Welp  ,  guess  thats  all  for  your  end" ,
-    "of  your  life  .  Poor  girl  with  her  poor  father",
-    "-->Bad End"
-]
-
-
-lines_1 = [
-    "--After  defeat  the  debtor--",
-    "Daughter  :  *SCREMING*  ",
-    "WHO  ARE  YOU?  I  WANT  MY  FATHER  BACK!!!",
-    "--A  piece  of  shattered  glass  reflect  and  so  who"
-    "had  you  become?--"
-    "-->End 1"
-]
-
-lines_2 = [
-    "Daughter  :  DAD!!",
-    "'Alright  sweetie,  lets  go  back  home'",
-    "--At  least  your  determination  find  you  back--",
-    "--The End--"
-]
-
-
 input_font_name = pygame.font.Font("Gloria.ttf", 50)
 
 font_turn = pygame.font.Font("Creepster.ttf", 50)
+font_turn = pygame.font.Font("Creepster.ttf", 50)
 turn_message = "Player's Turn"
+fontshoot = pygame.font.Font("Gloria.ttf", 28)
+fontbulletbig = pygame.font.Font('Nerko.ttf', 45)
+fontbulletsmall = pygame.font.Font('Nerko.ttf', 40)
 fontshoot = pygame.font.Font("Gloria.ttf", 28)
 fontbulletbig = pygame.font.Font('Nerko.ttf', 45)
 fontbulletsmall = pygame.font.Font('Nerko.ttf', 40)
@@ -333,19 +319,20 @@ debtor_rect.x = 350
 debtor_rect.y = 50
 
 crying = pygame.image.load('crying.png')
-crying = pygame.transform.scale(crying, (300, 300))
-crying_rect = crying.get_rect()
-crying_rect.x = 350
-crying_rect.y = 50
+crying_rect = crying.get_rect(topleft=(200,700))
 
-hug = pygame.image.load('crying.png')
-hug = pygame.transform.scale(hug, (300, 300))
+dadmonster = pygame.image.load('dadmonster.png')
+dadmonster = pygame.transform.scale(dadmonster, (300, 300))
+dadmonster_rect = dadmonster.get_rect(topleft=(750, 1500))
+
+hug = pygame.image.load('hug.png')
 hug_rect = hug.get_rect()
 hug_rect.x = 350
 hug_rect.y = 50
 
 user = pygame.image.load('player.png')
 user = pygame.transform.scale(user, (200, 200))
+user_rect = user.get_rect(topleft=(50, 400))
 user_rect = user.get_rect(topleft=(50, 400))
 
 #Display positions of images
@@ -355,29 +342,48 @@ player_y = 200
 debtorblood = pygame.image.load('debtorblood.png')
 debtorblood = pygame.transform.scale(debtorblood, (200, 250))
 debtorblood_rect = debtorblood.get_rect(topleft=(740, 385))
+debtorblood_rect = debtorblood.get_rect(topleft=(740, 385))
 
 playerblood = pygame.image.load('playerblood.png')
 playerblood = pygame.transform.scale(playerblood, (200, 300))
+playerblood_rect = playerblood.get_rect(topleft=(50, 330))
 playerblood_rect = playerblood.get_rect(topleft=(50, 330))
 
 handsaw1 = pygame.image.load('handsaw1.png')
 handsaw1 = pygame.transform.scale(handsaw1, (70, 70))
 handsaw1_rect = handsaw1.get_rect(topleft=(screen_width // 2 - 250, screen_height // 2 + 90))
+handsaw1 = pygame.transform.scale(handsaw1, (70, 70))
+handsaw1_rect = handsaw1.get_rect(topleft=(screen_width // 2 - 250, screen_height // 2 + 90))
 handsaw2 = pygame.image.load('handsaw2.png')
+handsaw2 = pygame.transform.scale(handsaw2, (70, 70))
+handsaw2_rect = handsaw2.get_rect(topleft=(screen_width // 2 + 170, screen_height // 2 + 90))
 handsaw2 = pygame.transform.scale(handsaw2, (70, 70))
 handsaw2_rect = handsaw2.get_rect(topleft=(screen_width // 2 + 170, screen_height // 2 + 90))
 
 medicine1 = pygame.image.load('medicine1.png')
 medicine1 = pygame.transform.scale(medicine1, (70, 70))
-medicine1_rect = medicine1.get_rect(topleft=(screen_width // 2 - 300, screen_height // 2 + 50))
+medicine1_rect = medicine1.get_rect(topleft=(screen_width // 2 - 290, screen_height // 2 + 50))
+medicine1 = pygame.transform.scale(medicine1, (70, 70))
+medicine1_rect = medicine1.get_rect(topleft=(screen_width // 2 - 290, screen_height // 2 + 50))
 medicine2 = pygame.image.load('medicine2.png')
 medicine2 = pygame.transform.scale(medicine2, (70, 70))
 medicine2_rect = medicine2.get_rect(topleft=(screen_width // 2 + 170, screen_height // 2 + 50))
+medicine2 = pygame.transform.scale(medicine2, (70, 70))
+medicine2_rect = medicine2.get_rect(topleft=(screen_width // 2 + 170, screen_height // 2 + 50))
+medicine3 = pygame.image.load('medicine3.png')
+medicine3 = pygame.transform.scale(medicine3, (70, 70))
+medicine3_rect = medicine3.get_rect(topleft=(screen_width // 2 - 290, screen_height // 2 - 20))
+medicine3 = pygame.transform.scale(medicine3, (70, 70))
+medicine3_rect = medicine3.get_rect(topleft=(screen_width // 2 - 290, screen_height // 2 - 20))
 
 magnifier1 = pygame.image.load('magnifier1.png')
 magnifier1 = pygame.transform.scale(magnifier1, (70, 70))
 magnifier1_rect = magnifier1.get_rect(topleft=(screen_width // 2 - 250, screen_height // 2 - 20))
+magnifier1 = pygame.transform.scale(magnifier1, (70, 70))
+magnifier1_rect = magnifier1.get_rect(topleft=(screen_width // 2 - 250, screen_height // 2 - 20))
 magnifier2 = pygame.image.load('magnifier2.png')
+magnifier2 = pygame.transform.scale(magnifier2, (70, 70))
+magnifier2_rect = magnifier2.get_rect(topleft=(screen_width // 2 + 170, screen_height // 2 - 20))
 magnifier2 = pygame.transform.scale(magnifier2, (70, 70))
 magnifier2_rect = magnifier2.get_rect(topleft=(screen_width // 2 + 170, screen_height // 2 - 20))
 
@@ -398,11 +404,6 @@ SCREENDISPLAY = 12
 SCREEN_ENDING1 = 13
 SCREEN_ENDING2 = 14
 SCREEN_ENDING3 = 15
-SCREEN_ENDING4 = 16
-SCREEN_ENDING5 = 17
-SCREEN_ENDING6 = 18
-SCREEN_ENDING7 = 19
-SCREEN_ENDING8 = 20
 
 current_screen = SCREEN_MAIN
 
@@ -414,6 +415,7 @@ def draw_rounded_rect(surface, color, rect, corner_radius):
 
 fonttext1 = pygame.font.Font('gennaro.ttf', 40)
 fonttext2 = pygame.font.Font('scary3.ttf', 40)
+fonttext3 = pygame.font.Font('scary3.ttf', 70)
 
 def draw_custom_shape(surface, color, x, y, width, height):
     points = [
@@ -478,11 +480,10 @@ def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radiu
     #Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
 ##########################################################################################################################################################################
-# Function to create a speech bubble with multiple lines
 def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_radius=10):
     bubble_surface_2 = pygame.Surface((width, height), pygame.SRCALPHA)
 
-    # Draw a rounded rectangle for the bubble
+    # Draw a rounded rectangle
     draw_rounded_rect(bubble_surface_2, DARKGREY, bubble_surface_2.get_rect(), corner_radius)
     pygame.draw.rect(bubble_surface_2, BLACK, bubble_surface_2.get_rect(), 6, border_radius=corner_radius)
 
@@ -495,8 +496,25 @@ def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_rad
         bubble_surface_2.blit(line_surface_2, line_rect_2)
     # Draw the bubble on the screen
     screen.blit(bubble_surface_2, (x, y))
-##########################################################################################################################################################################
 
+##########################################################################################################################################################################
+def create_rounded_speech_bubble_3(text, x, y, width=200, height=100, corner_radius=10):
+    bubble_surface_3 = pygame.Surface((width, height), pygame.SRCALPHA)
+
+    # Draw a rounded rectangle
+    draw_rounded_rect(bubble_surface_3, DARKGREY, bubble_surface_3.get_rect(), corner_radius)
+    pygame.draw.rect(bubble_surface_3, BLACK, bubble_surface_3.get_rect(), 6, border_radius=corner_radius)
+
+    wrapped_lines_2 = wrap_text(text, font4, width - 20)  # Adjust for padding
+
+    # Render each line
+    for i, line_2 in enumerate(wrapped_lines_2):
+        line_surface_2 = font4.render(line_2, True, BLACK)
+        line_rect_2 = line_surface_2.get_rect(center=(width//2, 20 + i * 30)) 
+        bubble_surface_3.blit(line_surface_2, line_rect_2)
+    # Draw the bubble on the screen
+    screen.blit(bubble_surface_3, (x, y))
+##########################################################################################################################################################################
 # Clock to control FPS
 clock = pygame.time.Clock()
 
@@ -525,6 +543,7 @@ class Man(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.power = 0
         self.lives = 3
+        self.boost_count = 0  
         self.boost_count = 0  
         self.last_collision_time = 0
 
@@ -693,8 +712,6 @@ setup_maze(level_1)
 exit_message = ""
 show_exit_message = False
 message_start_time = 0
-
-
 ##########################################################################################################################################################################
 #Define initial hp
 max_hp = 5
@@ -706,6 +723,7 @@ shoot_message = " "
 ai_shoot_message = " "
 medicine_message = ""  
 medicine_display_time = 0  
+medicine_delay_duration = 3000
 medicine_delay_duration = 3000
 
 ai_delay_start = 0
@@ -741,91 +759,30 @@ ai_waiting_after_medicine = False
 ai_waiting_before_shoot = False  
 ai_delay_start = 0  
 ai_shoot_complete = False 
-magnifier_delay_start = 0
-magnifier_delay_duration = 6000  
-magnifier_delay_active = False
+magnifier_delay_active = False  
+magnifier_delay_start = 0  
+magnifier_delay_duration = 6000 
+ai_turn = True
+player_turn = False
+ai_used_item = False
+ai_shooted = False
+player_has_medicine3 = False
+medicine3_used_by_player = False 
 
 true_ending = False
 bad_ending = False
 
-def reset_game_state_after_maze():
-    global player_hp, ai_hp, player_totem_used, ai_totem_used, handsaw1_used_by_player, handsaw2_used_by_ai
-    global num_real_bullets, num_fake_bullets, bullets, turn, current_round, player_hit_time, ai_hit_time
-    global handsaw_damage_pending_player, handsaw_damage_pending_ai, magnifier1_used_by_player, magnifier2_used_by_ai
-    global video_playing, current_video_clip, video_start_time, magnifier_bullet_type, ai_waiting, ai_delay_start
-    global player_heart, ai_heart, player_restored, ai_restored, player_shoot_message, ai_shoot_message
-    global playing_totem, player_hp_restored, ai_hp_restored, num_real_bullets, num_fake_bullets, bullets
-
-    # Reset player and AI health
-    player_hp = 4
-    ai_hp = 3
-
-    player_heart = hearts
-    ai_heart = hearts
-
-    # Reset totem usage for player and AI
-    player_totem_used = False
-    ai_totem_used = False
-    player_restored = False
-    ai_restored = False
-
-    # Reset handsaw usage for player and AI
-    handsaw1_used_by_player = False
-    handsaw2_used_by_ai = False
-    handsaw_damage_pending_player = False
-    handsaw_damage_pending_ai = False
-
-    # Reset magnifier usage
-    magnifier1_used_by_player = False
-    magnifier2_used_by_ai = False
-    magnifier_bullet_type = None
-
-    # Reset turn to player's turn
-    turn = "player"
-
-    # Reset bullets and bullet-related variables
-    num_real_bullets = 5
-    num_fake_bullets = 3
-    bullets = [1] * num_real_bullets + [0] * num_fake_bullets
-    random.shuffle(bullets)
-
-    # Reset video playback
-    video_playing = False
-    current_video_clip = None
-    video_start_time = 0
-
-    # Reset messages
-    player_shoot_message = ""
-    ai_shoot_message = ""
-
-    # Reset AI waiting and delay for AI turns
-    ai_waiting = False
-    ai_delay_start = 0
-
-    # Reset health displays
-    player_hit_time = None
-    ai_hit_time = None
-    player_heart = hearts
-    ai_heart = hearts
-
-    # Reset playing_totem and restore flags
-    playing_totem = False
-    player_hp_restored = False
-    ai_hp_restored = False
-
-    # Reset round to 1
-    current_round = 1
-
+# if player got all the boosts in the maze
 def true_ending():
     global max_hp, player_hp
-    if man.boost_count == 3:
-        player_hp = 4
-        true_ending = True
-        if true_ending == True:
-            print ("Congraz")
-
+    if man.boost_count == 3:  # Check if player has 3 boosts
+        max_hp = 4
+        player_hp = 4  # Give player full health when all boosts are collected
+        print("Congratulations! You've achieved the true ending.")
+        current_screen = SCREEN_ENDING2  # Move to the true ending screen
     else:
-        player_hp = min (player_hp, max_hp)
+        max_hp = 3
+        player_hp = min(player_hp, max_hp)
 
 def check_if_all_bullets_used():
     global bullets, player_hp, ai_hp, current_round
@@ -841,29 +798,30 @@ def check_if_all_bullets_used():
                 pygame.quit() 
 
 def draw_health_bars():
-    global player_hp, max_hp
+   
     hearts_y = 280
+
+    # Player's hearts
+   
+    hearts_y = 280
+
     # Player's hearts
     for i in range(max_hp):
         if i < player_hp:
-            screen.blit(hearts, (50 + i * 60, hearts_y))
+            screen.blit(hearts, (50 + i * 60, hearts_y))  
+            screen.blit(hearts, (50 + i * 60, hearts_y))  
         else:
             screen.blit(broken_hearts, (50 + i * 60, hearts_y))  
+            screen.blit(broken_hearts, (50 + i * 60, hearts_y))  
+
     # Dealer's hearts
     for i in range(max_hp):
         if i < ai_hp:
             screen.blit(hearts, (900 - i * 60, hearts_y))  
+            screen.blit(hearts, (900 - i * 60, hearts_y))  
         else:
-            screen.blit(broken_hearts, (900 - i * 60, hearts_y))  
+            screen.blit(broken_hearts, (900 - i * 60, hearts_y))
 
-def health_boost():
-    global max_hp, player_hp
-    if man.boost_count == 0:
-        max_hp = 3
-    if man.boost_count == 2 or man.boost_count == 3:
-        player_hp = 4
-    else:
-        pass
 
 # Initialize global variables for health restoration, totem usage and can be eliminated or not
 player_restored = False
@@ -912,54 +870,35 @@ class Player:
             pygame.time.delay(2000)
             self.reset
 
+    #Draw out defeated screen when player is defeated
+    def draw_lose_screen(self):
+        if self.game_over:
+            screen.fill(BLACK)
+            screen.blit(lose_text_surface, (lose_x, lose_y))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            self.reset
+
 def check_game_over():
+    global ai_hp, player_hp, player_totem_used, ai_totem_used, current_round, running, num_real_bullets, num_fake_bullets
     global ai_hp, player_hp, player_totem_used, ai_totem_used, current_round, running, num_real_bullets, num_fake_bullets
 
     if ai_hp <= 0:
         if not ai_totem_used and current_round < 3:
             ai_hp = 1
+        if not ai_totem_used and current_round < 3:
+            ai_hp = 1
             ai_totem_used = True
             return
-
-        if current_round == 3:
-            if man.boost_count == 2:
-                screen.fill(BLACK)
-                screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
-
-                text_19_x = 0
-                base_y = 450
-                line_spacing = 60
-                fixed_y_positions = [base_y, base_y + line_spacing, base_y + 2 * line_spacing, base_y + 3 * line_spacing]
-
-                for i, line in enumerate(lines_1):
-                    text_19_surface = font_7.render(line, True, WHITE)
-                    screen.blit(text_19_surface, (text_19_x, fixed_y_positions[i]))
-
-                screen.blit(crying, crying_rect.topleft)
-
-            elif man.boost_count == 3 or man.boost_count == 0:
-                screen.fill(BLACK)
-                screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
-
-                text_20_x = 0
-                base_y = 450
-                line_spacing = 60
-                fixed_y_positions = [base_y, base_y + line_spacing, base_y + 2 * line_spacing, base_y + 3 * line_spacing]
-
-                for i, line in enumerate(lines_2):
-                    text_20_surface = font_7.render(line, True, WHITE)
-                    screen.blit(text_20_surface, (text_20_x, fixed_y_positions[i]))
-
-                screen.blit(hug, hug_rect.topleft)
-
-            running = False
-            return
-
         if ai_totem_used and current_round == 1:
+            current_round = 2
+            round_2()
             current_round = 2
             round_2()
             return
         elif ai_totem_used and current_round == 2:
+            current_round = 3
+            round_3()
             current_round = 3
             round_3()
             return
@@ -967,9 +906,15 @@ def check_game_over():
     if player_hp <= 0:
         if not player_totem_used and current_round < 3:
             player_hp = 1
+        if not player_totem_used and current_round < 3:
+            player_hp = 1
             player_totem_used = True
             return
 
+        if current_round == 3:
+            show_game_over("Foolish gambler. Try again would ya?")
+            running = False
+            return
         if current_round == 3:
             show_game_over("Foolish gambler. Try again would ya?")
             running = False
@@ -1086,7 +1031,7 @@ def show_game_over(message):
     pygame.display.flip()
     pygame.time.delay(3000)
     running = False  
-    
+
 def render_health_restoration():
     global playing_totem, player_restored, ai_restored, player_heart, ai_heart
 
@@ -1171,6 +1116,28 @@ def handle_medicine(who_used):
     
     medicine_display_time = pygame.time.get_ticks()  
 
+def display_medicine3():
+    global player_has_medicine3  
+
+    if player_has_medicine3:
+        screen.blit(medicine3, medicine3_rect)  # Display on screen
+
+    if man.boost_count >= 2:
+        player_has_medicine3 = True  # Unlock medicine3 if the player got 2 boosts
+    else:
+        player_has_medicine3 = False
+
+def handle_medicine3():
+    global player_hp, player_has_medicine3, max_hp, medicine_message, medicine_display_time
+
+    if player_has_medicine3:
+        if player_hp < max_hp:
+            player_hp += 1 
+            medicine_message = f"{name} got a booster from the maze! +1 HP!"
+        player_has_medicine3 = False  
+        medicine3_used_by_player = True 
+        medicine_display_time = pygame.time.get_ticks()
+
 def render_medicine_result():
     global medicine_display_time
     current_time = pygame.time.get_ticks()
@@ -1185,6 +1152,14 @@ def render_medicine_result():
         screen.blit(medicine_surface, text_rect.topleft)
     else:
         medicine_display_time = 0 
+
+def check_maze_completion():
+    global player_has_medicine3, medicine_message 
+    if man.boost_count >= 2:
+        player_has_medicine3 = True  
+        medicine_message = f"Player got {man.boost_count} boosts in maze, extra bonus to you, +1hp!"
+    else:
+        player_has_medicine3 = False
 
 def handle_handsaw_usage(shooter, target):
     global shoot_message, player_hp, ai_hp, ai_hit_time, player_hit_time
@@ -1259,7 +1234,7 @@ totemplayer = font_13.render("You have been resurrected, cherish it.", True, WHI
 totemplayer_x, totemplayer_y = (screen_width // 2 - totemplayer.get_width() // 2), (screen_height // 2 + 200)
 
 totemdealer = font_13.render("Dealer has been resurrected.", True, WHITE)
-totemdealer_x, totemdealer_y = (screen_width // 2 - totemdealer.get_width() // 2), (screen_height // 2 + 250)
+totemdealer_x, totemdealer_y = (screen_width // 2 - totemdealer.get_width() // 2), (screen_height // 2 + 220)
 
 def render_resurrection_message():
     if video_playing and current_video_clip == totem:
@@ -1290,21 +1265,26 @@ def handle_ai_hit():
 def player_turn():
     global turn, handsaw1_used_by_player, handsaw_damage_pending_player, num_real_bullets, num_fake_bullets
     global player_hp, ai_hp, player_hit_time, ai_hit_time, player_heart, ai_heart
-    global medicine1_used_by_player, medicine_display_time, gun_sound, emptygun_sound, shoot_message
+    global medicine1_used_by_player, medicine3_used_by_player, medicine3_rect
+    global medicine_display_time, gun_sound, emptygun_sound, shoot_message
     global ai_waiting, ai_delay_start, video_playing, current_video_clip, video_start_time
-    global magnifier1_used_by_player, current_round, magnifier_bullet_type
+    global magnifier1_used_by_player, current_round, magnifier_bullet_type, max_hp
+    global player_has_medicine3 
 
     mouse_pos = pygame.mouse.get_pos()
     current_time = pygame.time.get_ticks()
 
-    # Handling medicine in round 1
     if current_round == 1 and medicine1_rect.collidepoint(mouse_pos) and not medicine1_used_by_player:
         handle_medicine("player")
         medicine1_used_by_player = True
         medicine_display_time = pygame.time.get_ticks()
-        return
+   
+    if current_round == 1 and medicine3_rect.collidepoint(mouse_pos) and not medicine3_used_by_player:
+        handle_medicine3()  
+        medicine3_used_by_player = True  # Mark medicine3 as used
+        medicine_display_time = pygame.time.get_ticks()  # Start the medicine display timer
+        return 
 
-    # Handling magnifier and handsaw in round 2
     if current_round == 2:
         if magnifier1_rect.collidepoint(mouse_pos) and not magnifier1_used_by_player:
             handle_magnifier("player")
@@ -1320,7 +1300,6 @@ def player_turn():
             video_start_time = pygame.time.get_ticks()
             return
 
-    # Handling handsaw usage
     if handsaw_damage_pending_player:
         if user_rect.collidepoint(mouse_pos):
             handle_handsaw_usage("player", "player")
@@ -1330,11 +1309,9 @@ def player_turn():
             turn = "ai"
             return
 
-    # Prevent player from shooting within 500ms of getting hit
     if player_hit_time and current_time - player_hit_time < 500:
         return
 
-    # Handle shooting self with a fake bullet
     if magnifier_bullet_type == 'fake':
         if user_rect.collidepoint(mouse_pos):
             shoot_message = f"{name} shot themselves with a fake bullet."
@@ -1343,7 +1320,6 @@ def player_turn():
             num_fake_bullets -= 1
             return  
 
-    # Handle shooting self
     if user_rect.collidepoint(mouse_pos):
         if magnifier_bullet_type == 'real':
             bullet_type = 'real'
@@ -1368,7 +1344,6 @@ def player_turn():
             shoot_message = f"{name} shot themselves with a fake bullet."
             return
 
-    # Handle shooting the AI
     if dealer_rect.collidepoint(mouse_pos):
         if magnifier_bullet_type is not None:
             bullet_type = magnifier_bullet_type
@@ -1401,7 +1376,6 @@ def player_turn():
         ai_delay_start = pygame.time.get_ticks()
         ai_waiting = True
 
-    # Reset the magnifier bullet type for the next turn
     magnifier_bullet_type = None
     check_if_all_bullets_used()
 
@@ -1495,9 +1469,11 @@ def handle_ai_magnifier():
         handle_magnifier("ai")  
         magnifier2_used_by_ai = True
         magnifier_delay_start = pygame.time.get_ticks()  
-        magnifier_delay_active = True 
+        magnifier_delay_active = True  
         ai_shoot_message = "Dealer used the magnifier!"
-    return True
+        return True
+
+    return False
 
 def handle_ai_handsaw():
     global handsaw2_used_by_ai, handsaw_damage_pending_ai, video_playing, current_video_clip, video_start_time
@@ -1519,85 +1495,79 @@ def handle_ai_round_2():
     global magnifier_bullet_type, ai_shoot_message, turn, num_real_bullets, num_fake_bullets, player_hp
     global player_hit_time, player_heart, ai_self_shots, ai_waiting, ai_delay_start, handsaw_damage_pending_ai
     global video_playing, current_video_clip, video_start_time
-    global handsaw2_used_by_ai  
+    global handsaw2_used_by_ai, bullets  
     current_time = pygame.time.get_ticks()
 
+    if not bullets:  
+        bullets_reset()  
     if handle_ai_magnifier():
         if magnifier_bullet_type == "fake":
             emptygun_sound.play()
             ai_shoot_message = "Dealer saw: Fake bullet! AI shot itself."
-            ai_self_shots += 1 
-            num_fake_bullets -= 1 
+            ai_self_shots += 1
+            num_fake_bullets -= 1
 
-            if not handsaw2_used_by_ai:
-                handle_ai_handsaw()
+            if not handsaw2_used_by_ai:  
+                handle_ai_handsaw() 
                 return 
-
-            if not video_playing: 
-                handle_handsaw_usage("ai", "ai") 
+            if not video_playing:  
+                handle_handsaw_usage("ai", "ai")  
                 handsaw_damage_pending_ai = False  
-                return 
+                if num_real_bullets > 0 or num_fake_bullets > 0: 
+                    handle_ai_round_2() 
+                return  
 
         elif magnifier_bullet_type == "real":
-            # Check if AI used handsaw, if not, trigger it
-            if not handsaw2_used_by_ai:
-                handle_ai_handsaw()
-                return  # Wait for handsaw video to finish
+            if not handsaw2_used_by_ai:  
+                handle_ai_handsaw()  
+                return 
             
-            # Ensure the handsaw video finishes playing before proceeding
-            if not video_playing:
-                handle_handsaw_usage("ai", "player")  # AI shoots player
-                handsaw_damage_pending_ai = False  
-                turn = "player"  # Switch turn after AI action
+            if not video_playing:  
+                handle_handsaw_usage("ai", "player")  
+                handsaw_damage_pending_ai = False 
+                turn = "player"
                 return
 
-    # Handle AI waiting state
-    if ai_waiting:
-        if current_time - ai_delay_start < 3000:  # Wait for 3 seconds
-            return  # Still in waiting state
-        ai_waiting = False  # Done waiting
+    if ai_waiting:  
+        if current_time - ai_delay_start < 3000: 
+            return  
+        ai_waiting = False 
 
-    # Proceed with shooting after magnifier or handsaw actions
-    bullet_type = handle_shooting("ai", "player")  
-    if bullet_type == "real":
-        num_real_bullets -= 1  
+    bullet_type = bullets.pop(0) 
+    if bullet_type == 1:
+        num_real_bullets -= 1 
         gun_sound.play()
         ai_shoot_message = f"Dealer shot {name} with a real bullet!"
         player_hp -= 2  
-        player_hit_time = current_time  
-        player_heart = broken_hearts  
+        player_hit_time = current_time
+        player_heart = broken_hearts
         check_game_over()
-    else:
+        turn = "player"
+    else: 
         num_fake_bullets -= 1  
         emptygun_sound.play()
         ai_shoot_message = f"Dealer shot {name} with a fake bullet!"
 
-    # After the AI shoots (real or fake), switch turn to player
-    turn = "player"
-
 def handle_ai_round_3():
     global num_real_bullets, num_fake_bullets, ai_shoot_message, turn, player_hp
 
-    # Check if player_hp is properly initialized and valid
     if player_hp is None or player_hp <= 0:
         print("Error: Invalid player_hp value.")
         return
     
-    # Handle shooting logic
     bullet_type = handle_shooting("ai", "player")
     
     if bullet_type == "real":
         num_real_bullets -= 1
         gun_sound.play()
         ai_shoot_message = f"Dealer shot {name} with real bullet!"
-        player_hp -= 1  # Ensure this doesn't go below 0
+        player_hp -= 1  
         player_hit_time = pygame.time.get_ticks()
         player_heart = broken_hearts
         
-        # Ensure player_hp does not go below 0
         if player_hp <= 0:
             player_hp = 0
-            handle_hp_restoration()  # Trigger any restoration logic if needed
+            handle_hp_restoration() 
         check_game_over()
 
     elif bullet_type == "fake":
@@ -1608,39 +1578,35 @@ def handle_ai_round_3():
     turn = "player"
 
 def ai_turn():
-    global turn, ai_waiting, ai_delay_start, ai_delay_duration
-    global num_real_bullets, num_fake_bullets, ai_shoot_message, player_hp, ai_hp
-    global handsaw2_used_by_ai, handsaw_damage_pending_ai, video_playing, current_video_clip, video_start_time
-    global ai_hit_time, player_hit_time, ai_heart, player_heart, ai_waiting, medicine2_used_by_ai
-    global magnifier2_used_by_ai, medicine_message, medicine_display_time, current_round, magnifier_bullet_type
-    global ai_shoot_complete  # Flag to track if AI has completed its turn
+    global turn, ai_waiting, ai_delay_start, magnifier_delay_active, magnifier_delay_start, magnifier_delay_duration
+    global ai_delay_duration, video_playing
 
     current_time = pygame.time.get_ticks()
 
-    # Handle AI waiting time (delay before taking action)
+    if magnifier_delay_active:
+        if current_time - magnifier_delay_start >= magnifier_delay_duration: 
+            magnifier_delay_active = False 
+            turn = "player"  
+            return
+
     if ai_waiting:
-        if current_time - ai_delay_start >= ai_delay_duration:  # Check if the delay time has passed
+        if current_time - ai_delay_start >= ai_delay_duration:
             if current_round == 1:
-                handle_ai_round_1()  # AI's logic for Round 1
+                display_medicine3()
+                handle_ai_round_1()
             elif current_round == 2:
-                handle_ai_round_2()  # AI's logic for Round 2
+                handle_ai_round_2()
             elif current_round == 3:
-                handle_ai_round_3()  # AI's logic for Round 3
-            ai_waiting = False  # AI is no longer waiting
-            ai_shoot_complete = True  # AI has completed its action
+                handle_ai_round_3()
+            ai_waiting = False
 
-    # Now, handle video completion check, only if the video clip is not None
-    if current_video_clip is not None and current_time - video_start_time >= current_video_clip.duration:
-        video_playing = False  # Mark the video as finished
+        if current_video_clip is not None and current_time - video_start_time >= current_video_clip.duration:
+            video_playing = False
 
-    # Check if all bullets have been used
-    check_if_all_bullets_used()
+        check_if_all_bullets_used()
 
-    # Ensure the AI's turn completes before switching back to the player's turn
-    if not video_playing and not ai_waiting and ai_hp > 0 and ai_shoot_complete:
-        turn = "player"  # Switch to the player's turn
-        ai_shoot_complete = False  # Reset the flag for the next AI turn
-        ai_waiting = False  # Ensure AI waiting is reset for the next turn
+    if not video_playing and not ai_waiting and ai_hp > 0:
+        turn = "player" 
 
 #Create player and AI objects
 global player
@@ -1681,27 +1647,29 @@ def player_name():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
+
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # Check if the input box is clicked
                 if input_box.collidepoint(event.pos):
                     sound_clickbox.play()
-                    active = True
+                    active = True 
                 else:
                     active = False
-                color = color_active if active else color_inactive
-            
+                color = color_active if active else color_inactive 
+
             if event.type == pygame.KEYDOWN and active:
                 if event.key == pygame.K_BACKSPACE:
                     delete_sound.play()
-                    text = text[:-1]  
+                    text = text[:-1]
                 elif event.key == pygame.K_RETURN:
                     sound_clickbox.play()
                     return text 
                 else:
-                    if event.unicode.isprintable() and len(text) < 7:  # Limit to 7 words that can insert
+                    if event.unicode.isprintable() and len(text) < 7:
                         text += event.unicode
                         delete_sound.play()
 
+        # Render input box and text
         screen.fill(BLACK)
         txt_surface = input_font_name.render(text, True, color)
         width = max(600, txt_surface.get_width() + 10)
@@ -1727,6 +1695,7 @@ def SCREENDISPLAY(name):
                 mouse_pos = pygame.mouse.get_pos()
                 if text_5_button_rect.collidepoint(mouse_pos):
                     soundclick.play()
+                    current_screen = SCREEN_PLAY 
                     current_screen = SCREEN_PLAY 
                     pygame.display.set_caption('Life Roulette')
                     return
@@ -1767,12 +1736,11 @@ def roundmessage(message, background_color=BLACK):
     screen.fill(background_color)
     pygame.display.update()
 
-#Define for reset bullets for every round
 def bullets_reset():
     global bullets, num_fake_bullets, num_real_bullets
     bullets = [1] * num_real_bullets + [0] * num_fake_bullets
     random.shuffle(bullets)
-
+    
 def round_1():
     global turn, num_real_bullets, num_fake_bullets, bullets
     global handsaw1_used_by_player, handsaw_damage_pending_player
@@ -1795,6 +1763,13 @@ def round_1():
     magnifier1_used_by_player = False
     magnifier2_used_by_ai = False
 
+def render_items_in_round_1():
+    if not medicine1_used_by_player:
+        screen.blit(medicine1, medicine1_rect)
+    
+    if not medicine3_used_by_player:
+        screen.blit(medicine3, medicine3_rect)
+
 def round_2():
     global turn, num_real_bullets, num_fake_bullets, bullets, current_round
     global handsaw1_used_by_player, handsaw_damage_pending_player, handsaw2_used_by_ai, handsaw_damage_pending_ai
@@ -1813,6 +1788,13 @@ def round_2():
     num_fake_bullets = 2
     bullets = [1] * num_real_bullets + [0] * num_fake_bullets
     random.shuffle(bullets)
+
+    bullets = [1] 
+    
+    remaining_bullets = [1] * (num_real_bullets - 1) + [0] * num_fake_bullets
+    random.shuffle(remaining_bullets)
+    
+    bullets += remaining_bullets
 
     handsaw1_used_by_player = False
     handsaw_damage_pending_player = False
@@ -1847,7 +1829,11 @@ def round_3():
     global player_hp, ai_hp
     global shoot_message, ai_shoot_message
     global ai_delay_start, ai_waiting  
+    global shoot_message, ai_shoot_message
+    global ai_delay_start, ai_waiting  
 
+    shoot_message = ""  
+    ai_shoot_message = "" 
     shoot_message = ""  
     ai_shoot_message = "" 
 
@@ -1855,10 +1841,10 @@ def round_3():
     # Reset AI's HP for the final round
     ai_hp = 1
 
-    # Set up the number of real and fake bullets for the final round
     num_real_bullets = 2
     num_fake_bullets = 2
     bullets = [1] * num_real_bullets + [0] * num_fake_bullets
+    random.shuffle(bullets)  
     random.shuffle(bullets)  
 
     # Set the status of the handsaw and magnifier items
@@ -1997,15 +1983,7 @@ while running:
                     SCREENDISPLAY(name)
                     current_screen = SCREEN_PLAY1
                     pygame.display.set_caption('Life Roulette')          
-            
-            elif current_screen == SCREEN_MAZE:
-                if text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    SCREENDISPLAY(name)
-                    current_screen = SCREEN_PLAY1
-                    pygame.display.set_caption('Ending')
-                SCREENDISPLAY(name)
-
+        
             elif current_screen == SCREEN_ENDING1:
                 if text_5_button_rect.collidepoint(event.pos):
                     soundclick.play()
@@ -2035,13 +2013,19 @@ while running:
 
                 if player_hp <= 0:
                     handle_hp_restoration()
+                
+                if player_has_medicine3:
+                    screen.blit(medicine3, medicine3_rect)
 
                 if current_round == 1:
                     if not medicine1_used_by_player:
                         screen.blit(medicine1, medicine1_rect)
                     if not medicine2_used_by_ai:
-                            screen.blit(medicine2, medicine2_rect)
-
+                        screen.blit(medicine2, medicine2_rect)
+                    if not medicine3_used_by_player:
+                        screen.blit(medicine3, medicine3_rect)
+                        display_medicine3()
+                    
                 elif current_round == 2:
                     render_items_in_round_2()
 
@@ -2310,15 +2294,23 @@ while running:
                 current_screen = SCREEN_ENDING1
                 break
             
-            # Handle exit point collision
             if man.is_collision(exit_point):
-                if man.boost_count >= 2:
+                if man.boost_count >= 3:  
                     SCREENDISPLAY(name)
-                    current_screen = SCREEN_PLAY1  # Move to the next screen
-                    maze_running = False  # Exit the maze loop
+                    current_screen = SCREEN_PLAY1 
+                    player_boost_condition = 1  # 3 boost condition
+                    maze_played = True
+                    maze_running = False  
+                elif man.boost_count >= 2:  
+                    SCREENDISPLAY(name)
+                    current_screen = SCREEN_PLAY1  
+                    player_boost_condition = 2  # 2 boost condition
+                    maze_played = True
+                    maze_running = False  
                 else:
                     exit_message = "Get at least two boosts to exit"
                     message_start_time = pygame.time.get_ticks()
+                    show_exit_message = True
             
             if show_exit_message:
                 current_time = pygame.time.get_ticks()
@@ -2346,8 +2338,6 @@ while running:
         turn_surface = font_turn.render(turn_message, True, WHITE)
         screen.blit(turn_surface, (350, 180))
 
-        #Define for boost collected
-        health_boost()
         if video_playing and current_video_clip:
             totem_rect = get_video_rect(totem, align="center")
             center_video(current_video_clip, screen_width, screen_height, x=totem_rect[0], y=totem_rect[1])
@@ -2379,6 +2369,10 @@ while running:
                 screen.blit(medicine1, medicine1_rect)
             if not medicine2_used_by_ai:
                 screen.blit(medicine2, medicine2_rect)
+            if player_has_medicine3:
+                print("Displaying medicine3 on screen.")
+                screen.blit(medicine3, medicine3_rect)
+            display_medicine3()
 
         elif current_round == 2:
             if not magnifier1_used_by_player:
@@ -2425,22 +2419,40 @@ while running:
                 ai.ai_hp_reset()
         else:
             pass
-            
-    elif current_screen == SCREEN_ENDING1:
-        screen.fill(BLACK) 
-        screen.blit(text_5_surface, (text_5_button_x, text_5_button_y))
 
-        text_18_x = 0           #Can ajust for X position
-        base_y = 450            # Starting Y position
-        line_spacing = 60  
-        fixed_y_positions = [base_y, base_y + line_spacing, base_y + 2 * line_spacing, base_y + 3 * line_spacing]
-
-    # Render each line of the long text at fixed positions
-        for i, line in enumerate(lines):
-            text_18_surface = font_7.render(line, True, WHITE)  
-            screen.blit(text_18_surface, (text_18_x, fixed_y_positions[i]))
-
-        screen.blit(debtor, debtor_rect.topleft)
+    elif current_screen == SCREEN_ENDING1: #bad
+        screen.fill(BLACK)
+        dealerlaugh.play()
+        screen.blit(monster, (player_x-50, player_y)) 
+        create_rounded_speech_bubble_2("Debtor: Well, guess  that's  all  for  your end  of  your  life  .  Poor  girl  with  her  poor  father",
+        player_x + 400, player_y - 130, width=410, height=180)
+        draw_multiline_text(screen, "-->Bad End", fonttext3, RED, 700, 520, max_width=170)
+    
+    elif current_screen == SCREEN_ENDING2: #3 boosts
+        screen.fill(BLACK)
+        screen.blit(hug, (player_x , player_y))
+        create_rounded_speech_bubble_2("Daughter: DAD!!!!",
+        player_x + 500, player_y - 170, width=430, height=70)
+        create_rounded_speech_bubble_2("Father : My precious princess, you are not getting hurt right?",
+        player_x + 500, player_y - 80, width=430, height=120)
+        create_rounded_speech_bubble_2("Daughter : Yeah. Dad, but I was so scare. The uncle is so creepy and horrible.",
+        player_x + 500, player_y + 50, width=430, height=150)
+        create_rounded_speech_bubble_2("Father : Is okay my dear, the nightmare has over, let's go back home.",
+        player_x + 500, player_y +220, width=430, height=120)
+        draw_multiline_text(screen, "--> The End", fonttext3, RED, 800, 700, max_width=170)
+        
+    elif current_screen == SCREEN_ENDING3: # 2boost
+        screen.blit(dadmonster, (player_x -50 , player_y - 100))
+        screen.blit(crying, (player_x + 150, player_y))
+        create_rounded_speech_bubble_2("Father : Are you okay my dear?",
+        player_x + 500, player_y - 180, width=430, height=80)
+        create_rounded_speech_bubble_2("Daughter : Screaming WHERE IS MY DAD, GIVE HIM BACK TO ME",
+        player_x + 500, player_y - 80, width=430, height=120)
+        create_rounded_speech_bubble_2("Father : Calm down my dear, dad is right here , in front of you. Don't you remember me?",
+        player_x + 500, player_y + 50, width=430, height=150)
+        create_rounded_speech_bubble_2("Daughter : GET OUT OF MY WAY YOU, MONSTER. DAD WHERE ARE YOU?",
+        player_x + 500, player_y +220, width=430, height=130)
+        draw_multiline_text(screen, "--> The End", fonttext3, RED, 800, 700, max_width=170)
         
             
     pygame.display.flip()   
