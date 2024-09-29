@@ -2661,8 +2661,6 @@ while running:
         screen.blit(turn_surface, (350, 180))
         player_wins = False
 
-        health_boost()
-
         if video_playing and current_video_clip:
             totem_rect = get_video_rect(totem, align="center")
             center_video(current_video_clip, screen_width, screen_height, x=totem_rect[0], y=totem_rect[1])
