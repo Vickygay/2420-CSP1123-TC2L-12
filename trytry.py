@@ -1128,8 +1128,6 @@ def render_health_restoration():
 def render_player_image():
     global player_hit_time, player_blood_duration, playerblood, playerblood_rect, user, user_rect
 
-    global player_hit_time, player_blood_duration, playerblood, playerblood_rect, user, user_rect
-
     current_time = pygame.time.get_ticks()
 
 
