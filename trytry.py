@@ -2363,8 +2363,6 @@ while running:
                 screen.blit(handsaw2, handsaw2_rect)
 
         if ai_hp <= 0:  
-            player_game_over = True
-        
             if maze_played:
                 if man.boost_count == 3:
                     current_screen = SCREEN_ENDING2 
@@ -2374,7 +2372,6 @@ while running:
                 current_screen = SCREEN_ENDING2 
 
         elif player_hp <= 0:  
-            player_game_over = True
             current_screen = SCREEN_ENDING1 
 
         if ai.game_over:
