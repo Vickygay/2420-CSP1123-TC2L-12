@@ -2404,7 +2404,7 @@ while running:
         
     elif current_screen == SCREEN_ENDING3: # 2boost
         screen.blit(dadmonster, (player_x -50 , player_y - 100))
-        screen.blit(crying, (player_x + 150, player_y))
+        screen.blit(crying, (player_x + 100, player_y))
         create_rounded_speech_bubble_2("Father : Are you okay my dear?",
         player_x + 500, player_y - 180, width=430, height=80)
         create_rounded_speech_bubble_2("Daughter : Screaming WHERE IS MY DAD, GIVE HIM BACK TO ME",
