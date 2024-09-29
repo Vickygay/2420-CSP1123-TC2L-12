@@ -438,11 +438,9 @@ def wrap_text(text, font, max_width):
     current_line = []
 
     for word in words:
-        # Check the width of the current line with the next word added
         current_line.append(word)
         line_width, _ = font.size(' '.join(current_line))
         if line_width > max_width:
-            # If it exceeds max width, add the line without the last word and start a new line
             current_line.pop()
             lines.append(' '.join(current_line))
             current_line = [word]
@@ -460,25 +458,21 @@ def draw_multiline_text(surface, text, font2, color, x, y, max_width, line_spaci
         text_rect = text_surface.get_rect(center=(x, start_y + i * (font2.get_height() + line_spacing)))
         surface.blit(text_surface, text_rect)
 
-# Function to create a speech bubble with multiple lines
+
 def create_rounded_speech_bubble(text, x, y, width=200, height=100, corner_radius=10):
-    # Create a surface for the speech bubble with transparency
+    # transparency
     bubble_surface = pygame.Surface((width, height), pygame.SRCALPHA)
     
-    # Draw a rounded rectangle for the bubble
     draw_rounded_rect(bubble_surface, WHITE, bubble_surface.get_rect(), corner_radius)
     pygame.draw.rect(bubble_surface, BLACK, bubble_surface.get_rect(), 2, border_radius=corner_radius)
     
-    # Wrap the text into multiple lines
-    wrapped_lines = wrap_text(text, font, width - 20)  # Adjust for padding
+    wrapped_lines = wrap_text(text, font, width - 20) 
     
-    # Render each line
     for i, line in enumerate(wrapped_lines):
         line_surface = font.render(line, True, BLACK)
-        line_rect = line_surface.get_rect(center=(width//2, 20 + i * 30))  # Adjust y position for each line
+        line_rect = line_surface.get_rect(center=(width//2, 20 + i * 30)) 
         bubble_surface.blit(line_surface, line_rect)
 
-    #Draw the bubble on the screen
     screen.blit(bubble_surface, (x, y))
 ##########################################################################################################################################################################
 def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_radius=10):
@@ -515,23 +509,7 @@ def create_rounded_speech_bubble_3(text, x, y, width=200, height=100, corner_rad
     # Draw the bubble on the screen
     screen.blit(bubble_surface_3, (x, y))
 ##########################################################################################################################################################################
-def create_rounded_speech_bubble_3(text, x, y, width=200, height=100, corner_radius=10):
-    bubble_surface_3 = pygame.Surface((width, height), pygame.SRCALPHA)
 
-    # Draw a rounded rectangle
-    draw_rounded_rect(bubble_surface_3, DARKGREY, bubble_surface_3.get_rect(), corner_radius)
-    pygame.draw.rect(bubble_surface_3, BLACK, bubble_surface_3.get_rect(), 6, border_radius=corner_radius)
-
-    wrapped_lines_2 = wrap_text(text, font4, width - 20)  # Adjust for padding
-
-    # Render each line
-    for i, line_2 in enumerate(wrapped_lines_2):
-        line_surface_2 = font4.render(line_2, True, BLACK)
-        line_rect_2 = line_surface_2.get_rect(center=(width//2, 20 + i * 30)) 
-        bubble_surface_3.blit(line_surface_2, line_rect_2)
-    # Draw the bubble on the screen
-    screen.blit(bubble_surface_3, (x, y))
-##########################################################################################################################################################################
 # Clock to control FPS
 clock = pygame.time.Clock()
 
@@ -791,20 +769,6 @@ magnifier_delay_start = 0
 magnifier_delay_duration = 6000  
 magnifier_delay_active = False
 
-true_ending = False
-bad_ending = False
-
-# if player got all the boosts in the maze
-def true_ending():
-    global max_hp, player_hp
-    if man.boost_count == 3:  # Check if player has 3 boosts
-        max_hp = 4
-        player_hp = 4  # Give player full health when all boosts are collected
-        print("Congratulations! You've achieved the true ending.")
-        current_screen = SCREEN_ENDING2  # Move to the true ending screen
-    else:
-        max_hp = 3
-        player_hp = min(player_hp, max_hp)
 
 def check_if_all_bullets_used():
     global bullets, player_hp, ai_hp, current_round
@@ -1910,6 +1874,8 @@ def current_bullet():
 video_playing = False
 current_video_clip = None
 video_start_time = 0
+maze_played = False
+player_boost_condition = 0
 
 show_input_box = False
 running = True
@@ -2019,42 +1985,6 @@ while running:
                     current_screen = SCREEN_PLAY1
                     pygame.display.set_caption('Life Roulette')          
         
-            elif current_screen == SCREEN_ENDING1:
-                if text_5_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    show_input_box = True
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Ending')
-                elif text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Ending') 
-                    pygame.display.flip()
-                    time.sleep(3)  
-                    pygame.quit()
-                    sys.exit()  
-                
-                else:
-                    pygame.display.update()
-
-            elif current_screen == SCREEN_ENDING1:
-                if text_5_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    show_input_box = True
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Ending')
-                elif text_4_button_rect.collidepoint(event.pos):
-                    soundclick.play()
-                    current_screen = SCREEN_MAIN
-                    pygame.display.set_caption('Ending') 
-                    pygame.display.flip()
-                    time.sleep(3)  
-                    pygame.quit()
-                    sys.exit()  
-                
-                else:
-                    pygame.display.update()
-
             elif current_screen == SCREEN_PLAY1:
                 if text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
@@ -2336,14 +2266,12 @@ while running:
                     boost.destroy()
                     man.boost_count += 1
 
-            # Handle enemy movements and chase logic
             for enemy in enemies:
                 enemy.move(walls, man)
                 if man.is_collision(enemy):
                     man.handle_collision_with_enemy()
                     collision_sound.play()
             
-                # Check if player loses all lives
             if man.lives <= 0:
                 current_screen = SCREEN_ENDING1
                 break
@@ -2374,19 +2302,16 @@ while running:
                     message_surface = font_Maze.render(exit_message, True, WHITE)
                     screen.blit(message_surface, (screen.get_width() // 2 - message_surface.get_width() // 2, screen.get_height() // 2 - 350))
 
-            # Drawing everything
             all_sprites.draw(screen)
 
-                # Display player lives
+            # lives
             for i in range(man.lives):
                 screen.blit(heart_img, (10 + i * 40, 10))
 
-            # Update display and control frame rate
             pygame.display.flip()
             clock.tick(60)
        
     elif current_screen == SCREEN_PLAY1:
-        # Show on Screen Play
         screen.fill(BLACK) 
         turn_message = turn_message = f"{name if turn == 'player' else 'Dealer'}'s Turn"
         turn_surface = font_turn.render(turn_message, True, WHITE)
@@ -2437,6 +2362,21 @@ while running:
             if not handsaw2_used_by_ai:
                 screen.blit(handsaw2, handsaw2_rect)
 
+        if ai_hp <= 0:  
+            player_game_over = True
+        
+            if maze_played:
+                if man.boost_count == 3:
+                    current_screen = SCREEN_ENDING2 
+                elif man.boost_count == 2:
+                    current_screen = SCREEN_ENDING3 
+            else:
+                current_screen = SCREEN_ENDING2 
+
+        elif player_hp <= 0:  
+            player_game_over = True
+            current_screen = SCREEN_ENDING1 
+
         if ai.game_over:
             if current_round == 1:
                 ai.reset()
@@ -2472,6 +2412,7 @@ while running:
                 ai.ai_hp_reset()
         else:
             pass
+        
     elif current_screen == SCREEN_ENDING1: #bad
         screen.fill(BLACK)
         dealerlaugh.play()
