@@ -153,18 +153,7 @@ text_5_surface = font_4.render("Next >>", True, WHITE)
 text_5_button_x, text_5_button_y = (screen_width - text_5_surface.get_width()) // 2 + 400, screen_height - text_5_surface.get_height() // 2 - 50
 text_5_button_rect = pygame.Rect(text_5_button_x, text_5_button_y, text_5_surface.get_width(), text_5_surface.get_height())
 
-font_6 = pygame.font.Font('Matemasie.ttf', 40)
-lose_text_surface = font_6.render("Foolish gambler. Try again would ya?", True, RED)
-lose_x, lose_y = 125, 250
-
 font_7 = pygame.font.Font('Creepster.ttf', 3)
-
-font_7 = pygame.font.Font('Creepster.ttf', 3)
-
-# You win
-font_7 = pygame.font.Font('Matemasie.ttf', 40)
-win_text_surface = font_7.render("Congratulations, your humanity didn't betray you.", True, WHITE)
-win_x, win_y = 50, 50
 
 # Round Two
 font_8 = pygame.font.Font('Matemasie.ttf', 40)
@@ -841,24 +830,6 @@ class Player:
         self.hp = 3
         self.game_over = False  
         self.totem_used = False
-
-    #Draw out defeated screen when player is defeated
-    def draw_lose_screen(self):
-        if self.game_over:
-            screen.fill(BLACK)
-            screen.blit(lose_text_surface, (lose_x, lose_y))
-            pygame.display.update()
-            pygame.time.delay(2000)
-            self.reset
-
-    #Draw out defeated screen when player is defeated
-    def draw_lose_screen(self):
-        if self.game_over:
-            screen.fill(BLACK)
-            screen.blit(lose_text_surface, (lose_x, lose_y))
-            pygame.display.update()
-            pygame.time.delay(2000)
-            self.reset
 
 def check_game_over():
     global ai_hp, player_hp, player_totem_used, ai_totem_used, current_round, running, num_real_bullets, num_fake_bullets
