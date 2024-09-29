@@ -863,18 +863,6 @@ def check_game_over():
             player_totem_used = True
             return
 
-        if current_round == 3:
-            show_game_over("Foolish gambler. Try again would ya?")
-            running = False
-            return
-        if current_round == 3:
-            show_game_over("Foolish gambler. Try again would ya?")
-            running = False
-            return
-
-        show_game_over("Foolish gambler. Try again would ya?")
-        return
-
     if num_real_bullets == 0:
         if current_round == 1:
             current_round = 2
