@@ -376,6 +376,7 @@ medicine3_rect = medicine3.get_rect(topleft=(screen_width // 2 - 290, screen_hei
 medicine3 = pygame.transform.scale(medicine3, (70, 70))
 medicine3_rect = medicine3.get_rect(topleft=(screen_width // 2 - 290, screen_height // 2 - 20))
 
+
 magnifier1 = pygame.image.load('magnifier1.png')
 magnifier1 = pygame.transform.scale(magnifier1, (70, 70))
 magnifier1_rect = magnifier1.get_rect(topleft=(screen_width // 2 - 250, screen_height // 2 - 20))
@@ -496,7 +497,23 @@ def create_rounded_speech_bubble_2(text, x, y, width=200, height=100, corner_rad
         bubble_surface_2.blit(line_surface_2, line_rect_2)
     # Draw the bubble on the screen
     screen.blit(bubble_surface_2, (x, y))
+##########################################################################################################################################################################
+def create_rounded_speech_bubble_3(text, x, y, width=200, height=100, corner_radius=10):
+    bubble_surface_3 = pygame.Surface((width, height), pygame.SRCALPHA)
 
+    # Draw a rounded rectangle
+    draw_rounded_rect(bubble_surface_3, DARKGREY, bubble_surface_3.get_rect(), corner_radius)
+    pygame.draw.rect(bubble_surface_3, BLACK, bubble_surface_3.get_rect(), 6, border_radius=corner_radius)
+
+    wrapped_lines_2 = wrap_text(text, font4, width - 20)  # Adjust for padding
+
+    # Render each line
+    for i, line_2 in enumerate(wrapped_lines_2):
+        line_surface_2 = font4.render(line_2, True, BLACK)
+        line_rect_2 = line_surface_2.get_rect(center=(width//2, 20 + i * 30)) 
+        bubble_surface_3.blit(line_surface_2, line_rect_2)
+    # Draw the bubble on the screen
+    screen.blit(bubble_surface_3, (x, y))
 ##########################################################################################################################################################################
 def create_rounded_speech_bubble_3(text, x, y, width=200, height=100, corner_radius=10):
     bubble_surface_3 = pygame.Surface((width, height), pygame.SRCALPHA)
@@ -530,6 +547,7 @@ monster_left_img = pygame.image.load("monster_left.png")
 monster_right_img = pygame.image.load("monster_right.png")
 heart_img = pygame.image.load("heart.png")
 exit_img = pygame.image.load("exit.png")
+maze_played = False
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -769,6 +787,10 @@ ai_shooted = False
 player_has_medicine3 = False
 medicine3_used_by_player = False 
 
+magnifier_delay_start = 0
+magnifier_delay_duration = 6000  
+magnifier_delay_active = False
+
 true_ending = False
 bad_ending = False
 
@@ -798,13 +820,8 @@ def check_if_all_bullets_used():
                 pygame.quit() 
 
 def draw_health_bars():
-   
+    global player_hp, max_hp
     hearts_y = 280
-
-    # Player's hearts
-   
-    hearts_y = 280
-
     # Player's hearts
     for i in range(max_hp):
         if i < player_hp:
@@ -933,7 +950,6 @@ def check_game_over():
             round_3()
             return
         elif current_round == 3:
-            show_game_over(f"No bullets left. {name} win.")
             running = False
             return
 
@@ -1632,6 +1648,25 @@ def render_bullet_info():
 
     fake_bullets_text = fontbulletsmall.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
     screen.blit(fake_bullets_text, (bullet_text_x, fake_bullets_y))
+# Define bullet text position
+bullet_text_x = 30
+bullet_text_y = 40
+bullet_line_spacing = 10  
+
+def render_bullet_info():
+    bullet_header_text = f"Number of Bullets in Round {current_round}"
+    bullet_header_surface = fontbulletbig.render(bullet_header_text, True, WHITE)
+    screen.blit(bullet_header_surface, (bullet_text_x, bullet_text_y))
+    
+    real_bullets_y = bullet_text_y + bullet_header_surface.get_height() + bullet_line_spacing
+
+    real_bullets_text = fontbulletsmall.render(f"Real Bullets: {num_real_bullets}", True, WHITE)
+    screen.blit(real_bullets_text, (bullet_text_x, real_bullets_y))
+    
+    fake_bullets_y = real_bullets_y + real_bullets_text.get_height() + bullet_line_spacing
+
+    fake_bullets_text = fontbulletsmall.render(f"Fake Bullets: {num_fake_bullets}", True, WHITE)
+    screen.blit(fake_bullets_text, (bullet_text_x, fake_bullets_y))
 ##########################################################################################################################################################################
 def player_name():
     input_box = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 75, 600, 120)
@@ -2002,6 +2037,24 @@ while running:
                 else:
                     pygame.display.update()
 
+            elif current_screen == SCREEN_ENDING1:
+                if text_5_button_rect.collidepoint(event.pos):
+                    soundclick.play()
+                    show_input_box = True
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Ending')
+                elif text_4_button_rect.collidepoint(event.pos):
+                    soundclick.play()
+                    current_screen = SCREEN_MAIN
+                    pygame.display.set_caption('Ending') 
+                    pygame.display.flip()
+                    time.sleep(3)  
+                    pygame.quit()
+                    sys.exit()  
+                
+                else:
+                    pygame.display.update()
+
             elif current_screen == SCREEN_PLAY1:
                 if text_4_button_rect.collidepoint(event.pos):
                     soundclick.play()
@@ -2068,6 +2121,7 @@ while running:
                 handle_hp_restoration()
 
             check_game_over()
+
 
     if current_screen == SCREEN_HOW_TO_PLAY:
         image_rect = pygame.Rect(image_1_x, image_1_y, image_1_width + 2 * frame_thickness, image_1_height + 2 * frame_thickness)
@@ -2160,7 +2214,7 @@ while running:
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))
         screen.blit(image_with_frame_surface_2, (image_2_x, image_2_y))
         screen.blit(image_with_frame_surface_3, (image_3_x, image_3_y))
-        create_rounded_speech_bubble_2("The game consists of three rounds. At the start of the round, the dealer loads the shotgun with a certain amount of real bullets and fake bullets in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the bullet is real, then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
+        create_rounded_speech_bubble_3("The game consists of three rounds. At the start of the round, the dealer loads the shotgun with a certain amount of real bullets and fake bullets in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the bullet is real, then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
         player_x +6 , player_y -100 , width=900, height=200)
 
         # Tooltip logic
@@ -2370,7 +2424,6 @@ while running:
             if not medicine2_used_by_ai:
                 screen.blit(medicine2, medicine2_rect)
             if player_has_medicine3:
-                print("Displaying medicine3 on screen.")
                 screen.blit(medicine3, medicine3_rect)
             display_medicine3()
 
@@ -2419,7 +2472,6 @@ while running:
                 ai.ai_hp_reset()
         else:
             pass
-
     elif current_screen == SCREEN_ENDING1: #bad
         screen.fill(BLACK)
         dealerlaugh.play()
