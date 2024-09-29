@@ -2482,7 +2482,7 @@ while running:
         screen.blit(image_with_frame_surface, (image_1_x, image_1_y))
         screen.blit(image_with_frame_surface_2, (image_2_x, image_2_y))
         screen.blit(image_with_frame_surface_3, (image_3_x, image_3_y))
-        create_rounded_speech_bubble_2("The game consists of three rounds. At the start of the round, the dealer loads the shotgun with a certain amount of real bullets and fake bullets in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the bullet is real, then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
+        create_rounded_speech_bubble_3("The game consists of three rounds. At the start of the round, the dealer loads the shotgun with a certain amount of real bullets and fake bullets in random order. Players then ask to choose either to shoot the dealer or themselves. Depending on whether the player chooses to shoot themselves or the dealer, if the bullet is real, then either the dealer or the player will lose a life. Each player has a certain amount of life depending on the round. Starting on round 2, a set of items will be distributed to you and the dealer. Every item will give you a different advantage.",
         player_x +6 , player_y -100 , width=900, height=200)
 
         # Tooltip logic
